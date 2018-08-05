@@ -1,0 +1,39 @@
+package com.example;
+
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
+
+
+
+
+//import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
+//@EnableJdbcHttpSession
+//(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
+
+//@EnableJpaAuditing
+
+@EntityScan(basePackageClasses = { 
+		YoloApplication.class,
+		Jsr310JpaConverters.class 
+})
+@SpringBootApplication
+
+public class YoloApplication {
+	
+	@PostConstruct
+	void init() {
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+08:00"));
+	}
+	
+	public static void main(String[] args) {
+		System.out.println("hello");
+		SpringApplication.run(YoloApplication.class, args);
+	}
+
+		}
