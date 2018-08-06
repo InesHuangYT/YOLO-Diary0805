@@ -25,11 +25,11 @@ public class Album extends UserDateAudit{
 	@Size(max = 15)
 	private String name;
 
-//	@OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "album",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 //	@Size(min = 1)
 //	@Fetch(FetchMode.SELECT)
 //	@BatchSize(size = 30)
-//	private List<Diary> diary = new ArrayList<>();
+	private List<Diary> diary ;
 
 	public Long getId() {
 		return id;
@@ -47,13 +47,13 @@ public class Album extends UserDateAudit{
 		this.name = name;
 	}
 
-//	public List<Diary> getDiary() {
-//		return diary;
-//	}
-//
-//	public void setDiary(List<Diary> diary) {
-//		this.diary = diary;
-//	}
+	public List<Diary> getDiary() {
+		return diary;
+	}
+
+	public void setDiary(List<Diary> diary) {
+		this.diary = diary;
+	}
 
 //	public void addDiary(Diary diary) {
 //		addDiary(diary);

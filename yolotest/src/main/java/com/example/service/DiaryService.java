@@ -38,13 +38,13 @@ public class DiaryService {
 	private static final Logger logger = LoggerFactory.getLogger(DiaryService.class);
 
 	//
-	public Diary createDiary(DiaryRequest diaryRequest) {
-		Diary diary = new Diary();
-		diary.setText(diaryRequest.getText());
-		
-		diary.setAlbum(diaryRequest.getAlbum());
-		return diaryRepository.save(diary);
-	}
+//	public Diary createDiary(DiaryRequest diaryRequest) {
+//		Diary diary = new Diary();
+//		diary.setText(diaryRequest.getText());
+//		
+//		diary.setAlbum(diaryRequest.getAlbum());
+//		return diaryRepository.save(diary);
+//	}
 	//	
 	public PagedResponse<DiaryResponse> getAllDiaries(UserPrincipal currentUser, int page, int size) {
 		validatePageNumberAndSize(page, size);

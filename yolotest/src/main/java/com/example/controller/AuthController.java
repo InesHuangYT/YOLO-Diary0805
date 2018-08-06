@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.example.entity.Album;
 import com.example.entity.Role;
 import com.example.entity.RoleName;
 import com.example.entity.User;
@@ -135,5 +136,7 @@ public class AuthController {
 		userRepository.deleteById(username);
 
 	}
-
+	
+	//新增好友
+	
 }
