@@ -19,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +30,7 @@ import com.example.entity.Role;
 import com.example.entity.RoleName;
 import com.example.entity.User;
 import com.example.exception.AppException;
+import com.example.exception.ResourceNotFoundException;
 import com.example.payload.ApiResponse;
 import com.example.payload.JwtAuthenticationResponse;
 import com.example.payload.LoginRequest;
@@ -110,17 +112,20 @@ public class AuthController {
 
 		User result = userRepository.save(user);
 
-		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/users/{username}")
+		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/{username}")
 				.buildAndExpand(result.getUsername()).toUri();
-		System.out.println(location);//http://localhost:8080/api/users/testin221111
+		System.out.println(location);//http://localhost:8080/api/user/testin221111
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
 
-	// 更改(failed)
-	@RequestMapping(value = "user/{username}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void update(@RequestBody User user) {
-		userRepository.save(user);
+	// 更改使用者密碼
+	@PutMapping("user/{username}")
+	public User update(@PathVariable String username , @RequestBody User user) {
+		return userRepository.findByUsername(username).map(users -> {
+			users.setPassword(passwordEncoder.encode(user.getPassword()));
+			return userRepository.save(users);
+		}).orElseThrow(()->new ResourceNotFoundException("Username " + username + " not found", null, user));
 
 	}
 

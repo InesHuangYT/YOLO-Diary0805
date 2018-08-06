@@ -70,14 +70,27 @@ public class DiaryController {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
 
-	// 新增日記
+//	 新增日記
 	@PostMapping("/diaries")
 	public Diary createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
+		System.out.println(diary.getText());
+
 		return albumRepository.findById(albumId).map(album -> {
 			diary.setAlbum(album);
 			return diaryRepository.save(diary);
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
+//	@PostMapping("/diaries") //新增日記
+//	@PreAuthorize("hasRole('USER')")
+//	public ResponseEntity<?> createDiary(@Valid @RequestBody DiaryRequest diaryRequest) {
+//
+//		Diary diary = diaryService.createDiary(diaryRequest);
+//
+//		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{diaryId}").buildAndExpand(diary.getId())
+//				.toUri();
+//
+//		return ResponseEntity.created(location).body(new ApiResponse(true, "Diary Created Successfully"));
+//	}
 
 	// 修改日記
 	@PutMapping("/diaries/{diaryId}")
@@ -107,17 +120,7 @@ public class DiaryController {
 		}).orElseThrow(() -> new BadRequestException("DiaryId " + diaryId + " not found"));
 	}
 
-//	@PostMapping //新增日記
-//	@PreAuthorize("hasRole('USER')")
-//	public ResponseEntity<?> createDiary(@Valid @RequestBody DiaryRequest diaryRequest) {
-//
-//		Diary diary = diaryService.createDiary(diaryRequest);
-//
-//		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{diaryId}").buildAndExpand(diary.getId())
-//				.toUri();
-//
-//		return ResponseEntity.created(location).body(new ApiResponse(true, "Diary Created Successfully"));
-//	}
+
 //	
 //	  @GetMapping("/{diaryId}")
 //	    public DiaryResponse getDiaryById(@CurrentUser UserPrincipal currentUser,
