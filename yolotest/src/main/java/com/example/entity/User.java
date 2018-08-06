@@ -42,6 +42,13 @@ public class User extends DateAudit {
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 
 	private Set<Role> roles = new HashSet<>();
+	
+	
+	@JoinTable(name = "users_friends", joinColumns = {
+			@JoinColumn(name = "user_name", referencedColumnName = "username", nullable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "friend_name", referencedColumnName = "username", nullable = false) })
+	@ManyToMany
+	private Set<User> friends = new HashSet<>();
 
 	public User() {
 	}
@@ -83,6 +90,14 @@ public class User extends DateAudit {
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public Set<User> getFriends() {
+		return friends;
+	}
+
+	public void setFriends(Set<User> friends) {
+		this.friends = friends;
 	}
 
 }

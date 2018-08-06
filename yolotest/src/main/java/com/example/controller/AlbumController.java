@@ -26,7 +26,8 @@ public class AlbumController {
 
 	@Autowired
 	AlbumRepository albumRepository;
-
+	
+	//取得所有相簿
 	@GetMapping
 	public Page<Album> getAllAlbums(Pageable pageable) {
 		return albumRepository.findAll(pageable);
@@ -35,6 +36,7 @@ public class AlbumController {
 	//新增相簿
 	@PostMapping
 	public Album createAlbum(@Valid @RequestBody Album album) {
+		System.out.println(album.getName());
 		return albumRepository.save(album);
 	}
 	
