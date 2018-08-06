@@ -32,7 +32,7 @@ public class Diary extends UserDateAudit {
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "album_id", nullable = false)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	//@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Album album;
 
