@@ -77,6 +77,7 @@ public class UserController {
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
+		System.out.println(user);//com.example.entity.User@19a3673a
 		UserProfile userProfile = new UserProfile(user.getUsername(), user.getCreatedAt());
 
 		return userProfile;
