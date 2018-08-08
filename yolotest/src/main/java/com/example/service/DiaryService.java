@@ -37,15 +37,7 @@ public class DiaryService {
 
 	private static final Logger logger = LoggerFactory.getLogger(DiaryService.class);
 
-	//
-//	public Diary createDiary(DiaryRequest diaryRequest) {
-//		Diary diary = new Diary();
-//		diary.setText(diaryRequest.getText());
-//		
-//		diary.setAlbum(diaryRequest.getAlbum());
-//		return diaryRepository.save(diary);
-//	}
-	//	
+//	DiaryController
 	public PagedResponse<DiaryResponse> getAllDiaries(UserPrincipal currentUser, int page, int size) {
 		validatePageNumberAndSize(page, size);
 
@@ -58,7 +50,7 @@ public class DiaryService {
 					diaries.getTotalElements(), diaries.getTotalPages(), diaries.isLast());
 		}
 
-		// Map Polls to PollResponses containing vote counts and poll creator details
+		// Map Diaries to DiaryResponses containing diary creator details
 
 		List<Long> diaryIds = diaries.map(Diary::getId).getContent();
 
@@ -72,7 +64,7 @@ public class DiaryService {
 				diaries.getTotalPages(), diaries.isLast());
 
 	}
-
+//UserController
 	public PagedResponse<DiaryResponse> getDiariesCreatedBy(String username, UserPrincipal currentUser, int page,
 			int size) {
 		validatePageNumberAndSize(page, size);
@@ -100,22 +92,33 @@ public class DiaryService {
 	}
 	
 	
+//	public Diary createDiary(DiaryRequest diaryRequest) {
+//	Diary diary = new Diary();
+//	diary.setText(diaryRequest.getText());
+//	
+//	diary.setAlbum(diaryRequest.getAlbum());
+//	return diaryRepository.save(diary);
+//}
 	
 	
+	
+	
+//DiaryController
+//	public DiaryResponse getDiaryById(Long diaryId, UserPrincipal currentUser) {
+//		Diary diary = diaryRepository.findById(diaryId)
+//				.orElseThrow(() -> new ResourceNotFoundException("Diary", "id", diaryId));
+//		
+//        // Retrieve diary creator details
+//		User creator = userRepository.findById(diary.getCreatedBy())
+//				.orElseThrow(() -> new ResourceNotFoundException("User", "username", diary.getCreatedBy()));// use
+//																											// username
+//		return ModelMapper.mapDiaryToDiaryResponse(diary, creator);																							// not id
 //
-	public DiaryResponse getDiaryById(Long diaryId, UserPrincipal currentUser) {
-		Diary diary = diaryRepository.findById(diaryId)
-				.orElseThrow(() -> new ResourceNotFoundException("Diary", "id", diaryId));
-		
-        // Retrieve diary creator details
-		User creator = userRepository.findById(diary.getCreatedBy())
-				.orElseThrow(() -> new ResourceNotFoundException("User", "username", diary.getCreatedBy()));// use
-																											// username
-		return ModelMapper.mapDiaryToDiaryResponse(diary, creator);																							// not id
+//	}
+	
+	
+	/*以下為上方有使用到的方法，validatePageNumberAndSize、getDiaryCreatorMap */
 
-	}
-	
-//
 	 private void validatePageNumberAndSize(int page, int size) {
 	        if(page < 0) {
 	            throw new BadRequestException("Page number cannot be less than zero.");
@@ -125,6 +128,7 @@ public class DiaryService {
 	            throw new BadRequestException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
 	        }
 	    }
+	
 // Get Diary Creator details of the given list of diaries
 	 Map<String,User> getDiaryCreatorMap (List<Diary> diaries){ //use String not long
 		 List<String> creatorIds = diaries.stream()
