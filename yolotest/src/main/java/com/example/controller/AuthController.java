@@ -38,7 +38,9 @@ import com.example.payload.LoginRequest;
 import com.example.payload.SignUpRequest;
 import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
+import com.example.security.CurrentUser;
 import com.example.security.JwtTokenProvider;
+import com.example.security.UserPrincipal;
 
 //https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/
 @RestController
@@ -61,12 +63,8 @@ public class AuthController {
 	@Autowired
 	JwtTokenProvider tokenProvider;
 
-	// 查詢全部的users
-	@GetMapping("/user")
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
 
-	}
+	
 
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/private")
@@ -115,18 +113,18 @@ public class AuthController {
 
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/{username}")
 				.buildAndExpand(result.getUsername()).toUri();
-		System.out.println(location);//http://localhost:8080/api/user/testin221111
+		System.out.println(location);// http://localhost:8080/api/user/testin221111
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
 
 	// 更改使用者密碼
 	@PutMapping("user/{username}")
-	public User update(@PathVariable String username , @RequestBody User user) {
+	public User update(@PathVariable String username, @RequestBody User user) {
 		return userRepository.findByUsername(username).map(users -> {
 			users.setPassword(passwordEncoder.encode(user.getPassword()));
 			return userRepository.save(users);
-		}).orElseThrow(()->new ResourceNotFoundException("Username " + username + " not found", null, user));
+		}).orElseThrow(() -> new ResourceNotFoundException("Username " + username + " not found", null, user));
 
 	}
 
@@ -136,7 +134,7 @@ public class AuthController {
 		userRepository.deleteById(username);
 
 	}
+
 	
-	//新增好友
 	
 }

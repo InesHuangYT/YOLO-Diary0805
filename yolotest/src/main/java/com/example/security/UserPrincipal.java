@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.entity.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+/* Spring Security will use the information stored in the UserPrincipal object 
+ * to perform authentication and authorization.
+*/
 public class UserPrincipal implements UserDetails {
 
 	private String username;
