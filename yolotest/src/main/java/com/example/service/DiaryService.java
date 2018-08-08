@@ -19,7 +19,6 @@ import com.example.entity.Diary;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
-import com.example.payload.DiaryRequest;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.DiaryRepository;
