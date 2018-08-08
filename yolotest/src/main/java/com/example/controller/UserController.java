@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,39 +34,45 @@ Get the public profile of a user.
 Get a paginated list of diaries created by a given user.
 */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
-	@Autowired
-	private DiaryRepository diaryRepository;
+	
 
 	@Autowired
 	private DiaryService diaryService;
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@GetMapping("/user/me")// "username": "tiday0805"
+	// 查詢全部的users
+	@GetMapping
+	public List<User> getAllUsers() {
+		return userRepository.findAll();
+
+	}
+
+	@GetMapping("/me") // "username": "tiday0805"
 	@PreAuthorize("hasRole('USER')")
 	public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
 		UserSummary userSummary = new UserSummary(currentUser.getUsername());
 		return userSummary;
 	}
 
-	@GetMapping("/user/checkUsernameAvailability")//確認帳號有無重複
+	@GetMapping("/checkUsernameAvailability") // 確認帳號有無重複
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
 		Boolean isAvailable = !userRepository.existsByUsername(username);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
-	@GetMapping("/user/checkEmailAvailability")//確認email有無重複
+	@GetMapping("/checkEmailAvailability") // 確認email有無重複
 	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
 		Boolean isAvailable = !userRepository.existsByEmail(email);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
-	@GetMapping("/user/{username}")// "username": "tiday0805","joinedAt": "2018-08-05T03:11:15Z"
+	@GetMapping("/{username}") // "username": "tiday0805","joinedAt": "2018-08-05T03:11:15Z"
 	public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
@@ -74,7 +82,7 @@ public class UserController {
 		return userProfile;
 	}
 
-	@GetMapping("/user/{username}/diaries")
+	@GetMapping("/{username}/diaries")
 	public PagedResponse<DiaryResponse> getDiariesCreatedBy(@PathVariable(value = "username") String username,
 			@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
