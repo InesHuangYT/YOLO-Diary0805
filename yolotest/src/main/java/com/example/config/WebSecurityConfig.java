@@ -19,7 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.example.security.CustomUserDetailsService;
 import com.example.security.JwtAuthenticationEntryPoint;
 import com.example.security.JwtAuthenticationFilter;
-
+//https://www.jianshu.com/p/6307c89fe3fa 參考網址
+/*為了讓Spring知道我們想如何控制安全性，我們需要建立一個安全配置類*/
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true, jsr250Enabled = true, prePostEnabled = true)

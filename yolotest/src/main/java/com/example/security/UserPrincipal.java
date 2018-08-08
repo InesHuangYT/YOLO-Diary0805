@@ -14,6 +14,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /* Spring Security will use the information stored in the UserPrincipal object 
  * to perform authentication and authorization.
+ * 这个接口中规定了用户的幾個必須要有的方法，所以我们創建一个UserPrincipal類来实现这个接口。
+ * 不直接使用User類是因為UserDetails完全是為了安全服务
+ * 它和我們的領域類可能有部分属性重叠，但很多的接口其實是安全定制的，所以最好新建一个類
 */
 public class UserPrincipal implements UserDetails {
 
