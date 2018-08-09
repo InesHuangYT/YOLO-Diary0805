@@ -238,13 +238,7 @@ public class AuthController {
 //				
 //				}).orElseThrow(()->new ResourceNotFoundException("Faill!!!!!!", currentUser.getUsername(), null));
 			}
-				
-			
 
-				
-				
-				
-				
 			
 			}
 

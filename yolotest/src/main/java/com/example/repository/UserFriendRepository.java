@@ -17,6 +17,8 @@ public interface UserFriendRepository extends JpaRepository<UserFriend, UserFrie
 	
 	Optional<UserFriend> deleteByUser(User anyUser);
 	
+	
+	
 	boolean existsById(UserFriendId id);
 
 	
