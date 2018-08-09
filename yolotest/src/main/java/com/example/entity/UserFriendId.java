@@ -15,12 +15,15 @@ public class UserFriendId implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	public User getFriend() {
 		return friend;
 	}
+
 	public void setFriend(User friend) {
 		this.friend = friend;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -29,6 +32,7 @@ public class UserFriendId implements Serializable {
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -50,6 +54,5 @@ public class UserFriendId implements Serializable {
 			return false;
 		return true;
 	}
-
 
 }
