@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -45,6 +44,7 @@ import com.example.payload.JwtAuthenticationResponse;
 import com.example.payload.LoginRequest;
 import com.example.payload.SignUpRequest;
 import com.example.repository.RoleRepository;
+import com.example.repository.UserFriendRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.JwtTokenProvider;
@@ -80,7 +80,6 @@ public class AuthController {
 	@Autowired
 	NotificationService notificationService;
 	
-
 
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/private")
