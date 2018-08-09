@@ -40,17 +40,23 @@ public class User extends DateAudit {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
-
 	private Set<Role> roles = new HashSet<>();
 	
-	
-	@JoinTable(name = "users_friends", joinColumns = {
-			@JoinColumn(name = "user_name", referencedColumnName = "username", nullable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "friend_name", referencedColumnName = "username", nullable = false) })
+	//http://blog.jbaysolutions.com/2013/06/06/jpa-2-tutorial-many-to-many-with-self-2/
+	//自己對自己關聯
+	/*
+	 @JoinTable(name = "users_friends", joinColumns = {
+	 @JoinColumn(name = "user_name", referencedColumnName = "username", nullable = false)}, , @JoinColumn(name = "status", nullable = false)
+	inverseJoinColumns = {
+	 @JoinColumn(name = "friend_name", referencedColumnName = "username", nullable = false)})
 	@ManyToMany
-	private Set<User> friends = new HashSet<>();
+	private Set<User> friends = new HashSet<User>();
+	*/
 
 	public User() {
+	}
+	public User(@NotBlank String username) {
+		this.username = username;
 	}
 
 	public User(@NotBlank String username, @NotBlank @Email String email, @NotBlank String password) {
@@ -92,12 +98,5 @@ public class User extends DateAudit {
 		this.roles = roles;
 	}
 
-	public Set<User> getFriends() {
-		return friends;
-	}
-
-	public void setFriends(Set<User> friends) {
-		this.friends = friends;
-	}
-
+	
 }
