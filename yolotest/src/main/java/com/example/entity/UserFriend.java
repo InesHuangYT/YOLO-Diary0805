@@ -1,6 +1,5 @@
 package com.example.entity;
 
-import java.util.Optional;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
