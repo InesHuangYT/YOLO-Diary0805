@@ -8,10 +8,14 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
+import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.example.entity.Album;
 import com.example.entity.Role;
 import com.example.entity.RoleName;
 import com.example.entity.User;
@@ -40,17 +45,19 @@ import com.example.payload.JwtAuthenticationResponse;
 import com.example.payload.LoginRequest;
 import com.example.payload.SignUpRequest;
 import com.example.repository.RoleRepository;
-import com.example.repository.UserFriendRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.JwtTokenProvider;
 import com.example.security.UserPrincipal;
+import com.example.service.NotificationService;
 
 //https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/
 @RestController
 @RequestMapping("/api/auth")
 
 public class AuthController {
+
+	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
 
 	@Autowired
 	AuthenticationManager authenticationManager;
@@ -70,12 +77,10 @@ public class AuthController {
 	@Autowired
 	UserFriendRepository userfriendrepository;
 
-	// 查詢全部的users
-	@GetMapping("/user")
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	@Autowired
+	NotificationService notificationService;
+	
 
-	}
 
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/private")
@@ -124,16 +129,22 @@ public class AuthController {
 
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/{username}")
 				.buildAndExpand(result.getUsername()).toUri();
-		System.out.println(location);//http://localhost:8080/api/user/testin221111
+		System.out.println(location);// http://localhost:8080/api/user/testin221111
+		
+		try {
+			notificationService.sendNotification(user);
+		}catch(MailException e) {
+			logger.info("Error sending email"+e.getMessage());
+		}
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
 
 	// 更改使用者密碼
 	@PutMapping("user/{username}")
-	public User update(@PathVariable String username , @RequestBody User user) {
-		return userRepository.findByUsername(username).map(users ->{
-			users.setPassword(passwordEncoder.encode(users.getPassword()));
+	public User update(@PathVariable String username, @RequestBody User user) {
+		return userRepository.findByUsername(username).map(users -> {
+			users.setPassword(passwordEncoder.encode(user.getPassword()));
 			return userRepository.save(users);
 		}).orElseThrow(()->new ResourceNotFoundException("Username" + username + "not found", null, user));
 	    

@@ -9,7 +9,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entity.User;
 import com.example.repository.UserRepository;
+/* 這個接口定義了一个方法 loadUserByUsername
+ * 提供一種從用户名可以查到用户並返回的方法。注意，不一定是資料庫哦，文本文件、xml文件等等都可能成為資料源，
+ * 這也是為什么Spring提供这样一个接口的原因：保證你可以採用靈活的資料源。
+ * 建立一个 CustomUserDetailsService 来實現這個接口。
 
+*/
 @Service
 
 public class CustomUserDetailsService implements UserDetailsService {

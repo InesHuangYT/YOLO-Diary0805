@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -25,10 +26,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.entity.Album;
 import com.example.entity.Diary;
+import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.payload.ApiResponse;
-import com.example.payload.DiaryRequest;
-import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
@@ -39,7 +39,7 @@ import com.example.service.DiaryService;
 import com.example.util.AppConstants;
 
 @RestController
-@RequestMapping("/api/album/{albumId}")
+@RequestMapping("/api/diary")
 //要在那一本相簿的哪一篇日記 做新增刪除修改
 
 public class DiaryController {
@@ -57,21 +57,21 @@ public class DiaryController {
 	private DiaryService diaryService;
 
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
-
+	
+//取得全部的日記
 	@GetMapping
-	public PagedResponse<DiaryResponse> getDiaries(@CurrentUser UserPrincipal currentUser,
-			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-		return diaryService.getAllDiaries(currentUser, page, size);
-	}
+	public List<Diary> getAllDiaries() {
+		return diaryRepository.findAll();
 
-	@GetMapping("/diaries")
+	}
+//取得某相簿的日記
+	@GetMapping("/{albumId}/diaries")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
 
 //	 新增日記
-	@PostMapping("/diaries")
+	@PostMapping("/{albumId}/diaries")
 	public Diary createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
 		System.out.println(diary.getText());
 
@@ -93,7 +93,7 @@ public class DiaryController {
 //	}
 
 	// 修改日記
-	@PutMapping("/diaries/{diaryId}")
+	@PutMapping("/{albumId}/diaries/{diaryId}")
 	public Diary updateDiary(@PathVariable(value = "albumId") Long albumId,
 			@PathVariable(value = "diaryId") Long diaryId, @Valid @RequestBody Diary diaryRequest) {
 		if (!albumRepository.existsById(albumId)) {
@@ -107,7 +107,7 @@ public class DiaryController {
 	}
 
 	// 刪除日記
-	@DeleteMapping("/diaries/{diaryId}")
+	@DeleteMapping("/{albumId}/diaries/{diaryId}")
 	public ResponseEntity<?> deleteDiary(@PathVariable(value = "albumId") Long albumId,
 			@PathVariable(value = "diaryId") Long diaryId) {
 		if (!albumRepository.existsById(albumId)) {

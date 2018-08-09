@@ -98,5 +98,4 @@ public class User extends DateAudit {
 		this.roles = roles;
 	}
 
-	
 }
