@@ -1,8 +1,10 @@
 package com.example.controller;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -28,6 +30,7 @@ import com.example.entity.Album;
 import com.example.entity.Diary;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
+import com.example.exception.ResourceNotFoundException;
 import com.example.payload.ApiResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
@@ -55,6 +58,9 @@ public class DiaryController {
 
 	@Autowired
 	private DiaryService diaryService;
+	
+
+	
 
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
 	
@@ -65,21 +71,28 @@ public class DiaryController {
 
 	}
 //取得某相簿的日記
-	@GetMapping("/{albumId}/diaries")
+	@GetMapping("/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
 
+	//@RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
-	@PostMapping("/{albumId}/diaries")
+	@PostMapping("/{albumId}")
 	public Diary createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
 		System.out.println(diary.getText());
 
 		return albumRepository.findById(albumId).map(album -> {
 			diary.setAlbum(album);
+			System.out.println(albumId);//20
+			System.out.println(album);//com.example.entity.Album@4bafd37f
 			return diaryRepository.save(diary);
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
+	
+	
+	
+	
 //	@PostMapping("/diaries") //新增日記
 //	@PreAuthorize("hasRole('USER')")
 //	public ResponseEntity<?> createDiary(@Valid @RequestBody DiaryRequest diaryRequest) {
@@ -93,7 +106,7 @@ public class DiaryController {
 //	}
 
 	// 修改日記
-	@PutMapping("/{albumId}/diaries/{diaryId}")
+	@PutMapping("/{albumId}/{diaryId}")
 	public Diary updateDiary(@PathVariable(value = "albumId") Long albumId,
 			@PathVariable(value = "diaryId") Long diaryId, @Valid @RequestBody Diary diaryRequest) {
 		if (!albumRepository.existsById(albumId)) {
@@ -107,7 +120,7 @@ public class DiaryController {
 	}
 
 	// 刪除日記
-	@DeleteMapping("/{albumId}/diaries/{diaryId}")
+	@DeleteMapping("/{albumId}/{diaryId}")
 	public ResponseEntity<?> deleteDiary(@PathVariable(value = "albumId") Long albumId,
 			@PathVariable(value = "diaryId") Long diaryId) {
 		if (!albumRepository.existsById(albumId)) {
@@ -121,7 +134,7 @@ public class DiaryController {
 	}
 
 
-//	
+
 //	  @GetMapping("/{diaryId}")
 //	    public DiaryResponse getDiaryById(@CurrentUser UserPrincipal currentUser,
 //	                                    @PathVariable Long diaryId) {
