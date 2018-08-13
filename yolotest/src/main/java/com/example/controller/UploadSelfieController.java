@@ -27,6 +27,8 @@ import com.example.entity.Selfie;
 import com.example.payload.UploadSelfieResponse;
 import com.example.repository.SelfieRepository;
 import com.example.repository.UserRepository;
+import com.example.security.CurrentUser;
+import com.example.security.UserPrincipal;
 import com.example.service.SelfieStorageService;
 
 @RestController
@@ -42,9 +44,8 @@ public class UploadSelfieController {
 	@Autowired
 	UserRepository userRepository ;
 
-	@PostMapping("/upload/{username}")
-	public UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file,@PathVariable(value = "username") String username) {
-		Selfie selfie = selfieStorageService.storeSelfie(file,username);
+	public UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {//@PathVariable(value = "username")
+		Selfie selfie = selfieStorageService.storeSelfie(file,current);
 		String selfieDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/selfie/downloadSelfie/")
 				.path(selfie.getId()).toUriString();
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
@@ -52,13 +53,15 @@ public class UploadSelfieController {
 
 	}
 	
-	@PostMapping("/uploadmany/{username}")
-	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@PathVariable(value = "username") String username){
+	@PostMapping("/uploadmany")
+	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@CurrentUser UserPrincipal currentUser){
+		String username = currentUser.getUsername();
 		return Arrays.asList(file).stream().map(files -> uploadSelfie(files,username)).collect(Collectors.toList());		
 	}
 	
 	@GetMapping("/downloadSelfie/{selfieId}")
 	public ResponseEntity<Resource> downloadSelfie(@PathVariable String selfieId){
+		
 		Selfie selfie = selfieStorageService.getSelfie(selfieId);
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.getSelfieType()))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
