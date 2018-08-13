@@ -1,14 +1,21 @@
 package com.example.entity;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -35,8 +42,14 @@ public class Diary extends UserDateAudit {
 	//@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private Album album;
-
+	
+	
 	public Diary() {
+	}
+
+	public Diary(Long id) {
+		super();
+		this.id = id;
 	}
 
 	public Diary(@NotBlank @Size(min = 5) String text) {
@@ -67,8 +80,11 @@ public class Diary extends UserDateAudit {
 		this.album = album;
 	}
 	
+
+	
 //Object類中默認的實現方式是 : return this == obj 。
 //那就是說，只有this 和 obj引用同一個對象，才會返回true。
+
 
 	@Override
 	public boolean equals(Object o) {
@@ -86,3 +102,14 @@ public class Diary extends UserDateAudit {
 	}
 
 }
+
+
+
+//@OneToMany(mappedBy = "diary",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+//private List<UserTagDiary> userTagDiary;
+//@ManyToMany(fetch = FetchType.LAZY)
+//@JoinTable(name = "users_diaries", joinColumns = @JoinColumn(name = "diary_id"), inverseJoinColumns = @JoinColumn(name = "username"))
+//private Set<User> users = new HashSet<>();
+
+//@ManyToMany(mappedBy = "diaries")
+//private Set<User> users = new HashSet<>();

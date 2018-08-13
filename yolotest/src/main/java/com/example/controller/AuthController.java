@@ -54,6 +54,8 @@ import com.example.service.NotificationService;
 //https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/
 @RestController
 @RequestMapping("/api/auth")
+
+//try1
 public class AuthController {
 
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
