@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.User;
 import com.example.entity.UserFriend;
@@ -17,6 +18,7 @@ import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
 
+@RestController
 @RequestMapping("/api/friend")
 public class FriendController {
 	
@@ -28,7 +30,7 @@ public class FriendController {
 	
 	
 	//新增好友 一個人加，對方確認，雙方互為好友
-	@PostMapping("/add/{username}")
+	@PostMapping(value = "/add/{username}")
 	public UserFriend addFriend(@PathVariable String username , @CurrentUser UserPrincipal currentUser){
 	//	if (userfriendrepository.existsById(username))
 	//	if (userRepository.existsByUsername(signUpRequest.getUsername())) {
