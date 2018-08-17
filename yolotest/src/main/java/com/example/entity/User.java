@@ -47,6 +47,9 @@ public class User extends DateAudit {
 	private Set<Role> roles = new HashSet<>();
 
 
+	@ManyToMany(fetch = FetchType.LAZY,  mappedBy = "tag_user")
+	private Set<Diary> tag = new HashSet<>();
+
 	public User() {
 	}
 	
@@ -117,6 +120,17 @@ public class User extends DateAudit {
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
+
+
+	public Set<Diary> getTag() {
+		return tag;
+	}
+
+
+	public void setTag(Set<Diary> tag) {
+		this.tag = tag;
+	}
+	
 
 
 }
