@@ -103,6 +103,7 @@ public class Diary extends UserDateAudit {
 
 	public void setPhoto(List<Photo> photo) {
 		this.photo = photo;
+	}
 
 	public Set<User> getTag_user() {
 		return tag_user;
