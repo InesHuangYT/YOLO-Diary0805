@@ -12,8 +12,6 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 
 
-//import org.springframework.session.jdbc.config.annotation.web.http.EnableJdbcHttpSession;
-//@EnableJdbcHttpSession
 //(exclude={DataSourceAutoConfiguration.class,HibernateJpaAutoConfiguration.class})
 
 //@EnableJpaAuditing
@@ -23,6 +21,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 		Jsr310JpaConverters.class 
 })
 @SpringBootApplication
+//@EnableJdbcHttpSession
 
 public class YoloApplication {
 	
@@ -32,7 +31,7 @@ public class YoloApplication {
 	}
 	
 	public static void main(String[] args) {
-		System.out.println("hello");
+		System.out.println("bonjour");
 		SpringApplication.run(YoloApplication.class, args);
 	}
 

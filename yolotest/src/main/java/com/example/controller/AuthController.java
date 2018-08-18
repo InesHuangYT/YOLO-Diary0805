@@ -2,17 +2,13 @@ package com.example.controller;
 
 import java.net.URI;
 import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,12 +27,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.example.entity.Album;
 import com.example.entity.Role;
 import com.example.entity.RoleName;
 import com.example.entity.User;
-import com.example.entity.UserFriend;
-import com.example.entity.UserFriendId;
 import com.example.exception.AppException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.ApiResponse;
@@ -44,11 +37,8 @@ import com.example.payload.JwtAuthenticationResponse;
 import com.example.payload.LoginRequest;
 import com.example.payload.SignUpRequest;
 import com.example.repository.RoleRepository;
-import com.example.repository.UserFriendRepository;
 import com.example.repository.UserRepository;
-import com.example.security.CurrentUser;
 import com.example.security.JwtTokenProvider;
-import com.example.security.UserPrincipal;
 import com.example.service.NotificationService;
 
 //https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/
@@ -74,12 +64,9 @@ public class AuthController {
 
 	@Autowired
 	JwtTokenProvider tokenProvider;
-	
-	
 
 	@Autowired
 	NotificationService notificationService;
-	
 
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/private")
@@ -97,7 +84,9 @@ public class AuthController {
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		System.out.println(authentication.getAuthorities());
+		System.out.println(authentication);
+		//org.springframework.security.authentication.UsernamePasswordAuthenticationToken@fbc82712: Principal: com.example.security.UserPrincipal@bfd52522; Credentials: [PROTECTED]; Authenticated: true; Details: null; Granted Authorities: ROLE_USER
+		System.out.println(authentication.getAuthorities());//[ROLE_USER]
 		String jwt = tokenProvider.generateToken(authentication);
 		return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
 	}
@@ -130,10 +119,11 @@ public class AuthController {
 				.buildAndExpand(result.getUsername()).toUri();
 		System.out.println(location);// http://localhost:8080/api/user/testin221111
 		
+		//信箱寄送
 		try {
 			notificationService.sendNotification(user);
-		}catch(MailException e) {
-			logger.info("Error sending email"+e.getMessage());
+		} catch (MailException e) {
+			logger.info("Error sending email" + e.getMessage());
 		}
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
@@ -145,10 +135,8 @@ public class AuthController {
 		return userRepository.findByUsername(username).map(users -> {
 			users.setPassword(passwordEncoder.encode(user.getPassword()));
 			return userRepository.save(users);
-		}).orElseThrow(()->new ResourceNotFoundException("Username" + username + "not found", null, user));
-	    
-				
-			
+		}).orElseThrow(() -> new ResourceNotFoundException("Username" + username + "not found", null, user));
+
 	}
 
 	// 刪除
@@ -157,7 +145,5 @@ public class AuthController {
 		userRepository.deleteById(username);
 
 	}
-	
-			
-			}
 
+}

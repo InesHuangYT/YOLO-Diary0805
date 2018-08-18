@@ -15,7 +15,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
-
+// generating a JWT after log in,use in JwtAuthenticationFilter,AuthController
 @Component
 public class JwtTokenProvider {
 	private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
@@ -25,7 +25,12 @@ public class JwtTokenProvider {
 
 	@Value("${app.jwtExpirationInMs}")
 	private int jwtExpirationInMs;
-
+	
+	/*
+	 * App Properties
+	 * app.jwtSecret= JWTSuperSecretKey
+	 * app.jwtExpirationInMs = 604800000
+	 */
 	public String generateToken(Authentication authentication) {
 
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

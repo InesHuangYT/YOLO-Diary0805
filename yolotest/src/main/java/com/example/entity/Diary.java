@@ -43,6 +43,10 @@ public class Diary extends UserDateAudit {
 	@JsonIgnore
 	private Album album;
 	
+	/*一個日記可以有很多張照片*/
+	@OneToMany(mappedBy = "diary",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<Photo> photo;
+	
 	
 	public Diary() {
 	}
@@ -85,6 +89,14 @@ public class Diary extends UserDateAudit {
 //Object類中默認的實現方式是 : return this == obj 。
 //那就是說，只有this 和 obj引用同一個對象，才會返回true。
 
+
+	public List<Photo> getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(List<Photo> photo) {
+		this.photo = photo;
+	}
 
 	@Override
 	public boolean equals(Object o) {

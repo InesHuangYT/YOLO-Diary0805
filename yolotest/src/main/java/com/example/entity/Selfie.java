@@ -21,6 +21,9 @@ public class Selfie {
 
 	@Lob
 	private byte[] selfiedata;
+	
+	private String selfieUri;
+	
 
 	/* 一個使用者可以上傳多張頭貼 */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -47,6 +50,14 @@ public class Selfie {
 		this.selfieName = selfieName;
 		this.selfieType = selfieType;
 		this.selfiedata = selfiedata;
+		this.user = user;
+	}
+
+	public Selfie(String selfieName, String selfieType, byte[] selfiedata, String selfieUri, User user) {
+		this.selfieName = selfieName;
+		this.selfieType = selfieType;
+		this.selfiedata = selfiedata;
+		this.selfieUri = selfieUri;
 		this.user = user;
 	}
 
@@ -89,5 +100,14 @@ public class Selfie {
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public String getSelfieUri() {
+		return selfieUri;
+	}
+
+	public void setSelfieUri(String selfieUri) {
+		this.selfieUri = selfieUri;
+	}
+	
 
 }

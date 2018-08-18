@@ -25,11 +25,21 @@ public class Album extends UserDateAudit{
 	@Size(max = 15)
 	private String name;
 
+	/*一個相簿可以有很多日記*/
 	@OneToMany(mappedBy = "album",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 //	@Size(min = 1)
 //	@Fetch(FetchMode.SELECT)
 //	@BatchSize(size = 30)
 	private List<Diary> diary ;
+	
+	
+	//For deserialisation purposes Album must have a zero-arg constructor.
+	public Album() {
+	}
+
+	public Album(Long id) {
+		this.id = id;
+	}
 
 	public Long getId() {
 		return id;
@@ -54,6 +64,9 @@ public class Album extends UserDateAudit{
 	public void setDiary(List<Diary> diary) {
 		this.diary = diary;
 	}
+
+	
+	
 
 //	public void addDiary(Diary diary) {
 //		addDiary(diary);
