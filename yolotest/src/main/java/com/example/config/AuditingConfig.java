@@ -17,7 +17,6 @@ import com.example.security.UserPrincipal;
 //要自動填充createdBy和updatedBy字段 change to all string
 
 public class AuditingConfig {
-    // That's all here for now. We'll add more auditing configurations later.
 	@Bean
 	public AuditorAware<String> auditorProvider(){
 		return new SpringSecurityAuditImpl();

@@ -19,6 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //什麼時間新增、什麼時間修改 
 //using Spring Boot’s AuditingEntityListener to automatically populate the createdAt and updatedAt fields.
 public class DateAudit implements Serializable {
+
+	
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	private Instant createdAt;

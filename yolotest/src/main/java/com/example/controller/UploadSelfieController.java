@@ -33,7 +33,8 @@ import com.example.service.SelfieStorageService;
 
 @RestController
 @RequestMapping("/api/selfie")
-
+//MultipartException: Current request is not a multipart request
+//https://stackoverflow.com/questions/42013087/multipartexception-current-request-is-not-a-multipart-request
 public class UploadSelfieController {
 	private static final Logger logger = LoggerFactory.getLogger(UploadSelfieController.class);
 
@@ -46,8 +47,12 @@ public class UploadSelfieController {
 
 	public UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {//@PathVariable(value = "username")
 		Selfie selfie = selfieStorageService.storeSelfie(file,current);
+
 		String selfieDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/selfie/downloadSelfie/")
 				.path(selfie.getId()).toUriString();
+		System.out.println(selfieDownloadURI);
+		selfie.setSelfieUri(selfieDownloadURI);
+		selfieRepository.save(selfie);
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
 

@@ -19,6 +19,15 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 //https://www.cnblogs.com/hbb0b0/p/8562277.html
+//signup
+//	filter0
+//	filter3:null
+//	filter1
+//login	
+//	filter0
+//	filter3:Basic bXktdHJ1c3RlZC1jbGllbnQ6c2VjcmV0
+//	filter1
+
 	@Autowired
 	private JwtTokenProvider tokenProvider;
 	@Autowired
@@ -34,11 +43,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 			String jwt = getJwtFromRequest(request);
 			System.out.println("filter1");
+			System.out.println(jwt);
 			if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
 				String userId = tokenProvider.getUserIdFromJWT(jwt);
+				System.out.println(userId);// fatheer
 				System.out.println("filter2");
 
 				UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+				System.out.println(customUserDetailsService.loadUserById(userId));
+				// com.example.security.UserPrincipal@bfd52522
+
 				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 						userDetails, null, userDetails.getAuthorities());
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -54,8 +68,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private String getJwtFromRequest(HttpServletRequest request) {
 		String bearerToken = request.getHeader("Authorization");
-		System.out.println("filter3:"+bearerToken);
-
+		System.out.println("filter3:" + bearerToken);
+		// filter3:Basic bXktdHJ1c3RlZC1jbGllbnQ6c2VjcmV0
 		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
 			System.out.println("filter4");
 
