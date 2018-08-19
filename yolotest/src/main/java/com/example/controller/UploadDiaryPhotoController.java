@@ -23,6 +23,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.entity.Photo;
 import com.example.payload.UploadPhotoResponse;
+import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
 import com.example.service.PhotoStorageService;
 
@@ -33,6 +34,8 @@ public class UploadDiaryPhotoController {
 	PhotoStorageService photoStorageService;
 	@Autowired
 	PhotoRepository photoRepository;
+	@Autowired
+	DiaryRepository diaryRepository;
 
 	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
@@ -49,7 +52,7 @@ public class UploadDiaryPhotoController {
 			@PathVariable(value = "diaryId") Long diaryId) {
 		return Arrays.asList(file).stream().map(files -> uploadPhoto(files, diaryId)).collect(Collectors.toList());
 	}
-//讀取照片
+//下載照片
 	@GetMapping("/downloadPhoto/{photoId}")
 	public ResponseEntity<Resource> downloadPhoto(@PathVariable String photoId) {
 		Photo photo = photoStorageService.getPhoto(photoId);
@@ -58,7 +61,10 @@ public class UploadDiaryPhotoController {
 				.body(new ByteArrayResource(photo.getPhotodata()));
 	}
 //讀取某日記中所上傳的照片
-	//@GetMapping("/downloadPhoto/{diaryId}")
+//	@GetMapping
+//	public List<Photo> getAllPhotos(){
+//		return photoRepository.findAll();
+//	}
 	
 
 }
