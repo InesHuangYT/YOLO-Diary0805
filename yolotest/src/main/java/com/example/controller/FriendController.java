@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.entity.Notice;
 import com.example.entity.User;
 import com.example.entity.UserFriend;
 import com.example.entity.UserFriendId;
 import com.example.exception.ResourceNotFoundException;
+import com.example.repository.NoticeRepository;
 import com.example.repository.UserFriendRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
@@ -21,6 +23,9 @@ import com.example.security.UserPrincipal;
 @RestController
 @RequestMapping("/api/friend")
 public class FriendController {
+	
+	@Autowired
+	NoticeRepository noticerepository;
 	
 	@Autowired
 	UserRepository userRepository;
@@ -48,13 +53,19 @@ public class FriendController {
 				return null;
 			}
 			else {
-				System.out.println("currentUser = "+currentUser.getUsername());
+				Notice notice = new Notice();
+				System.out.println("currentUser = "+current);
 				System.out.println("findUser = "+username);
 				return userRepository.findByUsername(username).map(frienddata ->{
 				UserFriend findfriend = new UserFriend();
 				findfriend.setFriend(friend);
 				findfriend.setUser(userdata);
-				findfriend.setConfirmed(true);
+				findfriend.setConfirmed(false);
+				notice.setMessage(current+" want to be your friend!");
+				notice.setRead(false);
+//				notice.setSender(userdata);
+				notice.setReceive(friend);
+				noticerepository.save(notice);
 			    return userfriendrepository.save(findfriend);
 				}).orElseThrow(()->new ResourceNotFoundException("Fail!!!!!!", username, currentUser));	
 				}
