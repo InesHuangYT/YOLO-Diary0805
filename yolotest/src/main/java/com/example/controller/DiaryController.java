@@ -42,6 +42,7 @@ import com.example.service.DiaryService;
 import com.example.util.AppConstants;
 
 @RestController
+@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/diary")
 //要在那一本相簿的哪一篇日記 做新增刪除修改
 

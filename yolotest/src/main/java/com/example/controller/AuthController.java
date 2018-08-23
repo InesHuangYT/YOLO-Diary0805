@@ -3,6 +3,8 @@ package com.example.controller;
 import java.net.URI;
 import java.util.Collections;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -40,6 +42,7 @@ import com.example.repository.RoleRepository;
 import com.example.repository.UserRepository;
 import com.example.security.JwtTokenProvider;
 import com.example.service.NotificationService;
+import com.example.util.CookieUtil;
 
 //https://www.callicoder.com/spring-boot-spring-security-jwt-mysql-react-app-part-2/
 @RestController
@@ -67,7 +70,9 @@ public class AuthController {
 
 	@Autowired
 	NotificationService notificationService;
-
+	@Autowired
+	CookieUtil cookieUtil;
+	
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/private")
 	public String privateArea() {
@@ -77,17 +82,22 @@ public class AuthController {
 	}
 
 	// 登入
+	//Session Management using Spring Session with JDBC DataStore
+	//https://sivalabs.in/2018/02/session-management-using-spring-session-jdbc-datastore/
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,  HttpServletRequest request, HttpServletResponse response) {
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		System.out.println(authentication);
-		//org.springframework.security.authentication.UsernamePasswordAuthenticationToken@fbc82712: Principal: com.example.security.UserPrincipal@bfd52522; Credentials: [PROTECTED]; Authenticated: true; Details: null; Granted Authorities: ROLE_USER
-		System.out.println(authentication.getAuthorities());//[ROLE_USER]
+		
+		System.out.println(authentication.getAuthorities());// [ROLE_USER]
 		String jwt = tokenProvider.generateToken(authentication);
+		
+		cookieUtil.setLoginTokenCookie(jwt, response);
+
 		return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
 	}
 
@@ -118,8 +128,8 @@ public class AuthController {
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/{username}")
 				.buildAndExpand(result.getUsername()).toUri();
 		System.out.println(location);// http://localhost:8080/api/user/testin221111
-		
-		//信箱寄送
+
+		// 信箱寄送
 		try {
 			notificationService.sendNotification(user);
 		} catch (MailException e) {
