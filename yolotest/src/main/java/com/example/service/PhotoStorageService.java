@@ -37,9 +37,11 @@ public class PhotoStorageService {
 
 			Photo photos = new Photo(photoName, photo.getContentType(), photo.getBytes(),diary);
 			
+			
 			return diaryRepository.findById(diaryId).map(diaryy -> {
 				return photoRepository.save(photos);
 			}).orElseThrow(() -> new BadRequestException("DiaryId " + diaryId + "not found"));
+			
 			
 		} catch (IOException ex) {
 			throw new BadRequestException("Could not store file " + photoName + ". Please try again!", ex);

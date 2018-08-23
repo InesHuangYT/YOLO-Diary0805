@@ -54,7 +54,7 @@ public class DiaryService {
 
 		// Map Diaries to DiaryResponses containing diary creator details
 
-		List<Long> diaryIds = diaries.map(Diary::getId).getContent();
+//		List<Long> diaryIds = diaries.map(Diary::getId).getContent();
 		List<DiaryResponse> diaryResponses = diaries.map(diary -> {
 			return ModelMapper.mapDiaryToDiaryResponse(diary, user);
 		}).getContent();

@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -37,11 +36,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new JwtAuthenticationFilter();
 	}
 
-	@Override
-	public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
-
-	}
+//	@Override
+//	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+//		auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
+//
+//	}
 
 	@Override
 	@Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -62,51 +61,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
 						"/**/*.css", "/**/*.js")
 				.permitAll()
-				.antMatchers("/api/auth/**").permitAll()
-				.antMatchers("/api/auth/private/**").access("hasRole('USER')")//webtoken,這段無效,controller才可以使用
+				.antMatchers("/api/**").permitAll()
+				//.antMatchers("/api/auth/private/**").access("hasRole('USER')")//webtoken,這段無效,controller才可以使用
 				.antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/users/**").permitAll().anyRequest().authenticated();
 		
 		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 	}
- //token檢查
-	
-	
-	
-//    @Bean
-//    public TokenStore tokenStore() {
-//        return new InMemoryTokenStore();
-//    }
 
-//    @Bean
-//    @Autowired
-//    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore){
-//        TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
-//        handler.setTokenStore(tokenStore);
-//        handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
-//        handler.setClientDetailsService(clientDetailsService);
-//        return handler;
-//    }
-//     
-//    @Bean
-//    @Autowired
-//    public ApprovalStore approvalStore(TokenStore tokenStore) throws Exception {
-//        TokenApprovalStore store = new TokenApprovalStore();
-//        store.setTokenStore(tokenStore);
-//        return store;
-//    }
-
-//        @Bean
-//        public static NoOpPasswordEncoder passwordEncoder() {
-//         return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
-//        }
-//        @Bean
-//        public PasswordEncoder passwordEncoder() {
-//            String idForEncode = "bcrypt";
-//            Map<String, PasswordEncoder> encoderMap = new HashMap<>();
-//            encoderMap.put(idForEncode, new BCryptPasswordEncoder());
-//            return new DelegatingPasswordEncoder(idForEncode, encoderMap);
-//        }
-// 
 }

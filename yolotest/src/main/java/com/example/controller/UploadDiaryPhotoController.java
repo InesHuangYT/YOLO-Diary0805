@@ -1,8 +1,15 @@
 package com.example.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.imageio.ImageIO;
+import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -12,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +36,7 @@ import com.example.repository.PhotoRepository;
 import com.example.service.PhotoStorageService;
 
 @RestController
+@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 	@Autowired
@@ -37,21 +46,38 @@ public class UploadDiaryPhotoController {
 	@Autowired
 	DiaryRepository diaryRepository;
 
+	public static void blob(byte[] imageByte) {
+		BufferedImage image = null;
+		try {
+		//	imageByte = DatatypeConverter.parseBase64Binary(imageString);
+			ByteArrayInputStream bis = new  ByteArrayInputStream(imageByte);
+			image = ImageIO.read(new ByteArrayInputStream(imageByte));
+			bis.close();
+			File outputfile = new File("/Users/ines/Desktop/photo/");
+			ImageIO.write(image,"jpg", outputfile);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
-		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath()
-				.path("/api/photo/downloadPhoto/").path(photo.getId()).toUriString();
+		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
+				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
+		blob(photo.getPhotodata());
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
 
 	}
+
 //上傳照片
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
 		return Arrays.asList(file).stream().map(files -> uploadPhoto(files, diaryId)).collect(Collectors.toList());
 	}
+
 //下載照片
 	@GetMapping("/downloadPhoto/{photoId}")
 	public ResponseEntity<Resource> downloadPhoto(@PathVariable String photoId) {
@@ -65,6 +91,5 @@ public class UploadDiaryPhotoController {
 //	public List<Photo> getAllPhotos(){
 //		return photoRepository.findAll();
 //	}
-	
 
 }

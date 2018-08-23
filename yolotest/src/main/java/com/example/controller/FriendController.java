@@ -3,6 +3,7 @@ package com.example.controller;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
 
 @RestController
+@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/friend")
 public class FriendController {
 	
