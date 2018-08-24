@@ -46,14 +46,14 @@ public class UploadDiaryPhotoController {
 	@Autowired
 	DiaryRepository diaryRepository;
 
-	public static void blob(byte[] imageByte) {
+	public static void blob(byte[] imageByte,String photoName) {
 		BufferedImage image = null;
 		try {
 		//	imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new  ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-			File outputfile = new File("/Users/ines/Desktop/photo/");
+			File outputfile = new File("/Users/ines/Desktop/photo/{photoName}.jpg");
 			ImageIO.write(image,"jpg", outputfile);
 		}catch(IOException e) {
 			e.printStackTrace();
@@ -66,7 +66,7 @@ public class UploadDiaryPhotoController {
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
-		blob(photo.getPhotodata());
+		blob(photo.getPhotodata(),photo.getPhotoName());
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
 
 	}
