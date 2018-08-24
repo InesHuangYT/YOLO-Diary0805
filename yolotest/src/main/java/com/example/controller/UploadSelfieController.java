@@ -1,10 +1,14 @@
 package com.example.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +35,7 @@ import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
 import com.example.service.SelfieStorageService;
+import com.mysql.fabric.xmlrpc.base.Array;
 
 @RestController
 @PreAuthorize("hasRole('USER')")
@@ -47,7 +52,25 @@ public class UploadSelfieController {
 	@Autowired
 	UserRepository userRepository ;
 
-	public UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {//@PathVariable(value = "username")
+	
+	
+	public static void blob(byte[] imageByte, int i) {
+		BufferedImage image = null;
+		try {
+		//	imageByte = DatatypeConverter.parseBase64Binary(imageString);
+			ByteArrayInputStream bis = new  ByteArrayInputStream(imageByte);
+			image = ImageIO.read(new ByteArrayInputStream(imageByte));
+			bis.close();
+			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\photo\\"+i+".jpg");
+			ImageIO.write(image,"jpg", outputfile);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current, int i) {//@PathVariable(value = "username")
+//	    
+		
 		Selfie selfie = selfieStorageService.storeSelfie(file,current);
 
 		String selfieDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/selfie/downloadSelfie/")
@@ -55,15 +78,31 @@ public class UploadSelfieController {
 		System.out.println(selfieDownloadURI);
 		selfie.setSelfieUri(selfieDownloadURI);
 		selfieRepository.save(selfie);
+		blob(selfie.getSelfiedata(), i);
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
 
 	}
 	
+	//上傳多張大頭照(改成for迴圈的方式)
+	//https://blog.csdn.net/SwingPyzf/article/details/20230865
 	@PostMapping("/uploadmany")
 	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@CurrentUser UserPrincipal currentUser){
 		String username = currentUser.getUsername();
-		return Arrays.asList(file).stream().map(files -> uploadSelfie(files,username)).collect(Collectors.toList());		
+		if(file != null && file.length > 0) {
+			
+			for(int i = 0; i < file.length; i++) {
+				System.out.println(i+":"+"第"+i+"張照片");
+				System.out.println("共"+(i+1)+"張照片");
+				
+				MultipartFile savefile = file[i];
+				uploadSelfie(savefile, username, i);
+				
+			}
+			
+			
+		}
+		return null;
 	}
 	
 	@GetMapping("/downloadSelfie/{selfieId}")

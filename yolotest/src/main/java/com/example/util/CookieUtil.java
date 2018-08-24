@@ -26,11 +26,13 @@ public class CookieUtil {
 	public String getCookie(HttpServletRequest request, String cookieName) {
 		final Cookie[] cookies = request.getCookies();
 		final HashMap<String, String> cookieHashmap = new HashMap<>();
+		System.out.println("cookies: "+ cookies.toString());
 		if (cookies != null) {
 			for (int i = 0; i < cookies.length; i++) {
 				cookieHashmap.put(cookies[i].getName(), cookies[i].getValue());
 			}
-			return cookieHashmap.get(cookieName);
+			System.out.println("cookieMAP: "+ cookieHashmap);
+			return cookieHashmap.get(cookieName.toString());
 		}
 		return null;
 	}
