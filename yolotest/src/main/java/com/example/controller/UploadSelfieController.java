@@ -3,6 +3,7 @@ package com.example.controller;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +29,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.example.engine.controller.EngineFunc;
+import com.example.engine.entity.RetrieveFace;
+import com.example.engine.entity.TrainFace;
+import com.example.engine.util.CmdUtil;
+import com.example.engine.util.Textfile;
+import com.example.engine.util.TxtUtil;
 import com.example.entity.Selfie;
 import com.example.payload.UploadSelfieResponse;
 import com.example.repository.SelfieRepository;
@@ -43,18 +50,32 @@ import com.mysql.fabric.xmlrpc.base.Array;
 //MultipartException: Current request is not a multipart request
 //https://stackoverflow.com/questions/42013087/multipartexception-current-request-is-not-a-multipart-request
 public class UploadSelfieController {
+	
+
 	private static final Logger logger = LoggerFactory.getLogger(UploadSelfieController.class);
 
 	@Autowired
 	SelfieStorageService selfieStorageService;
+	
 	@Autowired
 	SelfieRepository selfieRepository;
+	
 	@Autowired
 	UserRepository userRepository ;
+	
+	@Autowired
+	static
+	Textfile txt;
+	
+	@Autowired
+	EngineFunc engine;
+	
+	
 
 	
 	
-	public static void blob(byte[] imageByte, int i) {
+	public static void blob(byte[] imageByte, int i, @CurrentUser String current) {
+		
 		BufferedImage image = null;
 		try {
 		//	imageByte = DatatypeConverter.parseBase64Binary(imageString);
@@ -63,9 +84,17 @@ public class UploadSelfieController {
 			bis.close();
 			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\photo\\"+i+".jpg");
 			ImageIO.write(image,"jpg", outputfile);
+			
+//			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
+
+
+//			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
+			
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
+	 
+		
 	}
 	
 	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current, int i) {//@PathVariable(value = "username")
@@ -78,7 +107,7 @@ public class UploadSelfieController {
 		System.out.println(selfieDownloadURI);
 		selfie.setSelfieUri(selfieDownloadURI);
 		selfieRepository.save(selfie);
-		blob(selfie.getSelfiedata(), i);
+		blob(selfie.getSelfiedata(), i, current);
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
 
@@ -86,8 +115,9 @@ public class UploadSelfieController {
 	
 	//上傳多張大頭照(改成for迴圈的方式)
 	//https://blog.csdn.net/SwingPyzf/article/details/20230865
+	
 	@PostMapping("/uploadmany")
-	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@CurrentUser UserPrincipal currentUser){
+	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@CurrentUser UserPrincipal currentUser) {
 		String username = currentUser.getUsername();
 		if(file != null && file.length > 0) {
 			
@@ -99,7 +129,12 @@ public class UploadSelfieController {
 				uploadSelfie(savefile, username, i);
 				
 			}
-			
+			try {
+			txt.getphotopath("C:\\Users\\Administrator\\Desktop\\photo\\", currentUser.getUsername());
+			engine.trainengine();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
 			
 		}
 		return null;
@@ -113,6 +148,8 @@ public class UploadSelfieController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
 				.body(new ByteArrayResource (selfie.getSelfiedata()));
 	}
+	
+	
 
 	
 

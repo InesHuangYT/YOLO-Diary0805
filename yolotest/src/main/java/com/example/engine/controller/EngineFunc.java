@@ -19,46 +19,65 @@ import com.example.engine.util.TxtUtil;
 * @version 
 * @description:
  */
+
 public class EngineFunc{
+	
 	static protected String ENGINEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818";
-	public static void main(String args[]){
-		// RetrieveFace
-		RetrieveFace retrieveFace = new RetrieveFace();
-		retrieveFace.setThreshold(0.7);
-		retrieveFace.setHideMainWindow(false);
-		retrieveFace.setResolution("720p");
-		retrieveFace.setOutputFacePath("outputFace");
-		retrieveFace.setOutputFramePath("outputFrame");
-		retrieveFace.setCam("0");
-		retrieveFace.setMinimumFaceSize(100);
-		retrieveFace.setThreshold(0.7);
-		retrieveFace.setTrainedBinaryPath("eGroup\\eGroup.Model.binary");
-		retrieveFace.setTrainedFaceInfoPath("eGroup\\eGroup.Model.faceInfor");
-		retrieveFace.setJsonPath("output");
-		retrieveFace(retrieveFace);
+	
+	public void trainengine(){
 		
-//		// TrainFace
-//		TrainFace trainFace = new TrainFace();
-//		trainFace.setModelExist(false);
-//		trainFace.setTrainListPath("list.txt");
-//		trainFace.setModelPath("eGroup5\\eGroup.Model");
-//		trainFace(trainFace);
-//		
-//		// ModelMerge
-//		ModelMerge modelMerge = new ModelMerge();
-//		modelMerge.setListPath("ModelList.egroup.List");
-//		modelMerge.setTrainedBinaryPath("eGroup\\eGroup_merged.binary");
-//		modelMerge.setTrainedFaceInfoPath("eGroup\\eGroup_merged.faceInfor");
-//		modelMerge(modelMerge);
+		// TrainFace
+		TrainFace trainFace = new TrainFace();
+		trainFace.setModelExist(false);
+		trainFace.setTrainListPath("list.txt");
+		trainFace.setModelPath("eGroup\\eGroup.Model");
+		trainFace(trainFace);
 		
-//		// ModelSwitch
-//		ModelSwitch modelSwitch = new ModelSwitch();
-//		modelSwitch.setNewModelBinaryPath(ENGINEPATH+"/eGroup5/eGroup.Model.binary");
-//		modelSwitch.setNewModelFaceInfoPath(ENGINEPATH+"/eGroup5/eGroup.Model.faceInfor");
-//		modelSwitch.setSwitchFilePath(ENGINEPATH+"/Singal_For_Model_Switch.txt");
-//		modelSwitch(modelSwitch);
+		
+
 	}
+	
+	public void retrieveengine(){
+		// RetrieveFace
+				RetrieveFace retrieveFace = new RetrieveFace();
+				retrieveFace.setThreshold(0.7);
+				retrieveFace.setHideMainWindow(false);
+				retrieveFace.setResolution("720p");
+				retrieveFace.setOutputFacePath("outputFace");
+				retrieveFace.setOutputFramePath("outputFrame");
+				retrieveFace.setCam("0");
+				retrieveFace.setMinimumFaceSize(100);
+				retrieveFace.setThreshold(0.7);
+				retrieveFace.setTrainedBinaryPath("eGroup\\eGroup.Model.binary");
+				retrieveFace.setTrainedFaceInfoPath("eGroup\\eGroup.Model.faceInfor");
+				retrieveFace.setJsonPath("output");
+				retrieveFace(retrieveFace);
+	
+	}
+	
+	public void modelmergeengine(){
 		
+		// ModelMerge
+		ModelMerge modelMerge = new ModelMerge();
+		modelMerge.setListPath("ModelList.egroup.List");
+		modelMerge.setTrainedBinaryPath("eGroup\\eGroup_merged.binary");
+		modelMerge.setTrainedFaceInfoPath("eGroup\\eGroup_merged.faceInfor");
+		modelMerge(modelMerge);
+		
+		
+	}
+	
+	public void modelswitchengine(){
+		// ModelSwitch
+		ModelSwitch modelSwitch = new ModelSwitch();
+		modelSwitch.setNewModelBinaryPath(ENGINEPATH+"/eGroup5/eGroup.Model.binary");
+		modelSwitch.setNewModelFaceInfoPath(ENGINEPATH+"/eGroup5/eGroup.Model.faceInfor");
+		modelSwitch.setSwitchFilePath(ENGINEPATH+"/Singal_For_Model_Switch.txt");
+		modelSwitch(modelSwitch);
+	
+	}
+	
+	
 	private static boolean trainFace(TrainFace trainFace){		
 		boolean flag = false;
 		// init func 
@@ -112,4 +131,6 @@ public class EngineFunc{
 			txtUtil.create(modelSwitch.getSwitchFilePath(), dataList);
 		}	
 	}
+
+
 }
