@@ -22,7 +22,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 		Jsr310JpaConverters.class 
 })
 @SpringBootApplication
-@ComponentScan({"com.example.engine.controller", "com.example.engine.entity", "com.example.engine.util"})
+//@ComponentScan({"com.example.engine.controller", "com.example.engine.entity", "com.example.engine.util"})
 public class YoloApplication {
 	
 	@PostConstruct

@@ -67,7 +67,7 @@ public class UploadSelfieController {
 	static
 	Textfile txt;
 	
-	@Autowired
+    @Autowired
 	EngineFunc engine;
 	
 	

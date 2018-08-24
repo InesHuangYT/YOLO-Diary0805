@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.example.engine.entity.ModelMerge;
 import com.example.engine.entity.ModelSwitch;
 import com.example.engine.entity.RetrieveFace;
@@ -20,6 +22,7 @@ import com.example.engine.util.TxtUtil;
 * @description:
  */
 
+@Service
 public class EngineFunc{
 	
 	static protected String ENGINEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818";
