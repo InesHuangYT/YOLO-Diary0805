@@ -86,12 +86,18 @@ public class UploadSelfieController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\photo\\"+i+".jpg");
-			ImageIO.write(image,"jpg", outputfile);
-			
+			File outputfile = new File("C:\\Users\\ASUS\\Desktop\\photo\\photo" + i + ".jpg");
+			// /Users/ines/Desktop/photo --> ines mac's path
+			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
+			ImageIO.write(image, "jpg", outputfile);
+
+
 			
+
+			
+
 		} catch (IOException e) {
 
 			e.printStackTrace();
