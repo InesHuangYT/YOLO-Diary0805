@@ -61,7 +61,6 @@ public class UploadSelfieController {
 	SelfieRepository selfieRepository;
 	
 	@Autowired
-<<<<<<< HEAD
 	UserRepository userRepository ;
 	
 	@Autowired
@@ -72,46 +71,34 @@ public class UploadSelfieController {
 	EngineFunc engine;
 	
 	
-=======
-	UserRepository userRepository;
->>>>>>> branch 'master' of https://github.com/inesbaby/YOLO-Diary0805.git
 
-<<<<<<< HEAD
+
+
 	
 	
-	public static void blob(byte[] imageByte, int i, @CurrentUser String current) {
-		
-=======
 //將檔案blob轉成絕對路徑
 	public static void blob(byte[] imageByte, int i) {
->>>>>>> branch 'master' of https://github.com/inesbaby/YOLO-Diary0805.git
+
 		BufferedImage image = null;
 		try {
 			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-<<<<<<< HEAD
+
 			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\photo\\"+i+".jpg");
 			ImageIO.write(image,"jpg", outputfile);
 			
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
-
-
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
 			
-		}catch(IOException e) {
-=======
-			File outputfile = new File("/Users/ines/Desktop/photo" + i + ".jpg");//
-			//C:\\Users\\Administrator\\Desktop\\photo\\
-			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
->>>>>>> branch 'master' of https://github.com/inesbaby/YOLO-Diary0805.git
+
 			e.printStackTrace();
 		}
-	 
-		
 	}
+	
+	
 
 //上傳頭貼
 	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current,
@@ -124,28 +111,15 @@ public class UploadSelfieController {
 		System.out.println(selfieDownloadURI);
 		selfie.setSelfieUri(selfieDownloadURI);
 		selfieRepository.save(selfie);
-		blob(selfie.getSelfiedata(), i, current);
+		blob(selfie.getSelfiedata(), i);
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
 
 	}
-<<<<<<< HEAD
-	
-	//上傳多張大頭照(改成for迴圈的方式)
-	//https://blog.csdn.net/SwingPyzf/article/details/20230865
-	
-=======
 
-	// 上傳多張大頭照(改成for迴圈的方式)
-	// https://blog.csdn.net/SwingPyzf/article/details/20230865
->>>>>>> branch 'master' of https://github.com/inesbaby/YOLO-Diary0805.git
 	@PostMapping("/uploadmany")
-<<<<<<< HEAD
 	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@CurrentUser UserPrincipal currentUser) {
-=======
-	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,
-			@CurrentUser UserPrincipal currentUser) {
->>>>>>> branch 'master' of https://github.com/inesbaby/YOLO-Diary0805.git
+ 
 		String username = currentUser.getUsername();
 		if (file != null && file.length > 0) {
 
@@ -157,7 +131,7 @@ public class UploadSelfieController {
 				uploadSelfie(savefile, username, i);
 
 			}
-<<<<<<< HEAD
+
 			try {
 			txt.getphotopath("C:\\Users\\Administrator\\Desktop\\photo\\", currentUser.getUsername());
 			engine.trainengine();
@@ -165,12 +139,14 @@ public class UploadSelfieController {
 				e.printStackTrace();
 			}
 			
-=======
 
->>>>>>> branch 'master' of https://github.com/inesbaby/YOLO-Diary0805.git
-		}
-		return null;
+		
+		
 	}
+		return null;
+ }
+
+	
 
 	@GetMapping("/downloadSelfie/{selfieId}")
 	public ResponseEntity<Resource> downloadSelfie(@PathVariable String selfieId) {
