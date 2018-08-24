@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 
@@ -21,8 +22,7 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 		Jsr310JpaConverters.class 
 })
 @SpringBootApplication
-//@EnableJdbcHttpSession
-
+//@ComponentScan({"com.example.engine.controller", "com.example.engine.entity", "com.example.engine.util"})
 public class YoloApplication {
 	
 	@PostConstruct
