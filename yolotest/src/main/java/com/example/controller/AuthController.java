@@ -70,6 +70,7 @@ public class AuthController {
 
 	@Autowired
 	NotificationService notificationService;
+	
 	@Autowired
 	CookieUtil cookieUtil;
 	
