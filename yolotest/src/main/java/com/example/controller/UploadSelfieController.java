@@ -60,7 +60,8 @@ public class UploadSelfieController {
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-			File outputfile = new File("/Users/ines/Desktop/photo" + i + ".jpg");//
+			File outputfile = new File("C:\\Users\\ASUS\\Desktop\\photo\\photo" + i + ".jpg");
+			// /Users/ines/Desktop/photo
 			//C:\\Users\\Administrator\\Desktop\\photo\\
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
