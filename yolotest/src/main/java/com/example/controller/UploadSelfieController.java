@@ -69,10 +69,6 @@ public class UploadSelfieController {
 	
     @Autowired
 	EngineFunc engine;
-	
-	
-
-
 
 	
 	
@@ -86,17 +82,12 @@ public class UploadSelfieController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\Users\\ASUS\\Desktop\\photo\\photo" + i + ".jpg");
+			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + i + ".jpg");
 			// /Users/ines/Desktop/photo --> ines mac's path
 			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
 			ImageIO.write(image, "jpg", outputfile);
-
-
-			
-
-			
 
 		} catch (IOException e) {
 
@@ -139,13 +130,13 @@ public class UploadSelfieController {
 			}
 
 			try {
-			txt.getphotopath("C:\\Users\\Administrator\\Desktop\\photo\\", currentUser.getUsername());
-			engine.trainengine();
+			txt.getphotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", currentUser.getUsername());
+			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+			//
+			engine.trainEngine();
 			}catch(Exception e) {
 				e.printStackTrace();
 			}
-			
-
 		
 		
 	}

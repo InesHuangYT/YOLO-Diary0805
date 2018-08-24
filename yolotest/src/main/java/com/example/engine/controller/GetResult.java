@@ -21,7 +21,9 @@ import com.google.gson.reflect.TypeToken;
 * @description:
 */
 public class GetResult {
-	static protected String ENGINEPATH = "C:/Users/eGroup/Desktop/Engine";
+	static protected String ENGINEPATH = "C:\\eGroupAI_FaceRecognitionEngine_V3.0";
+	//C:\eGroupAI_FaceRecognitionEngine_V3.0 -->ines's path
+	//C:/Users/eGroup/Desktop/Engine -->rrou's path
 	
 	public static void main(String args[]){
 //		List<Face> faceList = new ArrayList<>();

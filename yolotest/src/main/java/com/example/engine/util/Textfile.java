@@ -38,7 +38,10 @@ public class Textfile {
 public static void getphotopath(String diretorypath, @CurrentUser String current) throws IOException {
 	 File file = new File(diretorypath);
 	 File[] filearray = file.listFiles();
-	 FileWriter fw = new FileWriter("C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt", true);
+	 FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt", true);
+	 //C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
+	 //C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
+	 
 		for(int i = 0; i < filearray.length; i++) {
 			 fw.write(filearray[i]+"\t"+current+"[NO]"+i+"\r\n");
 			 fw.flush();
