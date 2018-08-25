@@ -38,7 +38,6 @@ import com.example.repository.PhotoRepository;
 import com.example.service.PhotoStorageService;
 
 @RestController
-@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 	@Autowired

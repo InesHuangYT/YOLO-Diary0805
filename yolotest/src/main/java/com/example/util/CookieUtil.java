@@ -19,7 +19,7 @@ public class CookieUtil {
 		final Cookie cookie_tid = new Cookie(name, value);
 		cookie_tid.setMaxAge(60 * 60 * 24); // 24HR
 		cookie_tid.setPath("/");
-		// cookie_tid.setSecure(true);
+		//cookie_tid.setSecure(true);
 		response.addCookie(cookie_tid);
 	}
 

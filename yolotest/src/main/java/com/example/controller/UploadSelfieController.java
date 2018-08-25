@@ -45,7 +45,6 @@ import com.example.service.SelfieStorageService;
 import com.mysql.fabric.xmlrpc.base.Array;
 
 @RestController
-@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/selfie")
 //MultipartException: Current request is not a multipart request
 //https://stackoverflow.com/questions/42013087/multipartexception-current-request-is-not-a-multipart-request
