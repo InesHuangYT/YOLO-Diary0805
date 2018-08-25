@@ -43,7 +43,7 @@ public static void getphotopath(String diretorypath, @CurrentUser String current
 	 //C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
 	 
 		for(int i = 0; i < filearray.length; i++) {
-			 fw.write(filearray[i]+"\t"+current+"[NO]"+i+"\r\n");
+			 fw.write(filearray[i]+"\t"+current+"[No]"+i+"\r\n");
 			 fw.flush();
 			System.out.println(filearray[i]);   	
 		}
