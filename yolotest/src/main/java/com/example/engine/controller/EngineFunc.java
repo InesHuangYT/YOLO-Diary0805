@@ -17,8 +17,8 @@ import com.example.engine.util.TxtUtil;
 /**
  * EngineControl Func
  * 
- * @author 雿�� Daniel
- * @date 2018撟�8���10� 銝��10:54:20
+ * @author 
+ * @date 
  * @version
  * @description:
  */
