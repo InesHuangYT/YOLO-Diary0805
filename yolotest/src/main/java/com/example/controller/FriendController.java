@@ -22,7 +22,6 @@ import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
 
 @RestController
-@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/friend")
 public class FriendController {
 	

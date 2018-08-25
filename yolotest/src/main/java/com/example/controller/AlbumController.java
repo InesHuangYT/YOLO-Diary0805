@@ -21,7 +21,6 @@ import com.example.exception.ResourceNotFoundException;
 import com.example.repository.AlbumRepository;
 
 @RestController
-@PreAuthorize("hasRole('USER')")
 @RequestMapping("/api/album")
 
 public class AlbumController {
