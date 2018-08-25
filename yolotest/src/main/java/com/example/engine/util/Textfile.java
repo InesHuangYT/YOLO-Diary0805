@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import com.example.security.CurrentUser;
 
-
-
 //建立檔案
 //http://blog.xuite.net/sea54100/wretch1/122337059-JAVA+-+%E5%BB%BA%E7%AB%8B%E8%B3%87%E6%96%99%E5%A4%BE%E8%B7%9F%E6%AA%94%E6%A1%88
 
@@ -35,22 +33,42 @@ public class Textfile {
 //	System.out.println("FAIL");
 //}
 //}
-public static void getphotopath(String diretorypath, @CurrentUser String current) throws IOException {
-	 File file = new File(diretorypath);
-	 File[] filearray = file.listFiles();
-	 FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt", true);
-	 //C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
-	 //C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
-	 
-		for(int i = 0; i < filearray.length; i++) {
-			 fw.write(filearray[i]+"\t"+current+"[No]"+i+"\r\n");
-			 fw.flush();
-			System.out.println(filearray[i]);   	
-		}
-		//close filewriter
-		//https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
-		     fw.close();
-			 
-}
+	/**我新增getphotopath，把原本的getphotopath改成getselfiepath了**/
 	
+	public static void getselfiepath(String diretorypath, @CurrentUser String current) throws IOException {
+		File file = new File(diretorypath);
+		File[] filearray = file.listFiles();
+		FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\listSelfie.txt", true);
+		// C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
+		// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
+
+		for (int i = 0; i < filearray.length; i++) {
+			fw.write(filearray[i] + "\t" + current + "[No]" + i + "\r\n");
+			fw.flush();
+			System.out.println(filearray[i]);
+		}
+		// close filewriter
+		// https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
+		fw.close();
+
+	}
+
+	public static void getphotopath(String diretorypath, Long diaryId) throws IOException {
+		File file = new File(diretorypath);
+		File[] filearray = file.listFiles();
+		FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photolist.egroupList", true);
+		// C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
+		// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
+
+		for (int i = 0; i < filearray.length; i++) {
+			fw.write(filearray[i] + "\r\n");
+			fw.flush();
+			System.out.println(filearray[i]);
+		}
+		// close filewriter
+		// https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
+		fw.close();
+
+	}
+
 }

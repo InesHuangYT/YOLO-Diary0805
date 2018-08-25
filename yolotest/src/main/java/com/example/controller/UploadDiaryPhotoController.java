@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.example.engine.controller.EngineFunc;
+import com.example.engine.util.Textfile;
 import com.example.entity.Photo;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.DiaryRepository;
@@ -45,28 +47,38 @@ public class UploadDiaryPhotoController {
 	PhotoRepository photoRepository;
 	@Autowired
 	DiaryRepository diaryRepository;
-
-	public static void blob(byte[] imageByte,String photoName) {
+	@Autowired
+	static Textfile txt;
+	@Autowired
+	EngineFunc engine;
+/**新增日記
+ * -->辨識人臉
+ * -->辨識出是好友-->通知
+ * -->辨識不出是好友，但是是好友-->訓練
+ * -->辨識錯誤（將好友a辨識成好友b）
+ * 
+ * **/
+	public static void blob(byte[] imageByte, int i) {
 		BufferedImage image = null;
 		try {
-		//	imageByte = DatatypeConverter.parseBase64Binary(imageString);
-			ByteArrayInputStream bis = new  ByteArrayInputStream(imageByte);
+			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
+			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-			File outputfile = new File("/Users/ines/Desktop/photo/{photoName}.jpg");
-			ImageIO.write(image,"jpg", outputfile);
-		}catch(IOException e) {
+			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + i + ".jpg");
+			ImageIO.write(image, "jpg", outputfile);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId) {
+	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId, int i) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
-		blob(photo.getPhotodata(),photo.getPhotoName());
+		blob(photo.getPhotodata(), i);
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
 
 	}
@@ -75,7 +87,23 @@ public class UploadDiaryPhotoController {
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
-		return Arrays.asList(file).stream().map(files -> uploadPhoto(files, diaryId)).collect(Collectors.toList());
+		if (file != null && file.length > 0) {
+			for (int i = 0; i < file.length; i++) {
+				System.out.println("第" + (i + 1) + "張");
+				System.out.println("共" + (i + 1) + "張照片");
+				MultipartFile savefile = file[i];
+				uploadPhoto(savefile, diaryId, i);
+			}
+			try {
+				txt.getphotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", diaryId);
+				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+
+				engine.retrieveEngine();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 //下載照片
