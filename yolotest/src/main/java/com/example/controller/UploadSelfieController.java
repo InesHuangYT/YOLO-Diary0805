@@ -74,14 +74,12 @@ public class UploadSelfieController {
 	
 //將檔案blob轉成絕對路徑
 	public static void blob(byte[] imageByte, int i) {
-
 		BufferedImage image = null;
 		try {
 			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-
 			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + i + ".jpg");
 			// /Users/ines/Desktop/photo --> ines mac's path
 			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
