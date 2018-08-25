@@ -61,7 +61,7 @@ public class Textfile {
 		// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
 
 		for (int i = 0; i < filearray.length; i++) {
-			fw.write(filearray[i] + "\r\n");
+			fw.write(filearray[i] + "\r\n");//C:\eGroupAI_FaceRecognitionEngine_V3.0\photo\1.jpg
 			fw.flush();
 			System.out.println(filearray[i]);
 		}

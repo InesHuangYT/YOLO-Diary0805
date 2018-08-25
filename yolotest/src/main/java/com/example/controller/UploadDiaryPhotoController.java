@@ -58,27 +58,27 @@ public class UploadDiaryPhotoController {
  * -->辨識錯誤（將好友a辨識成好友b）
  * 
  * **/
-	public static void blob(byte[] imageByte, int i) {
+	public static void blob(byte[] imageByte, String name) {
 		BufferedImage image = null;
 		try {
 			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + i + ".jpg");
+			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + name );
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId, int i) {
+	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
-		blob(photo.getPhotodata(), i);
+		blob(photo.getPhotodata(), photo.getPhotoName());
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
 
 	}
@@ -92,7 +92,7 @@ public class UploadDiaryPhotoController {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
-				uploadPhoto(savefile, diaryId, i);
+				uploadPhoto(savefile, diaryId);
 			}
 			try {
 				txt.getphotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", diaryId);
