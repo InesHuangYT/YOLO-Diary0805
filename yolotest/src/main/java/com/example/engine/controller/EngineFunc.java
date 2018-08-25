@@ -27,13 +27,12 @@ import com.example.engine.util.TxtUtil;
 public class EngineFunc {
 
 	static protected String ENGINEPATH = "C:\\eGroupAI_FaceRecognitionEngine_V3.0";
-
 	// C:\\Users\\Administrator\\Desktop\\Engine0818 --> rrou's path
 	public void trainEngine() {
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
 		trainFace.setModelExist(false);
-		trainFace.setTrainListPath("list.txt");
+		trainFace.setTrainListPath("listTrain.txt");
 		trainFace.setModelPath("eGroup\\trainTest0825.Model");
 		trainFace(trainFace);
 	}
@@ -46,11 +45,12 @@ public class EngineFunc {
 		retrieveFace.setResolution("720p");
 		retrieveFace.setOutputFacePath("outputFace");
 		retrieveFace.setOutputFramePath("outputFrame");
-		retrieveFace.setCam("0");
+//		retrieveFace.setCam("0");
+		retrieveFace.setPhotoListPath("photolist.egroupList");
 		retrieveFace.setMinimumFaceSize(100);
-		retrieveFace.setThreshold(0.7);
-		retrieveFace.setTrainedBinaryPath("eGroup\\eGroup.Model.binary");
-		retrieveFace.setTrainedFaceInfoPath("eGroup\\eGroup.Model.faceInfor");
+		retrieveFace.setThreads(1);
+		retrieveFace.setTrainedBinaryPath("eGroup\\retrieveFace0825.Model.binary");
+		retrieveFace.setTrainedFaceInfoPath("eGroup\\retrieveFace0825.Model.faceInfor");
 		retrieveFace.setJsonPath("output");
 		retrieveFace(retrieveFace);
 

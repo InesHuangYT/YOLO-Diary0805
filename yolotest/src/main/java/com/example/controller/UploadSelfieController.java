@@ -61,11 +61,8 @@ public class UploadSelfieController {
 	SelfieRepository selfieRepository;
 	
 	@Autowired
-	UserRepository userRepository ;
-	
-	@Autowired
-	static
-	Textfile txt;
+	static Textfile txt;
+
 	
     @Autowired
 	EngineFunc engine;
@@ -74,15 +71,17 @@ public class UploadSelfieController {
 	
 //將檔案blob轉成絕對路徑
 	public static void blob(byte[] imageByte, int i) {
+
 		BufferedImage image = null;
 		try {
 			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + i + ".jpg");
+
+			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\" + i + ".jpg");
 			// /Users/ines/Desktop/photo --> ines mac's path
-			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+			// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
 			ImageIO.write(image, "jpg", outputfile);
@@ -92,8 +91,6 @@ public class UploadSelfieController {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 //上傳頭貼
 	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current,
@@ -112,9 +109,11 @@ public class UploadSelfieController {
 
 	}
 
+//上傳頭貼
 	@PostMapping("/uploadmany")
-	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@CurrentUser UserPrincipal currentUser) {
- 
+	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,
+			@CurrentUser UserPrincipal currentUser) {
+
 		String username = currentUser.getUsername();
 		if (file != null && file.length > 0) {
 
@@ -128,11 +127,11 @@ public class UploadSelfieController {
 			}
 
 			try {
-			txt.getphotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", currentUser.getUsername());
-			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
-			//
-			engine.trainEngine();
-			}catch(Exception e) {
+				txt.getselfiepath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\", currentUser.getUsername());
+				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+				//
+				engine.trainEngine();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		
