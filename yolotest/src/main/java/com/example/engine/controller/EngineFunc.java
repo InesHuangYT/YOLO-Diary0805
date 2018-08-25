@@ -32,7 +32,7 @@ public class EngineFunc {
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
 		trainFace.setModelExist(false);
-		trainFace.setTrainListPath("listTrain.txt");
+		trainFace.setTrainListPath("listSelfie.txt");
 		trainFace.setModelPath("eGroup\\trainTest0825.Model");
 		trainFace(trainFace);
 	}
@@ -43,14 +43,14 @@ public class EngineFunc {
 		retrieveFace.setThreshold(0.7);
 		retrieveFace.setHideMainWindow(false);
 		retrieveFace.setResolution("720p");
-		retrieveFace.setOutputFacePath("outputFace");
-		retrieveFace.setOutputFramePath("outputFrame");
+		retrieveFace.setOutputFacePath("outputFace0825");
+		retrieveFace.setOutputFramePath("outputFrame0825");
 //		retrieveFace.setCam("0");
 		retrieveFace.setPhotoListPath("photolist.egroupList");
 		retrieveFace.setMinimumFaceSize(100);
 		retrieveFace.setThreads(1);
-		retrieveFace.setTrainedBinaryPath("eGroup\\retrieveFace0825.Model.binary");
-		retrieveFace.setTrainedFaceInfoPath("eGroup\\retrieveFace0825.Model.faceInfor");
+		retrieveFace.setTrainedBinaryPath("eGroup\\trainTest0825.Model.binary");
+		retrieveFace.setTrainedFaceInfoPath("eGroup\\trainTest0825.Model.faceInfor");
 		retrieveFace.setJsonPath("output");
 		retrieveFace(retrieveFace);
 
