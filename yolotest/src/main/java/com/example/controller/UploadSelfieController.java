@@ -50,28 +50,24 @@ import com.mysql.fabric.xmlrpc.base.Array;
 //MultipartException: Current request is not a multipart request
 //https://stackoverflow.com/questions/42013087/multipartexception-current-request-is-not-a-multipart-request
 public class UploadSelfieController {
-	
 
 	private static final Logger logger = LoggerFactory.getLogger(UploadSelfieController.class);
 
 	@Autowired
 	SelfieStorageService selfieStorageService;
-	
+
 	@Autowired
 	SelfieRepository selfieRepository;
-	
+
 	@Autowired
-	UserRepository userRepository ;
-	
+	UserRepository userRepository;
+
 	@Autowired
-	static
-	Textfile txt;
-	
-    @Autowired
+	static Textfile txt;
+
+	@Autowired
 	EngineFunc engine;
 
-	
-	
 //將檔案blob轉成絕對路徑
 	public static void blob(byte[] imageByte, int i) {
 
@@ -82,9 +78,9 @@ public class UploadSelfieController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + i + ".jpg");
+			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\" + i + ".jpg");
 			// /Users/ines/Desktop/photo --> ines mac's path
-			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+			// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
 			ImageIO.write(image, "jpg", outputfile);
@@ -94,8 +90,6 @@ public class UploadSelfieController {
 			e.printStackTrace();
 		}
 	}
-	
-	
 
 //上傳頭貼
 	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current,
@@ -114,9 +108,11 @@ public class UploadSelfieController {
 
 	}
 
+//上傳頭貼
 	@PostMapping("/uploadmany")
-	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,@CurrentUser UserPrincipal currentUser) {
- 
+	public List<UploadSelfieResponse> uploadSelfies(@RequestParam("file") MultipartFile[] file,
+			@CurrentUser UserPrincipal currentUser) {
+
 		String username = currentUser.getUsername();
 		if (file != null && file.length > 0) {
 
@@ -130,20 +126,17 @@ public class UploadSelfieController {
 			}
 
 			try {
-			txt.getphotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", currentUser.getUsername());
-			//C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
-			//
-			engine.trainEngine();
-			}catch(Exception e) {
+				txt.getselfiepath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\", currentUser.getUsername());
+				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+				//
+				engine.trainEngine();
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
-		
-	}
-		return null;
- }
 
-	
+		}
+		return null;
+	}
 
 	@GetMapping("/downloadSelfie/{selfieId}")
 	public ResponseEntity<Resource> downloadSelfie(@PathVariable String selfieId) {
@@ -153,7 +146,5 @@ public class UploadSelfieController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
 				.body(new ByteArrayResource(selfie.getSelfiedata()));
 	}
-	
-	
 
 }
