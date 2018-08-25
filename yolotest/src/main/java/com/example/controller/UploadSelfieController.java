@@ -50,27 +50,23 @@ import com.mysql.fabric.xmlrpc.base.Array;
 //MultipartException: Current request is not a multipart request
 //https://stackoverflow.com/questions/42013087/multipartexception-current-request-is-not-a-multipart-request
 public class UploadSelfieController {
-	
 
 	private static final Logger logger = LoggerFactory.getLogger(UploadSelfieController.class);
 
 	@Autowired
 	SelfieStorageService selfieStorageService;
-	
+
 	@Autowired
 	SelfieRepository selfieRepository;
-	
+
 	@Autowired
 	static Textfile txt;
 
-	
-    @Autowired
+	@Autowired
 	EngineFunc engine;
 
-	
-	
 //將檔案blob轉成絕對路徑
-	public static void blob(byte[] imageByte, int i) {
+	public static void blob(byte[] imageByte, String name) {
 
 		BufferedImage image = null;
 		try {
@@ -79,7 +75,7 @@ public class UploadSelfieController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\" + i + ".jpg");
+			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\" + name);
 			// /Users/ines/Desktop/photo --> ines mac's path
 			// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
@@ -93,8 +89,7 @@ public class UploadSelfieController {
 	}
 
 //上傳頭貼
-	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current,
-			int i) {// @PathVariable(value = "username")
+	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {// @PathVariable(value = "username")
 
 		Selfie selfie = selfieStorageService.storeSelfie(file, current);
 
@@ -103,7 +98,7 @@ public class UploadSelfieController {
 		System.out.println(selfieDownloadURI);
 		selfie.setSelfieUri(selfieDownloadURI);
 		selfieRepository.save(selfie);
-		blob(selfie.getSelfiedata(), i);
+		blob(selfie.getSelfiedata(), selfie.getSelfieName());
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
 
@@ -122,7 +117,7 @@ public class UploadSelfieController {
 				System.out.println("共" + (i + 1) + "張照片");
 
 				MultipartFile savefile = file[i];
-				uploadSelfie(savefile, username, i);
+				uploadSelfie(savefile, username);
 
 			}
 
@@ -134,13 +129,10 @@ public class UploadSelfieController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
-		
-	}
-		return null;
- }
 
-	
+		}
+		return null;
+	}
 
 	@GetMapping("/downloadSelfie/{selfieId}")
 	public ResponseEntity<Resource> downloadSelfie(@PathVariable String selfieId) {
@@ -150,7 +142,5 @@ public class UploadSelfieController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
 				.body(new ByteArrayResource(selfie.getSelfiedata()));
 	}
-	
-	
 
 }
