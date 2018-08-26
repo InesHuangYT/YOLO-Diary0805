@@ -4,22 +4,16 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
-import javax.xml.bind.DatatypeConverter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -47,13 +41,13 @@ public class UploadDiaryPhotoController {
 	@Autowired
 	DiaryRepository diaryRepository;
 	@Autowired
-	static Textfile txt;
+	Textfile txt;
 	@Autowired
 	EngineFunc engine;
-/**新增日記
+/** 新增日記
  * -->辨識人臉
- * -->辨識出是好友-->通知
- * -->辨識不出是好友，但是是好友-->訓練
+ * -->辨識出是好友-->通知(hasFound:1)
+ * -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
  * -->辨識錯誤（將好友a辨識成好友b）
  * 
  * **/
@@ -94,7 +88,7 @@ public class UploadDiaryPhotoController {
 				uploadPhoto(savefile, diaryId);
 			}
 			try {
-				txt.getphotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", diaryId);
+				txt.getPhotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", diaryId);
 				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 
 				engine.retrieveEngine();

@@ -26,26 +26,26 @@ public class GetResult {
 	//C:/Users/eGroup/Desktop/Engine -->rrou's path
 	
 	public static void main(String args[]){
-//		List<Face> faceList = new ArrayList<>();
+		List<Face> faceList = new ArrayList<>();
 		
-//		// Get All Retrieve Data
-//		Integer startIndex = 0;
-//		String jsonName = "output.2018-08-16.egroup";	// Get All Retrieve Data
-//		while(true) {
-//			long startTime = System.currentTimeMillis();
-//			faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);
-//			if(faceList.size()>0){
-//				startIndex = faceList.get(faceList.size()-1).getEndIndex();
-//			}
-//			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,startIndex="+startIndex+",faceList="+new Gson().toJson(faceList));
-//			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		// Get All Retrieve Data
+		Integer startIndex = 0;
+		String jsonName = "output.2018-08-16.egroup";	// Get All Retrieve Data
+		while(true) {
+			long startTime = System.currentTimeMillis();
+			faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);
+			if(faceList.size()>0){
+				startIndex = faceList.get(faceList.size()-1).getEndIndex();
+			}
+			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,startIndex="+startIndex+",faceList="+new Gson().toJson(faceList));
+			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// Stop by yourself
 		
 //		//Get Real-time data

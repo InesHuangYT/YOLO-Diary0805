@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import com.example.security.CurrentUser;
+import org.springframework.stereotype.Service;
 
+import com.example.security.CurrentUser;
+@Service
 //建立檔案
 //http://blog.xuite.net/sea54100/wretch1/122337059-JAVA+-+%E5%BB%BA%E7%AB%8B%E8%B3%87%E6%96%99%E5%A4%BE%E8%B7%9F%E6%AA%94%E6%A1%88
 
@@ -35,7 +37,7 @@ public class Textfile {
 //}
 	/**我新增getphotopath，把原本的getphotopath改成getselfiepath了**/
 	
-	public static void getselfiepath(String diretorypath, @CurrentUser String current) throws IOException {
+	public void getSelfiepath(String diretorypath, @CurrentUser String current) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
 		FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\listSelfie.txt", true);
@@ -53,7 +55,7 @@ public class Textfile {
 
 	}
 
-	public static void getphotopath(String diretorypath, Long diaryId) throws IOException {
+	public void getPhotopath(String diretorypath, Long diaryId) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
 		FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photolist.egroupList", true);

@@ -121,7 +121,7 @@ public class UploadSelfieController {
 			}
 
 			try {
-				txt.getselfiepath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\", currentUser.getUsername());
+				txt.getSelfiepath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\", currentUser.getUsername());
 				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				//
 				engine.trainEngine();
