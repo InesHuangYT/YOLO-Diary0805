@@ -28,6 +28,8 @@ public class EngineFunc {
 
 	static protected String ENGINEPATH = "C:\\eGroupAI_FaceRecognitionEngine_V3.0";
 	// C:\\Users\\Administrator\\Desktop\\Engine0818 --> rrou's path
+	
+	
 	public void trainEngine() {
 		// TrainFace
 		TrainFace trainFace = new TrainFace();

@@ -10,7 +10,6 @@ import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.MySelfieNotFoundException;
 import com.example.repository.SelfieRepository;
-import com.example.repository.UserRepository;
 
 import java.io.IOException;
 
