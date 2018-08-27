@@ -26,16 +26,17 @@ import com.example.engine.util.TxtUtil;
 @Service
 public class EngineFunc {
 
-	static protected String ENGINEPATH = "C:\\eGroupAI_FaceRecognitionEngine_V3.0";
+	static protected String ENGINEPATH = "D:\\engine";
 	// C:\\Users\\Administrator\\Desktop\\Engine0818 --> rrou's path
-	
+	// C:\\eGroupAI_FaceRecognitionEngine_V3.0 --> ines's path
+	// D:\\engine --> laboratory's path
 	
 	public void trainEngine() {
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
 		trainFace.setModelExist(false);
 		trainFace.setTrainListPath("listSelfie.txt");
-		trainFace.setModelPath("eGroup\\trainTest0825.Model");
+		trainFace.setModelPath("eGroup\\trainTest0827.Model");
 		trainFace(trainFace);
 	}
 

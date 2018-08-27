@@ -38,12 +38,15 @@ public class Textfile {
 	/**我新增getphotopath，把原本的getphotopath改成getselfiepath了**/
 	
 	public void getSelfiepath(String diretorypath, @CurrentUser String current) throws IOException {
+		System.out.println("START METHOD");
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\listSelfie.txt", true);
+		FileWriter fw = new FileWriter("D:\\engine\\list.txt", true);
 		// C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
 		// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
-
+        // D:\\engine\\listSelfie.txt --> laboratory's path
+		
+		
 		for (int i = 0; i < filearray.length; i++) {
 			fw.write(filearray[i] + "\t" + current + "[No]" + i + "\r\n");
 			fw.flush();
@@ -58,9 +61,10 @@ public class Textfile {
 	public void getPhotopath(String diretorypath, Long diaryId) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photolist.egroupList", true);
+		FileWriter fw = new FileWriter("D:\\engine\\photolist.egroupList", true);
 		// C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
 		// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
+		// D:\\engine\\photolist.egroupList --> laboratory's path
 
 		for (int i = 0; i < filearray.length; i++) {
 			fw.write(filearray[i] + "\r\n");//C:\eGroupAI_FaceRecognitionEngine_V3.0\photo\1.jpg
