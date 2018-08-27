@@ -22,8 +22,8 @@ public class Face {
 	private String videoFrameNo;
 	private String imageSourcePath;
 
-	private Integer startIndex;
-	private Integer endIndex;
+	private Integer startIndex; //startIndex:字串起始位置。
+	private Integer endIndex;   //endIndex:字串結尾位置。
 	public String getHasFound() {
 		return hasFound;
 	}
