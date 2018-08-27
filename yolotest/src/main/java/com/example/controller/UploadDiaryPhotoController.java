@@ -27,6 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.engine.controller.EngineFunc;
 import com.example.engine.util.Textfile;
 import com.example.entity.Photo;
+import com.example.exception.BadRequestException;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
@@ -45,13 +46,13 @@ public class UploadDiaryPhotoController {
 	Textfile txt;
 	@Autowired
 	EngineFunc engine;
-/** 新增日記
- * -->辨識人臉
- * -->辨識出是好友-->通知(hasFound:1)
- * -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
- * -->辨識錯誤（將好友a辨識成好友b）
- * 
- * **/
+
+	/**
+	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) 
+	 * -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
+	 * -->辨識錯誤（將好友a辨識成好友b）
+	 * 
+	 **/
 	public static void blob(byte[] imageByte, String name) {
 		BufferedImage image = null;
 		try {
@@ -59,7 +60,7 @@ public class UploadDiaryPhotoController {
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + name );
+			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + name);
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -108,5 +109,18 @@ public class UploadDiaryPhotoController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; photoname = \"" + photo.getPhotoName() + "\"")
 				.body(new ByteArrayResource(photo.getPhotodata()));
 	}
-	
+
+//刪除照片
+	@DeleteMapping("/{diaryId}/{photoId}")
+	public ResponseEntity<?> deletePhoto(@PathVariable(value = "diaryId") Long diaryId,
+			@PathVariable(value = "photoId") String photoId) {
+		if (!diaryRepository.existsById(diaryId)) {
+			throw new BadRequestException("DiaryId " + diaryId + " not found");
+		}
+		return photoRepository.findById(photoId).map(photo -> {
+			photoRepository.delete(photo);
+			return ResponseEntity.ok().build();
+		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
+	}
+
 }
