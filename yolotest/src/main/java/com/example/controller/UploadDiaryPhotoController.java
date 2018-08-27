@@ -107,10 +107,5 @@ public class UploadDiaryPhotoController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; photoname = \"" + photo.getPhotoName() + "\"")
 				.body(new ByteArrayResource(photo.getPhotodata()));
 	}
-//讀取某日記中所上傳的照片
-//	@GetMapping
-//	public List<Photo> getAllPhotos(){
-//		return photoRepository.findAll();
-//	}
-
+	
 }

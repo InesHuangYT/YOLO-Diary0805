@@ -90,9 +90,6 @@ public class DiaryController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 	
-	
-	
-	
 //	@PostMapping("/diaries") //新增日記
 //	@PreAuthorize("hasRole('USER')")
 //	public ResponseEntity<?> createDiary(@Valid @RequestBody DiaryRequest diaryRequest) {
