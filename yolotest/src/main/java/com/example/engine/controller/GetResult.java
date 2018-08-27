@@ -30,7 +30,7 @@ public class GetResult {
 		
 		// Get All Retrieve Data
 		Integer startIndex = 0;
-		String jsonName = "output.2018-08-16.egroup";	// Get All Retrieve Data
+		String jsonName = "output.2018-08-25.egroup";	// Get All Retrieve Data
 		while(true) {
 			long startTime = System.currentTimeMillis();
 			faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);

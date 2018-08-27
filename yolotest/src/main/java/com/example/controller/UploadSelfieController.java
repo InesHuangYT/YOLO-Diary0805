@@ -59,7 +59,7 @@ public class UploadSelfieController {
 	SelfieRepository selfieRepository;
 
 	@Autowired
-	static Textfile txt;
+	Textfile txt;
 
 	@Autowired
 	EngineFunc engine;
@@ -88,7 +88,9 @@ public class UploadSelfieController {
 	}
 
 //上傳頭貼
-	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {// @PathVariable(value = "username")
+	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {// @PathVariable(value
+																														// =
+																														// "username")
 
 		Selfie selfie = selfieStorageService.storeSelfie(file, current);
 
