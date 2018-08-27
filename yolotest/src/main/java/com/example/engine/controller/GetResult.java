@@ -24,6 +24,12 @@ import com.google.gson.reflect.TypeToken;
  * 無法直接讀取回傳的 JSON?
  * 因辨識引擎持續辨識，程式需複製辨識中的 JSON 檔，再進行讀取。
 */
+/**
+ * Yoloapplication先執行
+ * 在執行GetResult
+ * 問題:最後一個JSON檔沒有印出?
+ * **/
+
 public class GetResult {
 	static protected String ENGINEPATH = "C:\\eGroupAI_FaceRecognitionEngine_V3.0";
 	//C:\eGroupAI_FaceRecognitionEngine_V3.0 -->ines's path
@@ -51,8 +57,9 @@ public class GetResult {
 //			}
 //		}
 		// Stop by yourself
+/*************************************************************************************************/
 		
-//		//Get Real-time data
+		//Get Real-time data
 		String cacheJsonName = "output.cache.egroup";	// Get Real-time data
 		while(true) {
 			long startTime = System.currentTimeMillis();
@@ -127,9 +134,9 @@ public class GetResult {
 						String json;
 						// Reorganization json
 						if (endIndex != -1 && startIndex != endIndex && startIndex < endIndex) {
-							if (startIndex > 0) { //從 JSON 內容 中間字元開始 [+ 擷取後JSON內容 +}]
+							if (startIndex > 0) {        //從 JSON 內容 中間字元開始 [+ 擷取後JSON內容 +}]
 								json = "[" + jsonContent.toString().substring(startIndex + 2, endIndex) + "}]";
-							} else { //從 JSON 內容 第一個字元開始 擷取後 JSON 內容 + }]
+							} else {       //從 JSON 內容 第一個字元開始 擷取後 JSON 內容 + }]
 								json = jsonContent.toString().substring(startIndex, endIndex) + "}]";
 							}
 							System.out.println("json="+json);
@@ -157,7 +164,7 @@ public class GetResult {
 	 * @param startIndex
 	 * @return
 	 */
-	public static List<Face> getCacheResult(String jsonPath,String jsonName) {
+	public static List<Face> getCacheResult(String jsonPath,String jsonName) { 
 		// init func
 		final Gson gson = new Gson();
 		final CopyUtil copyUtil = new CopyUtil();

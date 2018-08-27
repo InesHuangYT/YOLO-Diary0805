@@ -8,9 +8,9 @@ import java.util.List;
 import com.google.gson.Gson;
 
 public class CmdUtil {
-	
+
 	public boolean cmdProcessBuilder(List<String> commandList) {
-		System.out.println("commandlist="+new Gson().toJson(commandList));
+		System.out.println("commandlist=" + new Gson().toJson(commandList));
 		Process process = null;
 		InputStreamReader inputStreamReader = null;
 		BufferedReader bufferedreader = null;
@@ -21,28 +21,29 @@ public class CmdUtil {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		 		
+
 		/* Read the output of command prompt */
 		inputStreamReader = new InputStreamReader(process.getInputStream());
 		bufferedreader = new BufferedReader(inputStreamReader);
-		String line="";
+		String line = "";
 		try {
-			while ((line=bufferedreader.readLine()) != null) {}			
+			while ((line = bufferedreader.readLine()) != null) {
+			}
 		} catch (IOException e) {
-		}		
+		}
 		try {
 			process.waitFor();
 		} catch (InterruptedException e) {
-		}		
-			process.destroy();		
+		}
+		process.destroy(); //關閉引擎
 		try {
 			bufferedreader.close();
 		} catch (IOException e) {
-		}		
+		}
 		try {
 			inputStreamReader.close();
 		} catch (IOException e) {
-		}		
+		}
 		return true;
 	}
 }
