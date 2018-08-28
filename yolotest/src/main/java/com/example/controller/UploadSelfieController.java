@@ -145,7 +145,7 @@ public class UploadSelfieController {
 				System.out.println("OVER!!!!!!!");
 				
 				File selfiefile = new File("C:\\engine\\selfie");
-				selfiefile.delete();
+				//selfiefile.delete();(未完成)
 				
 				
 				
