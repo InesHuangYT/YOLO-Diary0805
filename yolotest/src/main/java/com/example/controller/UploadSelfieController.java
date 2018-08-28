@@ -96,7 +96,9 @@ public class UploadSelfieController {
 	}
 
 //上傳頭貼
-	private UploadSelfieResponse uploadSelfie(/*@RequestParam("file")*/ MultipartFile file, @CurrentUser String current) {// @PathVariable(value = "username")
+
+	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {// @PathVariable(value = "username")
+
 
 		Selfie selfie = selfieStorageService.storeSelfie(file, current);
 
@@ -134,12 +136,14 @@ public class UploadSelfieController {
 				System.out.println("START　Write!");
 				txt.getSelfiepath("C:\\engine\\selfie\\", currentUser.getUsername());
 				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+
 				// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\ --> ines's path
 				// D:\\engine\\selfie\\ --> laboratory's path
 				
 				
 				//System.out.println("TRAIN!");
 				
+
 				
 				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");

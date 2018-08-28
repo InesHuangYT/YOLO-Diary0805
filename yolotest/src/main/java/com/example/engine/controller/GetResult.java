@@ -20,6 +20,16 @@ import com.google.gson.reflect.TypeToken;
 * @version 
 * @description:
 */
+/**
+ * 無法直接讀取回傳的 JSON?
+ * 因辨識引擎持續辨識，程式需複製辨識中的 JSON 檔，再進行讀取。
+*/
+/**
+ * Yoloapplication先執行
+ * 在執行GetResult
+ * 問題:最後一個JSON檔沒有印出?
+ * **/
+
 public class GetResult {
 	static protected String ENGINEPATH = "C:\\eGroupAI_FaceRecognitionEngine_V3.0";
 	//C:\eGroupAI_FaceRecognitionEngine_V3.0 -->ines's path
@@ -29,6 +39,7 @@ public class GetResult {
 		List<Face> faceList = new ArrayList<>();
 		
 		// Get All Retrieve Data
+    
 		Integer startIndex = 0;
 		String jsonName = "output.2018-08-28.egroup";	// Get All Retrieve Data
 		while(true) {
@@ -50,18 +61,40 @@ public class GetResult {
 		
 //		//Get Real-time data
 //		String cacheJsonName = "output.cache.egroup";	// Get Real-time data
+//		Integer startIndex = 0;
+//		String jsonName = "output.2018-08-25.egroup";	// Get All Retrieve Data
 //		while(true) {
 //			long startTime = System.currentTimeMillis();
-//			faceList = getCacheResult(ENGINEPATH,cacheJsonName);
-//			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="+new Gson().toJson(faceList));
+//			faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);
+//			if(faceList.size()>0){
+//				startIndex = faceList.get(faceList.size()-1).getEndIndex();
+//			}
+//			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,startIndex="+startIndex+",faceList="+new Gson().toJson(faceList));
 //			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
 //			try {
-//				Thread.sleep(300);
+//				Thread.sleep(100);
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
 //		}
+		// Stop by yourself
+/*************************************************************************************************/
+		
+		//Get Real-time data
+		String cacheJsonName = "output.cache.egroup";	// Get Real-time data
+		while(true) {
+			long startTime = System.currentTimeMillis();
+			faceList = getCacheResult(ENGINEPATH,cacheJsonName);
+			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="+new Gson().toJson(faceList));
+			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		// Stop by yourself
 	}
 		
@@ -119,12 +152,13 @@ public class GetResult {
 					if (jsonContent.toString() != null) {
 						// Get last one object
 						int endIndex = jsonContent.lastIndexOf("}\n\t,");
+						//System.out.println(endIndex);
 						String json;
 						// Reorganization json
 						if (endIndex != -1 && startIndex != endIndex && startIndex < endIndex) {
-							if (startIndex > 0) {
+							if (startIndex > 0) {        //從 JSON 內容 中間字元開始 [+ 擷取後JSON內容 +}]
 								json = "[" + jsonContent.toString().substring(startIndex + 2, endIndex) + "}]";
-							} else {
+							} else {       //從 JSON 內容 第一個字元開始 擷取後 JSON 內容 + }]
 								json = jsonContent.toString().substring(startIndex, endIndex) + "}]";
 							}
 							System.out.println("json="+json);
@@ -152,7 +186,7 @@ public class GetResult {
 	 * @param startIndex
 	 * @return
 	 */
-	public static List<Face> getCacheResult(String jsonPath,String jsonName) {
+	public static List<Face> getCacheResult(String jsonPath,String jsonName) { 
 		// init func
 		final Gson gson = new Gson();
 		final CopyUtil copyUtil = new CopyUtil();
@@ -198,6 +232,7 @@ public class GetResult {
 						// Get last one object
 						final int endIndex = jsonContent.lastIndexOf("}\n\t,");
 						final String json = jsonContent.toString().substring(0, endIndex) + "}]";
+						System.out.println("json="+json);
 						faceList = gson.fromJson(json, faceListType);						
 					}
 				} catch (IOException e) {
