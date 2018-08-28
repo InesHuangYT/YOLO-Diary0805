@@ -60,7 +60,9 @@ public class UploadDiaryPhotoController {
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
+
 			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + name);
+
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -90,8 +92,10 @@ public class UploadDiaryPhotoController {
 				uploadPhoto(savefile, diaryId);
 			}
 			try {
-				txt.getPhotopath("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\", diaryId);
+				txt.getPhotopath("C:\\engine\\photo\\", diaryId);
 				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+				// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\ --> ines's path
+				// C:\\engine\\photo\\ --> laboratory's path
 
 				engine.retrieveEngine();
 			} catch (Exception e) {
