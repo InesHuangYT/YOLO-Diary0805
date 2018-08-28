@@ -61,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/", "/favicon.ico", "/**/*.png", "/**/*.gif", "/**/*.svg", "/**/*.jpg", "/**/*.html",
 						"/**/*.css", "/**/*.js")
 				.permitAll()
-				.antMatchers("/api/auth/**").permitAll()
+				.antMatchers("/api/**").permitAll()
 				//.antMatchers("/api/auth/private/**").access("hasRole('USER')")//webtoken,這段無效,controller才可以使用
 				.antMatchers("/api/user/checkUsernameAvailability", "/api/user/checkEmailAvailability").permitAll()
 				.antMatchers(HttpMethod.GET, "/api/users/**").permitAll().anyRequest().authenticated();

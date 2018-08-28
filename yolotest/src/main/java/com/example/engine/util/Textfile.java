@@ -41,7 +41,7 @@ public class Textfile {
 		System.out.println("START METHOD");
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("D:\\engine\\list.txt", true);
+		FileWriter fw = new FileWriter("C:\\engine\\list.txt");
 		// C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
 		// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
         // D:\\engine\\listSelfie.txt --> laboratory's path
@@ -51,6 +51,7 @@ public class Textfile {
 			fw.write(filearray[i] + "\t" + current + "[No]" + i + "\r\n");
 			fw.flush();
 			System.out.println(filearray[i]);
+			
 		}
 		// close filewriter
 		// https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
@@ -61,7 +62,7 @@ public class Textfile {
 	public void getPhotopath(String diretorypath, Long diaryId) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("D:\\engine\\photolist.egroupList", true);
+		FileWriter fw = new FileWriter("C:\\engine\\photolist.egroupList", true);
 		// C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
 		// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\list.txt --> ines's path
 		// D:\\engine\\photolist.egroupList --> laboratory's path

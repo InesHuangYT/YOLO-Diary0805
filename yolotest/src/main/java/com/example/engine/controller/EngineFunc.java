@@ -26,17 +26,27 @@ import com.example.engine.util.TxtUtil;
 @Service
 public class EngineFunc {
 
-	static protected String ENGINEPATH = "D:\\engine";
+	static protected String ENGINEPATH = "C:\\engine";
 	// C:\\Users\\Administrator\\Desktop\\Engine0818 --> rrou's path
 	// C:\\eGroupAI_FaceRecognitionEngine_V3.0 --> ines's path
 	// D:\\engine --> laboratory's path
 	
 	public void trainEngine() {
+		
+		File file = new File("C:\\engineeGroup\\trainTest0828.Model");
+		System.out.println("11");
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
+		System.out.println("22");
 		trainFace.setModelExist(false);
-		trainFace.setTrainListPath("listSelfie.txt");
-		trainFace.setModelPath("eGroup\\trainTest0827.Model");
+		System.out.println("33");
+		if(file.exists()) {
+			System.out.println("44");
+//		trainFace.setModelExist(true);
+			System.out.println("SUCCESS  EXIST");
+		}
+		trainFace.setTrainListPath("list.txt");
+		trainFace.setModelPath("eGroup\\trainTest0828.Model");
 		trainFace(trainFace);
 	}
 
@@ -83,10 +93,15 @@ public class EngineFunc {
 	private static boolean trainFace(TrainFace trainFace) {
 		boolean flag = false;
 		// init func
+		System.out.println("01");
 		trainFace.generateCli();
+		System.out.println("02");
 		if (trainFace.getCommandList() != null) {
+			System.out.println("03");
 			final CmdUtil cmdUtil = new CmdUtil();
+			System.out.println("04");
 			flag = cmdUtil.cmdProcessBuilder(trainFace.getCommandList());
+			System.out.println("05");
 		}
 		return flag;
 	}
