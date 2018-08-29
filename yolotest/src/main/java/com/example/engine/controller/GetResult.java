@@ -82,19 +82,19 @@ public class GetResult {
 /*************************************************************************************************/
 		
 		//Get Real-time data
-		String cacheJsonName = "output.cache.egroup";	// Get Real-time data
-		while(true) {
-			long startTime = System.currentTimeMillis();
-			faceList = getCacheResult(ENGINEPATH,cacheJsonName);
-			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="+new Gson().toJson(faceList));
-			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		//String cacheJsonName = "output.cache.egroup";	// Get Real-time data
+//		while(true) {
+//			long startTime = System.currentTimeMillis();
+//			faceList = getCacheResult(ENGINEPATH,cacheJsonName);
+//			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="+new Gson().toJson(faceList));
+//			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
+//			try {
+//				Thread.sleep(300);
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 		// Stop by yourself
 	}
 		

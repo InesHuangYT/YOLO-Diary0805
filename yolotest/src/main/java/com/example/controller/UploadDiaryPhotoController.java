@@ -61,7 +61,8 @@ public class UploadDiaryPhotoController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\" + name);
+			File outputfile = new File("C:\\engine\\photo\\" + name);
+			//C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\ -->ines's path
 
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {

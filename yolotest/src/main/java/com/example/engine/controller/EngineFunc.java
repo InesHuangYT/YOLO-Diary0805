@@ -33,20 +33,16 @@ public class EngineFunc {
 	
 	public void trainEngine() {
 		
-		File file = new File("C:\\engineeGroup\\trainTest0828.Model");
-		System.out.println("11");
+		//File file = new File("C:\\engineeGroup\\trainTest0828.Model");
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
-		System.out.println("22");
 		trainFace.setModelExist(false);
-		System.out.println("33");
-		if(file.exists()) {
-			System.out.println("44");
+//		if(file.exists()) {
 //		trainFace.setModelExist(true);
-			System.out.println("SUCCESS  EXIST");
-		}
+//			System.out.println("SUCCESS  EXIST");
+//		}
 		trainFace.setTrainListPath("list.txt");
-		trainFace.setModelPath("eGroup\\trainTest0828.Model");
+		trainFace.setModelPath("eGroup\\trainTest0825.Model");
 		trainFace(trainFace);
 	}
 
