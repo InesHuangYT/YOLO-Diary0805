@@ -66,8 +66,8 @@ public class UploadSelfieController {
 	EngineFunc engine;
 
 //將檔案blob轉成絕對路徑
-	public static void blob(byte[] imageByte, String name) {
-        String filepath = "C:\\engine\\selfie\\"+ name;
+	public static void blob(byte[] imageByte, String name) { //改成username
+        String filepath = "C:\\engine\\selfie\\"+ name+".jpg";
         File file = new File(filepath);
 		BufferedImage image = null;
 		try {
@@ -108,7 +108,7 @@ public class UploadSelfieController {
 		selfie.setSelfieUri(selfieDownloadURI);
 		selfieRepository.save(selfie);
 		
-		blob(selfie.getSelfiedata(), selfie.getSelfieName());
+		blob(selfie.getSelfiedata(), current);
 		
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
