@@ -25,21 +25,19 @@ import com.google.gson.reflect.TypeToken;
  * 因辨識引擎持續辨識，程式需複製辨識中的 JSON 檔，再進行讀取。
 */
 /**
- * Yoloapplication先執行
- * 在執行GetResult
- * 問題:最後一個JSON檔沒有印出?
- * **/
+ * Yoloapplication先執行 在執行GetResult 問題:最後一個JSON檔沒有印出?
+ **/
 
 public class GetResult {
 	static protected String ENGINEPATH = "C:\\engine";
-	//C:\eGroupAI_FaceRecognitionEngine_V3.0 -->ines's path
-	//C:/Users/eGroup/Desktop/Engine -->rrou's path
-	
-	public static void main(String args[]){
+	// C:\eGroupAI_FaceRecognitionEngine_V3.0 -->ines's path
+	// C:/Users/eGroup/Desktop/Engine -->rrou's path
+
+	public static void main(String args[]) {
 		List<Face> faceList = new ArrayList<>();
-		
+
 		// Get All Retrieve Data 抓整日JSON檔
-    
+
 //		Integer startIndex = 0;
 //		String jsonName = "output.2018-08-28.egroup";	// Get All Retrieve Data
 //		while(true) {
@@ -58,17 +56,18 @@ public class GetResult {
 //			}
 //		}
 		// Stop by yourself
-	
 
-/*************************************************************************************************/
-		
-		//Get Real-time data 抓快取JSON檔
-		String cacheJsonName = "output.cache.egroup";	// Get Real-time data
-		while(true) {
+		/*************************************************************************************************/
+
+		// Get Real-time data 抓快取JSON檔
+		String cacheJsonName = "output.cache.egroup"; // Get Real-time data
+		while (true) {
 			long startTime = System.currentTimeMillis();
-			faceList = getCacheResult(ENGINEPATH,cacheJsonName);
-			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="+new Gson().toJson(faceList));
-			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
+			faceList = getCacheResult(ENGINEPATH, cacheJsonName);
+			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="
+					+ new Gson().toJson(faceList));
+			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame =
+			// 100 ms
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException e) {
@@ -77,33 +76,33 @@ public class GetResult {
 			}
 		}
 		// Stop by yourself
-		
-		
+
 	}
-		
-	
+
 	/**
 	 * Get Retrieve result json
+	 * 
 	 * @author Daniel
 	 *
 	 * @param jsonPath
 	 * @param startIndex
 	 * @return
 	 */
-	public static List<Face> getAllResult(String jsonPath,String jsonName,int startIndex) {
+	public static List<Face> getAllResult(String jsonPath, String jsonName, int startIndex) {
 		// init func
 		final Gson gson = new Gson();
 		final CopyUtil copyUtil = new CopyUtil();
 
 		// init variable
-		final Type faceListType = new TypeToken<ArrayList<Face>>() {}.getType();
+		final Type faceListType = new TypeToken<ArrayList<Face>>() {
+		}.getType();
 		List<Face> faceList = new ArrayList<Face>();
 
 		// Get retrieve result
-		final File sourceJson = new File(jsonPath.toString() + "/"+jsonName+".json");
-		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/"+jsonName+"_copy.json");
+		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
+		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + "_copy.json");
 		final File destJson = new File(jsonFileName.toString());
-		if(sourceJson.exists()&&sourceJson.length()!=destJson.length()) {
+		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
 			try {
 				copyUtil.copyFile(sourceJson, destJson);
 			} catch (IOException e1) {
@@ -135,16 +134,16 @@ public class GetResult {
 					if (jsonContent.toString() != null) {
 						// Get last one object
 						int endIndex = jsonContent.lastIndexOf("}\n\t,");
-						//System.out.println(endIndex);
+						// System.out.println(endIndex);
 						String json;
 						// Reorganization json
 						if (endIndex != -1 && startIndex != endIndex && startIndex < endIndex) {
-							if (startIndex > 0) {        //從 JSON 內容 中間字元開始 [+ 擷取後JSON內容 +}]
+							if (startIndex > 0) { // 從 JSON 內容 中間字元開始 [+ 擷取後JSON內容 +}]
 								json = "[" + jsonContent.toString().substring(startIndex + 2, endIndex) + "}]";
-							} else {       //從 JSON 內容 第一個字元開始 擷取後 JSON 內容 + }]
+							} else { // 從 JSON 內容 第一個字元開始 擷取後 JSON 內容 + }]
 								json = jsonContent.toString().substring(startIndex, endIndex) + "}]";
 							}
-							System.out.println("json="+json);
+							System.out.println("json=" + json);
 							faceList = gson.fromJson(json, faceListType);
 							faceList.get(faceList.size() - 1).setEndIndex(endIndex + 2);
 						}
@@ -157,32 +156,34 @@ public class GetResult {
 					}
 				}
 			}
-		}		
+		}
 		return faceList;
 	}
-	
+
 	/**
 	 * Get Retrieve result json
+	 * 
 	 * @author Daniel
 	 *
 	 * @param jsonPath
 	 * @param startIndex
 	 * @return
 	 */
-	public static List<Face> getCacheResult(String jsonPath,String jsonName) { 
+	public static List<Face> getCacheResult(String jsonPath, String jsonName) {
 		// init func
 		final Gson gson = new Gson();
 		final CopyUtil copyUtil = new CopyUtil();
 
 		// init variable
-		final Type faceListType = new TypeToken<ArrayList<Face>>() {}.getType();
+		final Type faceListType = new TypeToken<ArrayList<Face>>() {
+		}.getType();
 		List<Face> faceList = new ArrayList<Face>();
 
 		// Get retrieve result
-		final File sourceJson = new File(jsonPath.toString() + "/"+jsonName+".json");
-		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/"+jsonName+"_copy.json");
+		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
+		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + "_copy.json");
 		final File destJson = new File(jsonFileName.toString());
-		if(sourceJson.exists()&&sourceJson.length()!=destJson.length()) {
+		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
 			try {
 				copyUtil.copyFile(sourceJson, destJson);
 			} catch (IOException e1) {
@@ -215,12 +216,12 @@ public class GetResult {
 						// Get last one object
 //						final int endIndex = jsonContent.lastIndexOf("}\n\t,");
 //						final String json = jsonContent.toString().substring(0, endIndex) + "}]";
-						faceList = gson.fromJson(jsonContent.toString(), faceListType);	
-						//System.out.println("json="+jsonContent.toString());
+						faceList = gson.fromJson(jsonContent.toString(), faceListType);
+						 System.out.println("json="+faceList);
 
 					}
-					for(int i = 0 ; i< faceList.size(); i++) {
-						System.out.println("HasFound : "+faceList.get(i).getHasFound());
+					for (int i = 0; i < faceList.size(); i++) {
+						System.out.println("HasFound : " + faceList.get(i).getHasFound());
 					}
 				} catch (IOException e) {
 				} finally {
@@ -230,7 +231,7 @@ public class GetResult {
 					}
 				}
 			}
-		}		
+		}
 		return faceList;
 	}
 }
