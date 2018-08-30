@@ -25,7 +25,10 @@ import com.google.gson.reflect.TypeToken;
  * 因辨識引擎持續辨識，程式需複製辨識中的 JSON 檔，再進行讀取。
 */
 /**
- * Yoloapplication先執行 在執行GetResult 問題:最後一個JSON檔沒有印出?
+ * Yoloapplication先執行 在執行GetResult 
+ * 步驟:
+ * I.上傳頭貼訓練，自動刪除list.txt和selfie中的圖片檔 ，使用append!
+ * II.上傳日記照片辨識，取快取結果，自動刪除photolist.egroupList和photo中的圖片檔
  **/
 
 public class GetResult {
