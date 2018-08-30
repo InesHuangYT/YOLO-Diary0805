@@ -81,7 +81,7 @@ public class UploadDiaryPhotoController {
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
-			set.setPhotoPath("C:\\engine\\photo\\" + photo.getPhotoName()); //在資料表photo中加入photoPath
+			set.setPhotoPath("C:\\engine\\photo\\" + photo.getPhotoName()); // 在資料表photo中加入photoPath
 			// --> C:\engine\photo\ --> windows's path
 			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
 			return photoRepository.save(set);
@@ -106,7 +106,7 @@ public class UploadDiaryPhotoController {
 				// --> C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				// --> C:\engine\photo\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
-				/** engine.retrieveEngine(); **/
+				engine.retrieveEngine();
 
 			} catch (Exception e) {
 				e.printStackTrace();

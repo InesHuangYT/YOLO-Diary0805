@@ -153,7 +153,7 @@ public class UploadSelfieController {
 
 				// System.out.println("TRAIN!");
 
-				/** engine.trainEngine(); **/
+				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");
 
 				File selfiefile = new File("C:\\engine\\selfie");
