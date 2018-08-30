@@ -23,6 +23,7 @@ public class Selfie {
 	private byte[] selfiedata;
 	
 	private String selfieUri;
+	private String selfiePath;
 	
 
 	/* 一個使用者可以上傳多張頭貼 */
@@ -107,6 +108,14 @@ public class Selfie {
 
 	public void setSelfieUri(String selfieUri) {
 		this.selfieUri = selfieUri;
+	}
+
+	public String getSelfiePath() {
+		return selfiePath;
+	}
+
+	public void setSelfiePath(String selfiePath) {
+		this.selfiePath = selfiePath;
 	}
 	
 

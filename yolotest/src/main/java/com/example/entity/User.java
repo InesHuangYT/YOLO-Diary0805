@@ -49,6 +49,10 @@ public class User extends DateAudit {
 
 	@ManyToMany(fetch = FetchType.LAZY,  mappedBy = "tag_user")
 	private Set<Diary> tag = new HashSet<>();
+	
+	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
+	@ManyToMany(fetch = FetchType.LAZY,  mappedBy = "user")
+	private Set<Photo> photo = new HashSet<>();
 
 	public User() {
 	}
@@ -129,6 +133,16 @@ public class User extends DateAudit {
 
 	public void setTag(Set<Diary> tag) {
 		this.tag = tag;
+	}
+
+
+	public Set<Photo> getPhoto() {
+		return photo;
+	}
+
+
+	public void setPhoto(Set<Photo> photo) {
+		this.photo = photo;
 	}
 	
 

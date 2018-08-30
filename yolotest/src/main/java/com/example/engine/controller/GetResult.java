@@ -30,8 +30,9 @@ import com.google.gson.reflect.TypeToken;
 
 public class GetResult {
 	static protected String ENGINEPATH = "C:\\engine";
-	// C:\eGroupAI_FaceRecognitionEngine_V3.0 -->ines's path
-	// C:/Users/eGroup/Desktop/Engine -->rrou's path
+	//--> C:\engine --> windows's path
+	//--> /Users/ines/Desktop/engine --> ines'mac path
+	//--> C:/Users/eGroup/Desktop/Engine -->rrou's path
 
 	public static void main(String args[]) {
 		List<Face> faceList = new ArrayList<>();
@@ -217,7 +218,7 @@ public class GetResult {
 //						final int endIndex = jsonContent.lastIndexOf("}\n\t,");
 //						final String json = jsonContent.toString().substring(0, endIndex) + "}]";
 						faceList = gson.fromJson(jsonContent.toString(), faceListType);
-						 System.out.println("json="+faceList);
+						 System.out.println("json="+jsonContent.toString());
 
 					}
 					for (int i = 0; i < faceList.size(); i++) {

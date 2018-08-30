@@ -1,12 +1,19 @@
 package com.example.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Lob;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -29,15 +36,23 @@ public class Photo extends UserDateAudit {
 	@Lob
 	private byte[] photodata;
 	private String photoUri;
+	private String photoPath;
 
 	/* 一個日記可以存放很多相片 */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "diary_id", nullable = false)
 	@JsonIgnore
 	private Diary diary;
+	
+	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
+	@ManyToMany (fetch = FetchType.LAZY)
+	@JoinTable(name = "photo_tag_users", joinColumns = @JoinColumn(name = "photoId"), inverseJoinColumns = @JoinColumn(name = "username"))
+	private Set<User> user = new HashSet<>();
+
 
 	public Photo() {
 	}
+	
 
 	public Photo(String photoName, String photoType, byte[] photodata) {
 		super();
@@ -110,5 +125,24 @@ public class Photo extends UserDateAudit {
 	public void setPhotoUri(String photoUri) {
 		this.photoUri = photoUri;
 	}
+
+	public String getPhotoPath() {
+		return photoPath;
+	}
+
+	public void setPhotoPath(String photoPath) {
+		this.photoPath = photoPath;
+	}
+
+
+	public Set<User> getUser() {
+		return user;
+	}
+
+
+	public void setUser(Set<User> user) {
+		this.user = user;
+	}
+	
 
 }

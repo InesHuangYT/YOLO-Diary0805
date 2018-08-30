@@ -37,6 +37,7 @@ import com.example.engine.util.CmdUtil;
 import com.example.engine.util.Textfile;
 import com.example.engine.util.TxtUtil;
 import com.example.entity.Selfie;
+import com.example.exception.BadRequestException;
 import com.example.payload.UploadSelfieResponse;
 import com.example.repository.SelfieRepository;
 import com.example.repository.UserRepository;
@@ -66,27 +67,30 @@ public class UploadSelfieController {
 	EngineFunc engine;
 
 //將檔案blob轉成絕對路徑
-	public static void blob(byte[] imageByte, String name) { //改成username
-        String filepath = "C:\\engine\\selfie\\"+ name+".jpg";
-        File file = new File(filepath);
+	public static void blob(byte[] imageByte, String name) { // 改成username
+		String filepath = "C:\\engine\\selfie\\" + name + ".jpg";
+		// --> C:\engine\selfie\ --> window's path
+		// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
+
+		File file = new File(filepath);
 		BufferedImage image = null;
 		try {
 			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
-            
+
 			file.getParentFile().mkdirs();
 			file.createNewFile();
 //			File outputfile = new File("C:\\engine\\selfie\\" + name);
-			
+
 			// /Users/ines/Desktop/photo --> ines mac's path
 			// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 			// D:\\engine\\selfie\\ --> laboratory's path
-			
+
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
 //			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
-			
+
 			ImageIO.write(image, "jpg", file);
 
 		} catch (IOException e) {
@@ -107,8 +111,15 @@ public class UploadSelfieController {
 		System.out.println(selfieDownloadURI);
 		selfie.setSelfieUri(selfieDownloadURI);
 		selfieRepository.save(selfie);
-		
 		blob(selfie.getSelfiedata(), current);
+		String selfieId = selfie.getId();
+		selfieRepository.findById(selfieId).map(set -> {
+			set.setSelfiePath("C:\\engine\\selfie\\" + current +".jpg");
+			// C:\engine\selfie\ --> windows's path
+			// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
+
+			return selfieRepository.save(set);
+		}).orElseThrow(() -> new BadRequestException("SelfieId " + selfieId + "not found"));
 		
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
@@ -116,7 +127,7 @@ public class UploadSelfieController {
 	}
 
 //上傳頭貼
-	@RequestMapping(value ="/uploadmany",headers = "content-type=multipart/*",method = RequestMethod.POST)
+	@RequestMapping(value = "/uploadmany", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	public List<UploadSelfieResponse> uploadSelfies(@RequestParam(value = "file", required = true) MultipartFile[] file,
 			@CurrentUser UserPrincipal currentUser) {
 
@@ -136,23 +147,18 @@ public class UploadSelfieController {
 				System.out.println("START　Write!");
 				txt.getSelfiepath("C:\\engine\\selfie\\", currentUser.getUsername());
 				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+				// C:\engine\selfie\ --> laboratory's path
+				// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
 
-				// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\selfie\\ --> ines's path
-				// D:\\engine\\selfie\\ --> laboratory's path
-				
-				
-				//System.out.println("TRAIN!");
-				
 
-				
-				engine.trainEngine();
+				// System.out.println("TRAIN!");
+
+				/** engine.trainEngine(); **/
 				System.out.println("OVER!!!!!!!");
-				
+
 				File selfiefile = new File("C:\\engine\\selfie");
-				//selfiefile.delete();(未完成)
-				
-				
-				
+				// selfiefile.delete();(未完成)
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
