@@ -68,7 +68,7 @@ public class UploadSelfieController {
 
 //將檔案blob轉成絕對路徑
 	public static void blob(byte[] imageByte, String name) { // 改成username
-		String filepath = "C:\\engine\\selfie\\" + name + ".jpg";
+		String filepath = "C:\\engine\\selfie\\selfie.jpg";
 		// --> C:\engine\selfie\ --> window's path
 		// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
 
@@ -114,7 +114,7 @@ public class UploadSelfieController {
 		blob(selfie.getSelfiedata(), current);
 		String selfieId = selfie.getId();
 		selfieRepository.findById(selfieId).map(set -> {
-			set.setSelfiePath("C:\\engine\\selfie\\" + current +".jpg");
+			set.setSelfiePath("C:\\engine\\selfie\\" + "selfie" +".jpg");
 			// C:\engine\selfie\ --> windows's path
 			// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
 

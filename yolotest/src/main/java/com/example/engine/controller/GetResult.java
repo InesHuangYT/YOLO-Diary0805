@@ -27,7 +27,7 @@ import com.google.gson.reflect.TypeToken;
 /**
  * Yoloapplication先執行 在執行GetResult 
  * 步驟:
- * I.上傳頭貼訓練，自動刪除list.txt和selfie中的圖片檔 ，使用append!
+ * I.上傳頭貼訓練，覆蓋list.txt和selfie中的圖片檔 ，我們要寫條件使用append!
  * II.上傳日記照片辨識，取快取結果，自動刪除photolist.egroupList和photo中的圖片檔
  **/
 
