@@ -62,7 +62,7 @@ public class UploadDiaryPhotoController {
 			bis.close();
 
 			File outputfile = new File("C:\\engine\\photo\\" + name);
-			// --> C:\engine\photo\ -->ines's path
+			// --> C:\engine\photo\ -->windows's path
 			// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 
 			ImageIO.write(image, "jpg", outputfile);
@@ -85,7 +85,7 @@ public class UploadDiaryPhotoController {
 			// --> C:\engine\photo\ --> windows's path
 			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
 			return photoRepository.save(set);
-		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + "not found"));
+		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
 
 	}
@@ -106,8 +106,7 @@ public class UploadDiaryPhotoController {
 				// --> C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				// --> C:\engine\photo\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
-				engine.retrieveEngine();
-
+				/** engine.retrieveEngine(); **/
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
