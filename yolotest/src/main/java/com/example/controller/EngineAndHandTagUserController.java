@@ -62,7 +62,6 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 手動標記 一張照片標記很多個人
-	
 	public Photo handTag(@PathVariable(value = "photoId") String photoId,@RequestParam("username") String personId) {
 		String username = findUsernameByPersonId(personId);
 		return photoRepository.findById(photoId).map(photo -> {

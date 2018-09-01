@@ -40,7 +40,6 @@ public class DiaryService {
 	public PagedResponse<DiaryResponse> getDiariesCreatedBy(String username, UserPrincipal currentUser, int page,
 			int size) {
 		validatePageNumberAndSize(page, size);
-
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 		// Retrieve all diaries created by the given username
@@ -84,8 +83,6 @@ public class DiaryService {
 		return creatorMap;
 
 	}
-
-
 
 //DiaryController
 //	public DiaryResponse getDiaryById(Long diaryId, UserPrincipal currentUser) {
