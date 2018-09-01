@@ -9,8 +9,11 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.example.engine.entity.Face;
 import com.example.engine.util.CopyUtil;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,17 +28,18 @@ import com.google.gson.reflect.TypeToken;
  * 因辨識引擎持續辨識，程式需複製辨識中的 JSON 檔，再進行讀取。
 */
 /**
- * Yoloapplication先執行 在執行GetResult 
- * 步驟:
- * I.上傳頭貼訓練，覆蓋list.txt和selfie中的圖片檔 ，我們要寫條件使用append!
- * II.上傳日記照片辨識，取快取結果，自動刪除photolist.egroupList和photo中的圖片檔
+ * Yoloapplication先執行 在執行GetResult 步驟: I.上傳頭貼訓練，覆蓋list.txt和selfie中的圖片檔
+ * ，我們要寫條件使用append! II.上傳日記照片辨識，取快取結果，產出photolist.egroupList和photo中的圖片檔 -->辨識人臉
+ * -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
+ * -->辨識錯誤（將好友a辨識成好友b）
  **/
-
+@Service
 public class GetResult {
+
 	static protected String ENGINEPATH = "C:\\engine";
-	//--> C:\engine --> windows's path
-	//--> /Users/ines/Desktop/engine --> ines'mac path
-	//--> C:/Users/eGroup/Desktop/Engine -->rrou's path
+	// --> C:\engine --> windows's path
+	// --> /Users/ines/Desktop/engine --> ines'mac path
+	// --> C:/Users/eGroup/Desktop/Engine -->rrou's path
 
 	public static void main(String args[]) {
 		List<Face> faceList = new ArrayList<>();
@@ -78,6 +82,7 @@ public class GetResult {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
 		}
 		// Stop by yourself
 
@@ -173,6 +178,7 @@ public class GetResult {
 	 * @param startIndex
 	 * @return
 	 */
+
 	public static List<Face> getCacheResult(String jsonPath, String jsonName) {
 		// init func
 		final Gson gson = new Gson();
@@ -221,12 +227,18 @@ public class GetResult {
 //						final int endIndex = jsonContent.lastIndexOf("}\n\t,");
 //						final String json = jsonContent.toString().substring(0, endIndex) + "}]";
 						faceList = gson.fromJson(jsonContent.toString(), faceListType);
-						 System.out.println("json="+jsonContent.toString());
+						System.out.println("json=" + jsonContent.toString());
 
 					}
 					for (int i = 0; i < faceList.size(); i++) {
-						System.out.println("HasFound : " + faceList.get(i).getHasFound());
+						int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+						if (hasFound == 1) {
+							System.out.println("HasFound : " + faceList.get(i).getHasFound());
+							System.out.println(faceList.get(i).getPersonId());
+							System.out.println(faceList.get(i).getImageSourcePath());
+						}
 					}
+
 				} catch (IOException e) {
 				} finally {
 					try {
@@ -238,4 +250,23 @@ public class GetResult {
 		}
 		return faceList;
 	}
+
+	// private static UserRepository userRepository;
+
+//	public static Photo engineTag(String personId, String imageSourcePath) {
+//		System.out.println("12");
+//		return photoRepository.findByPhotoPath(imageSourcePath).map(photo -> {
+//			System.out.println("123");
+//			String photoId = photo.getId();
+//			User users = new User(personId);
+//			Photo photos = new Photo(photoId);
+//			photos.getUser().add(users);
+//			return photoRepository.save(photos);
+//
+//		}).orElseThrow(() -> new BadRequestException("photoId not found"));
+////		User username = userRepository.findByUsername(personId)
+////				.orElseThrow(() -> new AppException("username not set."));
+//
+//	}
+
 }

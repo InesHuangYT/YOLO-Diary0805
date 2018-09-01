@@ -43,16 +43,22 @@ public class Photo extends UserDateAudit {
 	@JoinColumn(name = "diary_id", nullable = false)
 	@JsonIgnore
 	private Diary diary;
-	
-	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
-	@ManyToMany (fetch = FetchType.LAZY)
-	@JoinTable(name = "photo_tag_users", joinColumns = @JoinColumn(name = "photoId"), inverseJoinColumns = @JoinColumn(name = "username"))
-	private Set<User> user = new HashSet<>();
 
+	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "photo_tag_users", joinColumns = @JoinColumn(name = "photo_id"), inverseJoinColumns = @JoinColumn(name = "user_name"))
+	private Set<User> user = new HashSet<>();
 
 	public Photo() {
 	}
-	
+
+	public Photo(String id) {
+		this.id = id;
+	}
+
+	public Photo(Set<User> user) {
+		this.user = user;
+	}
 
 	public Photo(String photoName, String photoType, byte[] photodata) {
 		super();
@@ -67,7 +73,6 @@ public class Photo extends UserDateAudit {
 		this.photodata = photodata;
 		this.diary = diary;
 	}
-	
 
 	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Diary diary) {
 		super();
@@ -134,15 +139,12 @@ public class Photo extends UserDateAudit {
 		this.photoPath = photoPath;
 	}
 
-
 	public Set<User> getUser() {
 		return user;
 	}
 
-
 	public void setUser(Set<User> user) {
 		this.user = user;
 	}
-	
 
 }
