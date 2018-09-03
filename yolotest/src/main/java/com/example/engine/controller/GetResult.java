@@ -31,9 +31,10 @@ import com.google.gson.reflect.TypeToken;
  * **/
 
 public class GetResult {
-	static protected String ENGINEPATH = "C:\\eGroupAI_FaceRecognitionEngine_V3.0";
+	static protected String ENGINEPATH = "C:\\engine";
 	//C:\eGroupAI_FaceRecognitionEngine_V3.0 -->ines's path
 	//C:/Users/eGroup/Desktop/Engine -->rrou's path
+	//C:\\engine -->laboratory's path
 	
 	public static void main(String args[]){
 		List<Face> faceList = new ArrayList<>();
@@ -41,7 +42,7 @@ public class GetResult {
 		// Get All Retrieve Data
     
 		Integer startIndex = 0;
-		String jsonName = "output.2018-08-28.egroup";	// Get All Retrieve Data
+		String jsonName = "output.2018-08-29.egroup";	// Get All Retrieve Data
 		while(true) {
 			long startTime = System.currentTimeMillis();
 			faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);
@@ -59,27 +60,7 @@ public class GetResult {
 		}
 		// Stop by yourself
 		
-//		//Get Real-time data
-//		String cacheJsonName = "output.cache.egroup";	// Get Real-time data
-//		Integer startIndex = 0;
-//		String jsonName = "output.2018-08-25.egroup";	// Get All Retrieve Data
-//		while(true) {
-//			long startTime = System.currentTimeMillis();
-//			faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);
-//			if(faceList.size()>0){
-//				startIndex = faceList.get(faceList.size()-1).getEndIndex();
-//			}
-//			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,startIndex="+startIndex+",faceList="+new Gson().toJson(faceList));
-//			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		// Stop by yourself
-/*************************************************************************************************/
+
 		
 		//Get Real-time data
 		//String cacheJsonName = "output.cache.egroup";	// Get Real-time data
@@ -152,7 +133,7 @@ public class GetResult {
 					if (jsonContent.toString() != null) {
 						// Get last one object
 						int endIndex = jsonContent.lastIndexOf("}\n\t,");
-						//System.out.println(endIndex);
+						System.out.println(endIndex);
 						String json;
 						// Reorganization json
 						if (endIndex != -1 && startIndex != endIndex && startIndex < endIndex) {
