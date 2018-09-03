@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.engine.controller.EngineFunc;
+import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
@@ -48,8 +49,7 @@ public class UploadDiaryPhotoController {
 	EngineFunc engine;
 
 	/**
-	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) 
-	 * -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
+	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
 	 * -->辨識錯誤（將好友a辨識成好友b）
 	 * 
 	 **/
@@ -62,7 +62,8 @@ public class UploadDiaryPhotoController {
 			bis.close();
 
 			File outputfile = new File("C:\\engine\\photo\\" + name);
-			//C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\ -->ines's path
+			// --> C:\engine\photo\ -->windows's path
+			// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
@@ -77,6 +78,14 @@ public class UploadDiaryPhotoController {
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
 		blob(photo.getPhotodata(), photo.getPhotoName());
+		String photoId = photo.getId();
+		System.out.println(photoId);
+		photoRepository.findById(photoId).map(set -> {
+			set.setPhotoPath("C:\\engine\\photo\\" + photo.getPhotoName()); // 在資料表photo中加入photoPath
+			// --> C:\engine\photo\ --> windows's path
+			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
+			return photoRepository.save(set);
+		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
 
 	}
@@ -94,11 +103,10 @@ public class UploadDiaryPhotoController {
 			}
 			try {
 				txt.getPhotopath("C:\\engine\\photo\\", diaryId);
-				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
-				// C:\\eGroupAI_FaceRecognitionEngine_V3.0\\photo\\ --> ines's path
-				// C:\\engine\\photo\\ --> laboratory's path
-
-				engine.retrieveEngine();
+				// --> C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+				// --> C:\engine\photo\ --> laboratory's path
+				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
+				/** engine.retrieveEngine(); **/
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

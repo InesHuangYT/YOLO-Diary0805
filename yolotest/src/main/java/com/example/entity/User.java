@@ -35,30 +35,31 @@ public class User extends DateAudit {
 
 	@NotBlank
 	private String password;
-	
-	/*一個使用者可以上傳多張頭貼*/
-	@OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private List<Selfie> selfie ;
-	
+
+	/* 一個使用者可以上傳多張頭貼 */
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	private List<Selfie> selfie;
+
 	private boolean enabled;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
-
-	@ManyToMany(fetch = FetchType.LAZY,  mappedBy = "tag_user")
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "tag_user")
 	private Set<Diary> tag = new HashSet<>();
+
+	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "user")
+//	private Set<Photo> photo = new HashSet<>();
 
 	public User() {
 	}
-	
 
 	public User(boolean enabled) {
 		super();
 		this.enabled = false;
 	}
-
 
 	public User(@NotBlank String username) {
 		this.username = username;
@@ -107,11 +108,9 @@ public class User extends DateAudit {
 		return selfie;
 	}
 
-
 	public void setSelfie(List<Selfie> selfie) {
 		this.selfie = selfie;
 	}
-
 
 	public boolean isEnabled() {
 		return enabled;
@@ -121,17 +120,21 @@ public class User extends DateAudit {
 		this.enabled = enabled;
 	}
 
-
 	public Set<Diary> getTag() {
 		return tag;
 	}
 
-
 	public void setTag(Set<Diary> tag) {
 		this.tag = tag;
 	}
-	
 
+//	public Set<Photo> getPhoto() {
+//		return photo;
+//	}
+//
+//	public void setPhoto(Set<Photo> photo) {
+//		this.photo = photo;
+//	}
 
 }
 

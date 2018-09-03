@@ -19,7 +19,6 @@ import com.example.payload.PagedResponse;
 import com.example.payload.UserIdentityAvailability;
 import com.example.payload.UserProfile;
 import com.example.payload.UserSummary;
-import com.example.repository.DiaryRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
