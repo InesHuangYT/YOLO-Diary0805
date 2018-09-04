@@ -47,7 +47,7 @@ import com.google.gson.reflect.TypeToken;
 @Service
 public class GetResult {
 
-	static protected String ENGINEPATH = "/Users/ines/Desktop/engine";
+	static protected String ENGINEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818";
 
 	// --> C:\engine --> windows's path
 	// --> /Users/ines/Desktop/engine --> ines'mac path
@@ -80,7 +80,7 @@ public class GetResult {
 
 		// Get Real-time data 抓快取JSON檔
 		String cacheJsonName = "output.cache.egroup"; // Get Real-time data
-		while (true) {
+		
 			long startTime = System.currentTimeMillis();
 			faceList = getCacheResult(ENGINEPATH, cacheJsonName);
 			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="
@@ -103,7 +103,7 @@ public class GetResult {
 		}
 		// Stop by yourself
 
-	}
+	
 
 	/**
 	 * Get Retrieve result json
@@ -198,7 +198,7 @@ public class GetResult {
 	public static List<Face> getCacheResult(String jsonPath, String jsonName) {
 		// init func
 		final Gson gson = new Gson();
-		final CopyUtil copyUtil = new CopyUtil();
+//		final CopyUtil copyUtil = new CopyUtil();
 
 		// init variable
 		final Type faceListType = new TypeToken<ArrayList<Face>>() {
@@ -206,16 +206,16 @@ public class GetResult {
 		List<Face> faceList = new ArrayList<Face>();
 
 		// Get retrieve result
-		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
-		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + "_copy.json");
-		final File destJson = new File(jsonFileName.toString());
-		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
-			try {
-				copyUtil.copyFile(sourceJson, destJson);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
+		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + ".json");
+//		final File destJson = new File(jsonFileName.toString());
+//		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
+//			try {
+//				copyUtil.copyFile(sourceJson, destJson);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 			final File jsonFile = new File(jsonFileName.toString());
 			FileReader fileReader = null;
 			BufferedReader bufferedReader = null;
@@ -264,7 +264,7 @@ public class GetResult {
 					}
 				}
 			}
-		}
+		
 		return faceList;
 	}
 
