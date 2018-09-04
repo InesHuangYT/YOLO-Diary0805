@@ -84,7 +84,7 @@ public class UploadSelfieController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			System.out.println("SAVE PHOTO");
+			
 			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\" + name+ ".jpg");
 
 			// /Users/ines/Desktop/photo --> ines mac's path
