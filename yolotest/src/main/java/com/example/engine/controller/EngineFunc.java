@@ -26,21 +26,24 @@ import com.example.engine.util.TxtUtil;
 @Service
 public class EngineFunc {
 
-	static protected String ENGINEPATH = "C:\\engine";
+	static protected String ENGINEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818";
 	// C:\\Users\\Administrator\\Desktop\\Engine0818 --> rrou's path
 	// C:\\eGroupAI_FaceRecognitionEngine_V3.0 --> ines's path
 	// D:\\engine --> laboratory's path
 	
 	public void trainEngine() {
 		
-		//File file = new File("C:\\engineeGroup\\trainTest0828.Model");
+		File file = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\eGroup\\trainTest0830.Model.binary");
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
-		trainFace.setModelExist(false);
-//		if(file.exists()) {
-//		trainFace.setModelExist(true);
-//			System.out.println("SUCCESS  EXIST");
-//		}
+		
+		if(file.exists()) {
+  	    trainFace.setModelExist(true);
+			System.out.println("Model EXIST");
+		}else {
+			trainFace.setModelExist(false);
+			System.out.println("Model Not EXIST");
+		}
 		trainFace.setTrainListPath("list.txt");
 		trainFace.setModelPath("eGroup\\trainTest0830.Model");
 		trainFace(trainFace);
