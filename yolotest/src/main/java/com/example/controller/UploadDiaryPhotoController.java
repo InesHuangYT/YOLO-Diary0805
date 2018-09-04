@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.engine.controller.EngineFunc;
+import com.example.engine.controller.GetResult;
 import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
 import com.example.entity.Photo;
@@ -47,11 +48,11 @@ public class UploadDiaryPhotoController {
 	Textfile txt;
 	@Autowired
 	EngineFunc engine;
+	@Autowired
+	GetResult getResult;
 
 	/**
-	 * 新增日記 
-	 * -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) 
-	 * -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
+	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
 	 * -->辨識錯誤（將好友a辨識成好友b)
 	 **/
 	public static void blob(byte[] imageByte, String name) {
@@ -108,6 +109,7 @@ public class UploadDiaryPhotoController {
 				// --> C:\engine\photo\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
 				engine.retrieveEngine();
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
