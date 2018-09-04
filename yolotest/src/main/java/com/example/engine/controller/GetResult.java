@@ -47,12 +47,16 @@ import com.google.gson.reflect.TypeToken;
 @Service
 public class GetResult {
 
+
 	static protected String ENGINEPATH = "C:\\engine";
+ 
 
 	// --> C:\engine --> windows's path
 	// --> /Users/ines/Desktop/engine --> ines'mac path
 	// --> C:/Users/eGroup/Desktop/Engine -->rrou's path
+
 	public void getResult() {
+
 		List<Face> faceList = new ArrayList<>();
 
 		// Get All Retrieve Data 抓整日JSON檔
@@ -80,14 +84,14 @@ public class GetResult {
 
 		// Get Real-time data 抓快取JSON檔
 		String cacheJsonName = "output.cache.egroup"; // Get Real-time data
-		while (true) {
+		
 			long startTime = System.currentTimeMillis();
 			faceList = getCacheResult(ENGINEPATH, cacheJsonName);
 			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="
 					+ new Gson().toJson(faceList));
 			if (faceList.size() > 0) {
 				for (int i = 0; i < faceList.size(); i++) {
-					System.out.println("Main hasFound : " + faceList.get(i).getHasFound());
+					System.out.println((i+1) + "." + "Main hasFound : " + faceList.get(i).getHasFound());
 
 				}
 			}
@@ -103,7 +107,7 @@ public class GetResult {
 		}
 		// Stop by yourself
 
-	}
+	
 
 	/**
 	 * Get Retrieve result json
@@ -198,7 +202,7 @@ public class GetResult {
 	public static List<Face> getCacheResult(String jsonPath, String jsonName) {
 		// init func
 		final Gson gson = new Gson();
-		final CopyUtil copyUtil = new CopyUtil();
+//		final CopyUtil copyUtil = new CopyUtil();
 
 		// init variable
 		final Type faceListType = new TypeToken<ArrayList<Face>>() {
@@ -206,16 +210,18 @@ public class GetResult {
 		List<Face> faceList = new ArrayList<Face>();
 
 		// Get retrieve result
-		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
-		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + "_copy.json");
-		final File destJson = new File(jsonFileName.toString());
-		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
-			try {
-				copyUtil.copyFile(sourceJson, destJson);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+//		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
+		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + ".json");//copy拿掉了
+		
+		//拿掉copy檔
+//		final File destJson = new File(jsonFileName.toString());
+//		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
+//			try {
+//				copyUtil.copyFile(sourceJson, destJson);
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 			final File jsonFile = new File(jsonFileName.toString());
 			FileReader fileReader = null;
 			BufferedReader bufferedReader = null;
@@ -264,7 +270,7 @@ public class GetResult {
 					}
 				}
 			}
-		}
+		
 		return faceList;
 	}
 

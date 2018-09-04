@@ -51,6 +51,7 @@ public class UploadDiaryPhotoController {
 	@Autowired
 	GetResult getResult;
 
+
 	/**
 	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
 	 * -->辨識錯誤（將好友a辨識成好友b)
@@ -63,7 +64,7 @@ public class UploadDiaryPhotoController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\engine\\photo\\" + name);
+			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\" + name);
 			// --> C:\engine\photo\ -->windows's path
 			// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 
@@ -83,7 +84,7 @@ public class UploadDiaryPhotoController {
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
-			set.setPhotoPath("C:\\engine\\photo\\" + photo.getPhotoName()); // 在資料表photo中加入photoPath
+			set.setPhotoPath("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\" + photo.getPhotoName()); // 在資料表photo中加入photoPath
 			// --> C:\engine\photo\ --> windows's path
 			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
 			return photoRepository.save(set);
@@ -104,7 +105,7 @@ public class UploadDiaryPhotoController {
 				uploadPhoto(savefile, diaryId);
 			}
 			try {
-				txt.getPhotopath("C:\\engine\\photo\\", diaryId);
+				txt.getPhotopath("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\", diaryId);
 				// --> C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				// --> C:\engine\photo\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
@@ -113,6 +114,8 @@ public class UploadDiaryPhotoController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			    result.getJson();
 		}
 		return null;
 	}
