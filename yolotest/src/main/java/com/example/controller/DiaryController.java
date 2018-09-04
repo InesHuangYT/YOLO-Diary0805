@@ -58,25 +58,33 @@ public class DiaryController {
 
 	@Autowired
 	private DiaryService diaryService;
-	
-
-	
 
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
-	
+
 //取得全部的日記
 	@GetMapping
 	public List<Diary> getAllDiaries() {
 		return diaryRepository.findAll();
 
 	}
+
 //取得某相簿的日記
 	@GetMapping("/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
-
-	//@RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
+//取得某個使用者新增過的日記
+	@GetMapping("/user/{createdBy}") 
+	public Page<Diary> getAllDiariesByUserId(@PathVariable(value = "createdBy") String createdBy, Pageable pageable) {
+		return diaryRepository.findByCreatedBy(createdBy, pageable);
+	}
+	
+//取得某個使用者新增過的相簿
+	@GetMapping("/user") 
+	public Page<Album> getAllAlbumsByUserId(@RequestParam(value = "username") String createdBy, Pageable pageable) {
+		return albumRepository.findByCreatedBy(createdBy, pageable);
+	}
+	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
 	public Diary createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
@@ -84,12 +92,12 @@ public class DiaryController {
 
 		return albumRepository.findById(albumId).map(album -> {
 			diary.setAlbum(album);
-			System.out.println(albumId);//20
-			System.out.println(album);//com.example.entity.Album@4bafd37f
+			System.out.println(albumId);// 20
+			System.out.println(album);// com.example.entity.Album@4bafd37f
 			return diaryRepository.save(diary);
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
-	
+
 //	@PostMapping("/diaries") //新增日記
 //	@PreAuthorize("hasRole('USER')")
 //	public ResponseEntity<?> createDiary(@Valid @RequestBody DiaryRequest diaryRequest) {
@@ -129,8 +137,6 @@ public class DiaryController {
 			return ResponseEntity.ok().build();
 		}).orElseThrow(() -> new BadRequestException("DiaryId " + diaryId + " not found"));
 	}
-
-
 
 //	  @GetMapping("/{diaryId}")
 //	    public DiaryResponse getDiaryById(@CurrentUser UserPrincipal currentUser,

@@ -49,9 +49,10 @@ public class UploadDiaryPhotoController {
 	EngineFunc engine;
 
 	/**
-	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
-	 * -->辨識錯誤（將好友a辨識成好友b）
-	 * 
+	 * 新增日記 
+	 * -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) 
+	 * -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
+	 * -->辨識錯誤（將好友a辨識成好友b)
 	 **/
 	public static void blob(byte[] imageByte, String name) {
 		BufferedImage image = null;
@@ -106,7 +107,7 @@ public class UploadDiaryPhotoController {
 				// --> C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				// --> C:\engine\photo\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
-				/** engine.retrieveEngine(); **/
+				engine.retrieveEngine();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
