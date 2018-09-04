@@ -46,7 +46,7 @@ public class Textfile {
 		System.out.println("START METHOD");
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt");
+		FileWriter fw = new FileWriter("C:\\engine\\list.txt");
 		
 		// --> C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
 		// --> C:\engine\list.txt --> laboratory's path
@@ -68,7 +68,7 @@ public class Textfile {
 	public void getPhotopath(String diretorypath, Long diaryId) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("C:\\Users\\Administrator\\Desktop\\Engine0818\\photolist.egroupList");
+		FileWriter fw = new FileWriter("C:\\engine\\photolist.egroupList");
 		// --> C:\Users\Administrator\Desktop\Engine0818\list.txt --> rrou's path
 		// --> C:\engine\photolist.egroupList --> laboratory's path
 		// --> /Users/ines/Desktop/engine/photolist.egroupList --> ines's mac path

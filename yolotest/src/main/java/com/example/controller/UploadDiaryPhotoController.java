@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -49,8 +50,9 @@ public class UploadDiaryPhotoController {
 	@Autowired
 	EngineFunc engine;
 	@Autowired
-	GetResult getResult;
-
+	GetResult result;
+	@Autowired
+	EngineAndHandTagUserController engineAndHandTagUserController;
 
 	/**
 	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
@@ -64,9 +66,10 @@ public class UploadDiaryPhotoController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\" + name);
+			File outputfile = new File("C:\\engine\\photo\\" + name);
 			// --> C:\engine\photo\ -->windows's path
 			// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
+			// --> C:\Users\Administrator\Desktop\Engine0818\photo\
 
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
@@ -84,7 +87,8 @@ public class UploadDiaryPhotoController {
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
-			set.setPhotoPath("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\" + photo.getPhotoName()); // 在資料表photo中加入photoPath
+			set.setPhotoPath("C:/engine/photo/" + photo.getPhotoName()); // 在資料表photo中加入photoPath
+			// --> C:\Users\Administrator\Desktop\Engine0818\photo\
 			// --> C:\engine\photo\ --> windows's path
 			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
 			return photoRepository.save(set);
@@ -97,6 +101,7 @@ public class UploadDiaryPhotoController {
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
+		List<Face> faceList = new ArrayList<>();
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
@@ -105,7 +110,7 @@ public class UploadDiaryPhotoController {
 				uploadPhoto(savefile, diaryId);
 			}
 			try {
-				txt.getPhotopath("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\", diaryId);
+				txt.getPhotopath("C:\\engine\\photo\\", diaryId);
 				// --> C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				// --> C:\engine\photo\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
@@ -114,8 +119,19 @@ public class UploadDiaryPhotoController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			    result.getJson();
+			faceList = result.getResult();
+			for (int i = 0; i < faceList.size(); i++) {
+				int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
+				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+				if (hasFound == 1) {
+					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
+							faceList.get(i).getImageSourcePath());
+					System.out.println("tag finish!");
+				}
+			}
+			/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
+
 		}
 		return null;
 	}

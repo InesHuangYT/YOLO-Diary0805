@@ -51,7 +51,6 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 引擎自動標記
-	// @PostMapping("/{personId}")
 	public Photo engineTag(@PathVariable(value = "personId") String personId,
 			@RequestParam("imageSourcePath") String imageSourcePath) {
 		String photoId = findPhotoIdByPhotoPath(imageSourcePath);

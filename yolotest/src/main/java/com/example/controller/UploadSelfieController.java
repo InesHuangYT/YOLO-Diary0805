@@ -85,11 +85,11 @@ public class UploadSelfieController {
 			bis.close();
 
 			
-			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\" + name+ ".jpg");
+			File outputfile = new File("C:\\engine\\selfie\\" + name+ ".jpg");
 
 			// /Users/ines/Desktop/photo --> ines mac's path
 			// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
-			// D:\\engine\\selfie\\ --> laboratory's path
+			// C:\engine\selfie\ --> laboratory's path
 			;
 			ImageIO.write(image, "jpg", outputfile);
 			
@@ -116,7 +116,7 @@ public class UploadSelfieController {
 		String selfieId = selfie.getId();
 		selfieRepository.findById(selfieId).map(set -> {
 			//改成使用使用者帳號(唯一值)只會用在大頭照的部分
-			set.setSelfiePath("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\" + current + ".jpg");
+			set.setSelfiePath("C:\\engine\\selfie\\" + current + ".jpg");
 			// C:\engine\selfie\ --> windows's path
 			// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
 
@@ -147,7 +147,7 @@ public class UploadSelfieController {
 
 			try {
 				System.out.println("START　Write!");
-				txt.getSelfiepath("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\", currentUser.getUsername());
+				txt.getSelfiepath("C:\\engine\\selfie\\", currentUser.getUsername());
 				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				// C:\engine\selfie\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
@@ -158,7 +158,7 @@ public class UploadSelfieController {
 				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");
 
-				File selfiefile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\"+ username + ".jpg");
+				File selfiefile = new File("C:\\engine\\selfie\\"+ username + ".jpg");
 			    selfiefile.delete();
 			    System.out.println("DELETE SELFIE!");
 
