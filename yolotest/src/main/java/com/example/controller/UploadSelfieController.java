@@ -155,11 +155,12 @@ public class UploadSelfieController {
 
 				// System.out.println("TRAIN!");
 
-				//engine.trainEngine();
+				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");
 
-				//File selfiefile = new File("C:\\engine\\selfie");
-				// selfiefile.delete();(未完成)
+				File selfiefile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\"+ username + ".jpg");
+			    selfiefile.delete();
+			    System.out.println("DELETE SELFIE!");
 
 			} catch (Exception e) {
 				e.printStackTrace();
