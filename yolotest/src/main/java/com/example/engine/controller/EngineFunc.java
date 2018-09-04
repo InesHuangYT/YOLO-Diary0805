@@ -32,7 +32,9 @@ public class EngineFunc {
 	
 	public void trainEngine() {
 		
-		File file = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\eGroup\\trainTest0830.Model.binary");
+		File file = new File("C:\\engine\\eGroup\\trainTest0830.Model.binary");
+		// C:\Users\Administrator\Desktop\Engine0818\eGroup\trainTest0830.Model.binary --> rrou's path
+		// C:\engine\eGroup\trainTest0830.Model.binary
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
 		

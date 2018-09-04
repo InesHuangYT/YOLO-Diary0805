@@ -116,7 +116,6 @@ public class UploadDiaryPhotoController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 			    result.getResult();
 		}
 		return null;
