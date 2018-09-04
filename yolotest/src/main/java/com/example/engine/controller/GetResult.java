@@ -52,7 +52,7 @@ public class GetResult {
 	// --> C:\engine --> windows's path
 	// --> /Users/ines/Desktop/engine --> ines'mac path
 	// --> C:/Users/eGroup/Desktop/Engine -->rrou's path
-	public static void main(String[] args) {
+	public static void getJson() {
 		List<Face> faceList = new ArrayList<>();
 
 		// Get All Retrieve Data 抓整日JSON檔
