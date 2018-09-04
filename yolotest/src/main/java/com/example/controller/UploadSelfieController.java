@@ -68,30 +68,31 @@ public class UploadSelfieController {
 
 //將檔案blob轉成絕對路徑
 	public static void blob(byte[] imageByte, String name) { // 改成username
-		String filepath = "C:\\engine\\selfie\\selfie.jpg";
+//		String filepath = "C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie.jpg";
 		// --> C:\engine\selfie\ --> window's path
 		// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
+		// C:\\engine\\selfie\\selfie.jpg
 
-		File file = new File(filepath);
+//		File file = new File(filepath);
+		
+		
 		BufferedImage image = null;
 		try {
+			
 			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			file.getParentFile().mkdirs();
-			file.createNewFile();
-//			File outputfile = new File("C:\\engine\\selfie\\" + name);
+			System.out.println("SAVE PHOTO");
+			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\" + name+ ".jpg");
 
 			// /Users/ines/Desktop/photo --> ines mac's path
 			// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 			// D:\\engine\\selfie\\ --> laboratory's path
-
-//			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\",current, i);
-//			trainEngine("C:\\Users\\Administrator\\Desktop\\photo\\+i+.jpg",current);
-
-			ImageIO.write(image, "jpg", file);
+			;
+			ImageIO.write(image, "jpg", outputfile);
+			
 
 		} catch (IOException e) {
 
@@ -114,7 +115,8 @@ public class UploadSelfieController {
 		blob(selfie.getSelfiedata(), current);
 		String selfieId = selfie.getId();
 		selfieRepository.findById(selfieId).map(set -> {
-			set.setSelfiePath("C:\\engine\\selfie\\" + "selfie" +".jpg");
+			//改成使用使用者帳號(唯一值)只會用在大頭照的部分
+			set.setSelfiePath("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\" + current + ".jpg");
 			// C:\engine\selfie\ --> windows's path
 			// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
 
@@ -145,7 +147,7 @@ public class UploadSelfieController {
 
 			try {
 				System.out.println("START　Write!");
-				txt.getSelfiepath("C:\\engine\\selfie\\", currentUser.getUsername());
+				txt.getSelfiepath("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\", currentUser.getUsername());
 				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
 				// C:\engine\selfie\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
@@ -156,8 +158,9 @@ public class UploadSelfieController {
 				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");
 
-				File selfiefile = new File("C:\\engine\\selfie");
-				// selfiefile.delete();(未完成)
+				File selfiefile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\selfie\\"+ username + ".jpg");
+			    selfiefile.delete();
+			    System.out.println("DELETE SELFIE!");
 
 			} catch (Exception e) {
 				e.printStackTrace();
