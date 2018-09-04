@@ -87,7 +87,7 @@ public class GetResult {
 					+ new Gson().toJson(faceList));
 			if (faceList.size() > 0) {
 				for (int i = 0; i < faceList.size(); i++) {
-					System.out.println("Main hasFound : " + faceList.get(i).getHasFound());
+					System.out.println((i+1) + "." + "Main hasFound : " + faceList.get(i).getHasFound());
 
 				}
 			}
@@ -207,7 +207,9 @@ public class GetResult {
 
 		// Get retrieve result
 //		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
-		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + ".json");
+		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + ".json");//copy拿掉了
+		
+		//拿掉copy檔
 //		final File destJson = new File(jsonFileName.toString());
 //		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
 //			try {

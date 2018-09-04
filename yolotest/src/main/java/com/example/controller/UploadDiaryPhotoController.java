@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.engine.controller.EngineFunc;
+import com.example.engine.controller.GetResult;
 import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
 import com.example.entity.Photo;
@@ -47,6 +48,8 @@ public class UploadDiaryPhotoController {
 	Textfile txt;
 	@Autowired
 	EngineFunc engine;
+	@Autowired
+	GetResult result;
 
 	/**
 	 * 新增日記 
@@ -111,6 +114,8 @@ public class UploadDiaryPhotoController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			
+			    result.getJson();
 		}
 		return null;
 	}
