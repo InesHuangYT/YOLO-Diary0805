@@ -9,20 +9,12 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.controller.EngineAndHandTagUserController;
+
 import com.example.engine.entity.Face;
 import com.example.engine.util.CopyUtil;
-import com.example.entity.Photo;
-import com.example.entity.User;
-import com.example.exception.BadRequestException;
-import com.example.repository.PhotoRepository;
-import com.example.repository.UserRepository;
-import com.example.service.PhotoStorageService;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -253,6 +245,10 @@ public class GetResult {
 							System.out.println(faceList.get(i).getPersonId());
 							System.out.println(faceList.get(i).getImageSourcePath());
 
+						} else {
+							System.out.println("HasFound : " + faceList.get(i).getHasFound());
+							System.out.println(faceList.get(i).getPersonId());
+							System.out.println(faceList.get(i).getImageSourcePath());
 						}
 					}
 
