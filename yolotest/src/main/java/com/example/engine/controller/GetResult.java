@@ -9,8 +9,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import com.example.engine.entity.Face;
 import com.example.engine.util.CopyUtil;
@@ -39,66 +39,62 @@ import com.google.gson.reflect.TypeToken;
 @Service
 public class GetResult {
 
-
 	static protected String ENGINEPATH = "C:\\engine";
 
 	// --> C:\engine --> windows's path
 	// --> /Users/ines/Desktop/engine --> ines'mac path
 	// --> C:/Users/eGroup/Desktop/Engine -->rrou's path
 
-	public void getResult() {
+	public List<Face> getResult() {
 
 		List<Face> faceList = new ArrayList<>();
 
-		// Get All Retrieve Data 抓整日JSON檔
-
-//		Integer startIndex = 0;
-//		String jsonName = "output.2018-08-28.egroup";	// Get All Retrieve Data
-//		while(true) {
-//			long startTime = System.currentTimeMillis();
-//			faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);
-//			if(faceList.size()>0){
-//				startIndex = faceList.get(faceList.size()-1).getEndIndex();
-//			}
-//			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,startIndex="+startIndex+",faceList="+new Gson().toJson(faceList));
-//			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
-//			try {
-//				Thread.sleep(100);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-		// Stop by yourself
-
-		/*************************************************************************************************/
-
 		// Get Real-time data 抓快取JSON檔
 		String cacheJsonName = "output.cache.egroup"; // Get Real-time data
-		
-			long startTime = System.currentTimeMillis();
-			faceList = getCacheResult(ENGINEPATH, cacheJsonName);
-			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="
-					+ new Gson().toJson(faceList));
-			if (faceList.size() > 0) {
-				for (int i = 0; i < faceList.size(); i++) {
-					System.out.println((i+1) + "." + "Main hasFound : " + faceList.get(i).getHasFound());
 
-				}
-			}
-			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame =
-			// 100 ms
-			try {
-				Thread.sleep(300);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		long startTime = System.currentTimeMillis();
+		faceList = getCacheResult(ENGINEPATH, cacheJsonName);
+		System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="
+				+ new Gson().toJson(faceList));
+		if (faceList.size() > 0) {
+			for (int i = 0; i < faceList.size(); i++) {
+				System.out.println((i + 1) + "." + "Main hasFound : " + faceList.get(i).getHasFound());
 
+			}
 		}
-		// Stop by yourself
+		// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame =
+		// 100 ms
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return faceList;
+	}
+	// Stop by yourself
+	/*************************************************************************************************/
 
-	
+	// Get All Retrieve Data 抓整日JSON檔
+
+//	Integer startIndex = 0;
+//	String jsonName = "output.2018-08-28.egroup";	// Get All Retrieve Data
+//	while(true) {
+//		long startTime = System.currentTimeMillis();
+//		faceList = getAllResult(ENGINEPATH,jsonName ,startIndex);
+//		if(faceList.size()>0){
+//			startIndex = faceList.get(faceList.size()-1).getEndIndex();
+//		}
+//		System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,startIndex="+startIndex+",faceList="+new Gson().toJson(faceList));
+//		// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame = 100 ms
+//		try {
+//			Thread.sleep(100);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	// Stop by yourself
 
 	/**
 	 * Get Retrieve result json
@@ -202,9 +198,9 @@ public class GetResult {
 
 		// Get retrieve result
 //		final File sourceJson = new File(jsonPath.toString() + "/" + jsonName + ".json");
-		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + ".json");//copy拿掉了
-		
-		//拿掉copy檔
+		final StringBuilder jsonFileName = new StringBuilder(jsonPath + "/" + jsonName + ".json");// copy拿掉了
+
+		// 拿掉copy檔
 //		final File destJson = new File(jsonFileName.toString());
 //		if (sourceJson.exists() && sourceJson.length() != destJson.length()) {
 //			try {
@@ -213,59 +209,59 @@ public class GetResult {
 //				// TODO Auto-generated catch block
 //				e1.printStackTrace();
 //			}
-			final File jsonFile = new File(jsonFileName.toString());
-			FileReader fileReader = null;
-			BufferedReader bufferedReader = null;
+		final File jsonFile = new File(jsonFileName.toString());
+		FileReader fileReader = null;
+		BufferedReader bufferedReader = null;
 
-			// If json exists
-			if (jsonFile.exists()) {
-				try {
-					fileReader = new FileReader(jsonFileName.toString());
-				} catch (FileNotFoundException e) {
-				}
-				bufferedReader = new BufferedReader(fileReader);
-				// Read Json
-				final StringBuilder jsonContent = new StringBuilder();
-				String line;
-				try {
-					// Read line
+		// If json exists
+		if (jsonFile.exists()) {
+			try {
+				fileReader = new FileReader(jsonFileName.toString());
+			} catch (FileNotFoundException e) {
+			}
+			bufferedReader = new BufferedReader(fileReader);
+			// Read Json
+			final StringBuilder jsonContent = new StringBuilder();
+			String line;
+			try {
+				// Read line
+				line = bufferedReader.readLine();
+				while (line != null) {
+					jsonContent.append(line + "\n");
 					line = bufferedReader.readLine();
-					while (line != null) {
-						jsonContent.append(line + "\n");
-						line = bufferedReader.readLine();
-					}
-					// If has data
-					if (jsonContent.toString() != null) {
-						// Get last one object
+				}
+				// If has data
+				if (jsonContent.toString() != null) {
+					// Get last one object
 //						final int endIndex = jsonContent.lastIndexOf("}\n\t,");
 //						final String json = jsonContent.toString().substring(0, endIndex) + "}]";
-						faceList = gson.fromJson(jsonContent.toString(), faceListType);
-						System.out.println("json=" + jsonContent.toString());
+					faceList = gson.fromJson(jsonContent.toString(), faceListType);
+					System.out.println("json=" + jsonContent.toString());
 
-					}
-					for (int i = 0; i < faceList.size(); i++) {
-						int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-						if (hasFound == 1) {
-							System.out.println("HasFound : " + faceList.get(i).getHasFound());
-							System.out.println(faceList.get(i).getPersonId());
-							System.out.println(faceList.get(i).getImageSourcePath());
+				}
+				for (int i = 0; i < faceList.size(); i++) {
+					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+					if (hasFound == 1) {
+						System.out.println("HasFound : " + faceList.get(i).getHasFound());
+						System.out.println(faceList.get(i).getPersonId());
+						System.out.println(faceList.get(i).getImageSourcePath());
 
-						} else {
-							System.out.println("HasFound : " + faceList.get(i).getHasFound());
-							System.out.println(faceList.get(i).getPersonId());
-							System.out.println(faceList.get(i).getImageSourcePath());
-						}
-					}
-
-				} catch (IOException e) {
-				} finally {
-					try {
-						bufferedReader.close();
-					} catch (IOException e) {
+					} else {
+						System.out.println("HasFound : " + faceList.get(i).getHasFound());
+						System.out.println(faceList.get(i).getPersonId());
+						System.out.println(faceList.get(i).getImageSourcePath());
 					}
 				}
+
+			} catch (IOException e) {
+			} finally {
+				try {
+					bufferedReader.close();
+				} catch (IOException e) {
+				}
 			}
-		
+		}
+
 		return faceList;
 	}
 
