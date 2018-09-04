@@ -47,12 +47,12 @@ import com.google.gson.reflect.TypeToken;
 @Service
 public class GetResult {
 
-	static protected String ENGINEPATH = "/Users/ines/Desktop/engine";
+	static protected String ENGINEPATH = "C:\\engine";
 
 	// --> C:\engine --> windows's path
 	// --> /Users/ines/Desktop/engine --> ines'mac path
 	// --> C:/Users/eGroup/Desktop/Engine -->rrou's path
-	public static void main(String[] args) {
+	public void getResult() {
 		List<Face> faceList = new ArrayList<>();
 
 		// Get All Retrieve Data 抓整日JSON檔

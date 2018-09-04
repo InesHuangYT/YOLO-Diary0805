@@ -35,8 +35,7 @@ public class EngineAndHandTagUserController {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
-	static GetResult getResult;
-
+	GetResult getResult;
 
 	public String findPhotoIdByPhotoPath(String imageSourcePath) {
 		return photoRepository.findByPhotoPath(imageSourcePath).map(photo -> {
