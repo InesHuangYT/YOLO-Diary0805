@@ -9,11 +9,20 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.controller.EngineAndHandTagUserController;
 import com.example.engine.entity.Face;
 import com.example.engine.util.CopyUtil;
-
+import com.example.entity.Photo;
+import com.example.entity.User;
+import com.example.exception.BadRequestException;
+import com.example.repository.PhotoRepository;
+import com.example.repository.UserRepository;
+import com.example.service.PhotoStorageService;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,23 +37,22 @@ import com.google.gson.reflect.TypeToken;
  * 因辨識引擎持續辨識，程式需複製辨識中的 JSON 檔，再進行讀取。
 */
 /**
- * Yoloapplication先執行 在執行GetResult 
- * 步驟: 
- * I.上傳頭貼訓練，覆蓋list.txt和selfie中的圖片檔，我們要寫條件使用append! 
+ * Yoloapplication先執行 在執行GetResult 步驟:
+ * I.上傳頭貼訓練，覆蓋list.txt和selfie中的圖片檔，我們要寫條件使用append!
  * II.上傳日記照片辨識，取快取結果，產出photolist.egroupList和photo中的圖片檔 -->辨識人臉
- * 1:辨識出是好友(hasFound:1) --> 標記進資料庫 --> 通知
- * 2:-->辨識不出是好友(hasFound:0)，但是是好友--> 手動標記進資料庫 --> 此face拿來訓練(append)
- * 3:-->辨識錯誤（將好友a辨識成好友b）--> 手動標記正確使用者進資料庫 --> 此face拿來訓練(append)
+ * 1:辨識出是好友(hasFound:1) --> 標記進資料庫 --> 通知 2:-->辨識不出是好友(hasFound:0)，但是是好友-->
+ * 手動標記進資料庫 --> 此face拿來訓練(append) 3:-->辨識錯誤（將好友a辨識成好友b）--> 手動標記正確使用者進資料庫 -->
+ * 此face拿來訓練(append)
  **/
 @Service
 public class GetResult {
 
-	static protected String ENGINEPATH = "C:\\engine";
+	static protected String ENGINEPATH = "/Users/ines/Desktop/engine";
+
 	// --> C:\engine --> windows's path
 	// --> /Users/ines/Desktop/engine --> ines'mac path
 	// --> C:/Users/eGroup/Desktop/Engine -->rrou's path
-
-	public static void main(String args[]) {
+	public static void main(String[] args) {
 		List<Face> faceList = new ArrayList<>();
 
 		// Get All Retrieve Data 抓整日JSON檔
@@ -77,6 +85,12 @@ public class GetResult {
 			faceList = getCacheResult(ENGINEPATH, cacheJsonName);
 			System.out.println("Get Json Using Time:" + (System.currentTimeMillis() - startTime) + " ms,faceList="
 					+ new Gson().toJson(faceList));
+			if (faceList.size() > 0) {
+				for (int i = 0; i < faceList.size(); i++) {
+					System.out.println("Main hasFound : " + faceList.get(i).getHasFound());
+
+				}
+			}
 			// If your fps is 10, means recognize 10 frame per seconds, 1000 ms /10 frame =
 			// 100 ms
 			try {
@@ -181,7 +195,6 @@ public class GetResult {
 	 * @param startIndex
 	 * @return
 	 */
-
 	public static List<Face> getCacheResult(String jsonPath, String jsonName) {
 		// init func
 		final Gson gson = new Gson();
@@ -239,6 +252,7 @@ public class GetResult {
 							System.out.println("HasFound : " + faceList.get(i).getHasFound());
 							System.out.println(faceList.get(i).getPersonId());
 							System.out.println(faceList.get(i).getImageSourcePath());
+
 						}
 					}
 

@@ -58,6 +58,14 @@ public class UserController {
 		UserSummary userSummary = new UserSummary(currentUser.getUsername());
 		return userSummary;
 	}
+	
+	@GetMapping("/usernameEmail") 
+	@PreAuthorize("hasRole('USER')")
+	public UserSummary getCurrentUserAndEmail(@CurrentUser UserPrincipal currentUser) {
+		UserSummary userSummary = new UserSummary(currentUser.getUsername(),currentUser.getEmail());
+		return userSummary;
+	}
+	
 
 	@GetMapping("/checkUsernameAvailability") // 確認帳號有無重複
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
@@ -77,7 +85,7 @@ public class UserController {
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
 		System.out.println(user);//com.example.entity.User@19a3673a
-		UserProfile userProfile = new UserProfile(user.getUsername(), user.getCreatedAt());
+		UserProfile userProfile = new UserProfile(user.getUsername(),user.getEmail(), user.getCreatedAt());
 
 		return userProfile;
 	}
@@ -89,5 +97,6 @@ public class UserController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return diaryService.getDiariesCreatedBy(username, currentUser, page, size);
 	}
+	
 
 }
