@@ -26,8 +26,7 @@ import com.example.repository.AlbumRepository;
 public class AlbumController {
 
 	@Autowired
-	AlbumRepository albumRepository;
-	
+	AlbumRepository albumRepository;	
 	//取得所有相簿
 	@GetMapping
 	public Page<Album> getAllAlbums(Pageable pageable) {
