@@ -49,7 +49,7 @@ public class UploadDiaryPhotoController {
 	@Autowired
 	EngineFunc engine;
 	@Autowired
-	GetResult getResult;
+	GetResult result;
 
 
 	/**
@@ -115,7 +115,7 @@ public class UploadDiaryPhotoController {
 				e.printStackTrace();
 			}
 			
-			    result.getJson();
+			    result.getResult();
 		}
 		return null;
 	}
