@@ -33,11 +33,16 @@ public class EngineFunc {
 	// C:\Users\Administrator\Desktop\Engine0818 --> rrou's path
 	// C:\engine --> laboratory's path
 	
+	static String ModelFILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\eGroup\\trainTest0830.Model.binary";
+	// C:\Users\Administrator\Desktop\Engine0818\eGroup\trainTest0830.Model.binary --> rrou's path
+	// C:\engine\eGroup\trainTest0830.Model.binary
+	
+	
+	
 	public void trainEngine() {
 		 String path = "";
-		File file = new File("C:\\engine\\eGroup\\trainTest0830.Model.binary");
-		// C:\Users\Administrator\Desktop\Engine0818\eGroup\trainTest0830.Model.binary --> rrou's path
-		// C:\engine\eGroup\trainTest0830.Model.binary
+		File file = new File(ModelFILEPATH);
+		
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
 		
