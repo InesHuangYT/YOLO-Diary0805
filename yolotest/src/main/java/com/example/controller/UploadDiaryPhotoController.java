@@ -105,7 +105,9 @@ public class UploadDiaryPhotoController {
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
+		
 		List<Face> faceList = new ArrayList<>();
+		
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
@@ -128,6 +130,7 @@ public class UploadDiaryPhotoController {
 				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 				if (hasFound == 1) {
+					System.out.println("tag 1");
 					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
 							faceList.get(i).getImageSourcePath());
 					System.out.println("tag finish!");
