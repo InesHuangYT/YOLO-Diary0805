@@ -110,6 +110,7 @@ public class UploadDiaryPhotoController {
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
 				uploadPhoto(savefile, diaryId);
+				faceList.removeAll(faceList);
 			}
 			try {
 				txt.getPhotopath( PhotoFILEPATH, diaryId);
