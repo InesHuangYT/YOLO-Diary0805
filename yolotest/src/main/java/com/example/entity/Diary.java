@@ -40,7 +40,7 @@ public class Diary extends UserDateAudit {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "album_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	//@JsonIgnore 不加才能response album json
+	@JsonIgnore //不加才能response album json
 	private Album album;
 	
 

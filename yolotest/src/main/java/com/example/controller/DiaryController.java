@@ -32,6 +32,7 @@ import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.ApiResponse;
+import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
@@ -87,14 +88,20 @@ public class DiaryController {
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
-	public Diary createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
+	public DiaryResponse createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
 		System.out.println(diary.getText());
-
+		DiaryResponse diaryResponse = new DiaryResponse();
 		return albumRepository.findById(albumId).map(album -> {
 			diary.setAlbum(album);
 			System.out.println(albumId);// 20
 			System.out.println(album);// com.example.entity.Album@4bafd37f
-			return diaryRepository.save(diary);
+			diaryRepository.save(diary);
+			diaryResponse.setId(diary.getId());
+			diaryResponse.setCreatedBy(diary.getCreatedBy());
+			diaryResponse.setCreationDateTime(diary.getCreatedAt());
+			diaryResponse.setText(diary.getText());
+			diaryResponse.setAlbumId(albumId);
+			return  diaryResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 

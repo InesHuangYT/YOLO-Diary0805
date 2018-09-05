@@ -14,7 +14,7 @@ public class ModelMapper {
 		diaryResponse.setCreationDateTime(diary.getCreatedAt());
 
 		UserSummary creatorSummary = new UserSummary(creator.getUsername());
-		diaryResponse.setCreatedBy(creatorSummary);
+	//	diaryResponse.setCreatedBy(creatorSummary);
 
 		return diaryResponse;
 
