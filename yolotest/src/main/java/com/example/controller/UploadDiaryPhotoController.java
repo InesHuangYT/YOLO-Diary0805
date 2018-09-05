@@ -130,7 +130,7 @@ public class UploadDiaryPhotoController {
 				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 				if (hasFound == 1) {
-					System.out.println("tag 1");
+					
 					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
 							faceList.get(i).getImageSourcePath());
 					System.out.println("tag finish!");
