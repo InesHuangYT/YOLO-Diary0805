@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,7 @@ public class Textfile {
 	public void getPhotopath(String diretorypath, Long diaryId) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter(FILEPATH + "photolist.egroupList", true);
+		FileWriter fw = new FileWriter(FILEPATH + "photolist.egroupList");
 		
 
 		for (int i = 0; i < filearray.length; i++) {
@@ -75,15 +76,11 @@ public class Textfile {
 
 	}
 	
-	public void deleteAllFile(String filepath) {
+	public void deleteAllFile(String filepath) throws IOException {
 		
 		File file = new File(filepath);
 		
-		if(file.isDirectory()) {
-			for(File f:file.listFiles()) 
-				deleteAllFile(f.getAbsolutePath());
-		}
-			file.delete();
+		FileUtils.cleanDirectory(file);
 		
 		
 	}
