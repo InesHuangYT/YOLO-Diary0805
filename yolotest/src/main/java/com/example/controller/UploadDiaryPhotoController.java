@@ -110,28 +110,28 @@ public class UploadDiaryPhotoController {
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
 				uploadPhoto(savefile, diaryId);
-				faceList.removeAll(faceList);
+				
 			}
 			try {
 				txt.getPhotopath( PhotoFILEPATH, diaryId);
 				
 				
-				engine.retrieveEngine();
+				//engine.retrieveEngine();
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			faceList = result.getResult();
-			for (int i = 0; i < faceList.size(); i++) {
-				int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
-				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-				if (hasFound == 1) {
-					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-							faceList.get(i).getImageSourcePath());
-					System.out.println("tag finish!");
-				}
-			}
+//			faceList = result.getResult();
+//			for (int i = 0; i < faceList.size(); i++) {
+//				int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+//				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
+//				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+//				if (hasFound == 1) {
+//					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
+//							faceList.get(i).getImageSourcePath());
+//					System.out.println("tag finish!");
+//				}
+//			}
 			/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
 		}
