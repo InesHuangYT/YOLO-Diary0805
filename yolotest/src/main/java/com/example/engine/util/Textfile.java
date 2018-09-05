@@ -56,7 +56,7 @@ public class Textfile {
 	public void getPhotopath(String diretorypath, Long diaryId) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter(FILEPATH + "photolist.egroupList");
+		FileWriter fw = new FileWriter(FILEPATH + "photolist.egroupList", true);
 		
 
 		for (int i = 0; i < filearray.length; i++) {
