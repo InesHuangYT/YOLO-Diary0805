@@ -23,6 +23,9 @@ import com.example.engine.util.TxtUtil;
  * @description:
  */
 
+//static和final的區別
+//http://blog.kenyang.net/2011/03/09/java-staticfinal
+
 @Service
 public class EngineFunc {
 
@@ -31,7 +34,7 @@ public class EngineFunc {
 	// C:\engine --> laboratory's path
 	
 	public void trainEngine() {
-		
+		 String path = "";
 		File file = new File("C:\\engine\\eGroup\\trainTest0830.Model.binary");
 		// C:\Users\Administrator\Desktop\Engine0818\eGroup\trainTest0830.Model.binary --> rrou's path
 		// C:\engine\eGroup\trainTest0830.Model.binary
