@@ -86,7 +86,9 @@ public class UploadDiaryPhotoController {
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
+		
 		blob(photo.getPhotodata(), photo.getPhotoName());
+		
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
@@ -114,9 +116,8 @@ public class UploadDiaryPhotoController {
 			}
 			try {
 				txt.getPhotopath( PhotoFILEPATH, diaryId);
-				
-				
 				//engine.retrieveEngine();
+				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {
 				e.printStackTrace();

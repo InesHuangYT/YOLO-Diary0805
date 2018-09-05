@@ -75,10 +75,15 @@ public class Textfile {
 
 	}
 	
-	public void deleteAllFile(File file) {
+	public void deleteAllFile(String filepath) {
 		
+		File file = new File(filepath);
 		
-		
+		if(file.isDirectory()) {
+			for(File f:file.listFiles()) 
+				deleteAllFile(f.getAbsolutePath());
+		}
+			file.delete();
 		
 		
 	}
