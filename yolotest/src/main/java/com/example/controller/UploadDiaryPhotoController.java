@@ -41,6 +41,9 @@ import com.example.service.PhotoStorageService;
 public class UploadDiaryPhotoController {
 	
 	static String PhotoFILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\";
+	// --> C:\engine\photo\ -->windows's path
+	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
+	// --> C:\Users\Administrator\Desktop\Engine0818\photo\ -->rou's path
 	
 	@Autowired
 	PhotoStorageService photoStorageService;
@@ -69,10 +72,7 @@ public class UploadDiaryPhotoController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\" + name);
-			// --> C:\engine\photo\ -->windows's path
-			// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
-			// --> C:\Users\Administrator\Desktop\Engine0818\photo\ -->rou's path
+			File outputfile = new File( PhotoFILEPATH + name);
 
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
@@ -90,10 +90,9 @@ public class UploadDiaryPhotoController {
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
-			set.setPhotoPath("C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\" + photo.getPhotoName()); // 在資料表photo中加入photoPath
-			// --> C:\Users\Administrator\Desktop\Engine0818\photo\ --> rou's path
-			// --> C:\engine\photo\ --> windows's path
-			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
+			set.setPhotoPath( PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
+			
+			
 			return photoRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
@@ -113,10 +112,9 @@ public class UploadDiaryPhotoController {
 				uploadPhoto(savefile, diaryId);
 			}
 			try {
-				txt.getPhotopath(" C:\\Users\\Administrator\\Desktop\\photo\\", diaryId);
-				// --> C:\Users\Administrator\Desktop\photo\ --> rrou's path
-				// --> C:\engine\photo\ --> laboratory's path
-				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
+				txt.getPhotopath( PhotoFILEPATH, diaryId);
+				
+				
 				engine.retrieveEngine();
 
 			} catch (Exception e) {
