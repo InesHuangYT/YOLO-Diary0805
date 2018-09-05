@@ -150,9 +150,8 @@ public class UploadSelfieController {
 				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");
 
-				File selfiefile = new File(SelfieFILEPATH + username + ".jpg");
 				
-			
+				File selfiefile = new File(SelfieFILEPATH + username + ".jpg");
 			    selfiefile.delete();
 			    System.out.println("DELETE SELFIE!");
 

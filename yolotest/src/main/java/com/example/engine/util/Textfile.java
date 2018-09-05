@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,10 @@ import com.example.security.CurrentUser;
 
 //記事本文字換行，為什麼要用/r/n?
 //http://catchtest.pixnet.net/blog/post/21981758-java%E7%9A%84%E6%8F%9B%E8%A1%8C%E7%AC%A6%E8%99%9F
+
+//刪除資料夾下全部資料
+//https://blog.csdn.net/u010834071/article/details/46894751
+
 public class Textfile {
     
 	static String FILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\";
@@ -62,13 +67,22 @@ public class Textfile {
 		for (int i = 0; i < filearray.length; i++) {
 			fw.write(filearray[i] + "\r\n");// C:\eGroupAI_FaceRecognitionEngine_V3.0\photo\1.jpg
 			fw.flush();
-			System.out.println(filearray[i]);
+			System.out.println("HERE!"+filearray[i]);
 
 		}
 		// close filewriter
 		// https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
 		fw.close();
 
+	}
+	
+	public void deleteAllFile(String filepath) throws IOException {
+		
+		File file = new File(filepath);
+		
+		FileUtils.cleanDirectory(file);
+		
+		
 	}
 
 }
