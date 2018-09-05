@@ -39,6 +39,9 @@ import com.example.service.PhotoStorageService;
 @RestController
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
+	
+	static String PhotoFILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\";
+	
 	@Autowired
 	PhotoStorageService photoStorageService;
 	@Autowired
