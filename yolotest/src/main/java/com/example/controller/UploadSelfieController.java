@@ -88,7 +88,7 @@ public class UploadSelfieController {
 			File outputfile = new File("C:\\engine\\selfie\\" + name+ ".jpg");
 
 			// /Users/ines/Desktop/photo --> ines mac's path
-			// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+			// C:\\Users\\Administrator\\Desktop\\selfie\\ --> rrou's path
 			// C:\engine\selfie\ --> laboratory's path
 			;
 			ImageIO.write(image, "jpg", outputfile);
@@ -119,6 +119,7 @@ public class UploadSelfieController {
 			set.setSelfiePath("C:\\engine\\selfie\\" + current + ".jpg");
 			// C:\engine\selfie\ --> windows's path
 			// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
+			// C:\\Users\\Administrator\\Desktop\\selfie\\ -->rou's path
 
 			return selfieRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("SelfieId " + selfieId + "not found"));
@@ -148,7 +149,7 @@ public class UploadSelfieController {
 			try {
 				System.out.println("START　Write!");
 				txt.getSelfiepath("C:\\engine\\selfie\\", currentUser.getUsername());
-				// C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
+				// C:\\Users\\Administrator\\Desktop\\selfie\\ --> rrou's path
 				// C:\engine\selfie\ --> laboratory's path
 				// --> /Users/ines/Desktop/engine/selfie/ --> ines's mac path
 
@@ -159,6 +160,7 @@ public class UploadSelfieController {
 				System.out.println("OVER!!!!!!!");
 
 				File selfiefile = new File("C:\\engine\\selfie\\"+ username + ".jpg");
+				//C:\\Users\\Administrator\\Desktop\\selfie\\ -->rou's path
 			    selfiefile.delete();
 			    System.out.println("DELETE SELFIE!");
 
