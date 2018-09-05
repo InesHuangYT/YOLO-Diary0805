@@ -40,10 +40,10 @@ import com.example.service.PhotoStorageService;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 	
-	static String PhotoFILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\";
-	// --> C:\engine\photo\ -->windows's path
+	static String PhotoFILEPATH = "C:/Users/Administrator/Desktop/Engine0818/photo/";
+	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
-	// --> C:\Users\Administrator\Desktop\Engine0818\photo\ -->rou's path
+	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
 	
 	@Autowired
 	PhotoStorageService photoStorageService;
@@ -105,7 +105,9 @@ public class UploadDiaryPhotoController {
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
+		
 		List<Face> faceList = new ArrayList<>();
+		
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
@@ -116,23 +118,24 @@ public class UploadDiaryPhotoController {
 			}
 			try {
 				txt.getPhotopath( PhotoFILEPATH, diaryId);
-				//engine.retrieveEngine();
+				engine.retrieveEngine();
 				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-//			faceList = result.getResult();
-//			for (int i = 0; i < faceList.size(); i++) {
-//				int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-//				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
-//				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-//				if (hasFound == 1) {
-//					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-//							faceList.get(i).getImageSourcePath());
-//					System.out.println("tag finish!");
-//				}
-//			}
+			faceList = result.getResult();
+			for (int i = 0; i < faceList.size(); i++) {
+				int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
+				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+				if (hasFound == 1) {
+					System.out.println("tag 1");
+					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
+							faceList.get(i).getImageSourcePath());
+					System.out.println("tag finish!");
+				}
+			}
 			/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
 		}
