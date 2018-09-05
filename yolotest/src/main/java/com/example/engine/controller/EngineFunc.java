@@ -26,7 +26,7 @@ import com.example.engine.util.TxtUtil;
 @Service
 public class EngineFunc {
 
-	static protected String ENGINEPATH = "C:\\engine";
+	static protected String ENGINEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818";
 	// C:\Users\Administrator\Desktop\Engine0818 --> rrou's path
 	// C:\engine --> laboratory's path
 	
