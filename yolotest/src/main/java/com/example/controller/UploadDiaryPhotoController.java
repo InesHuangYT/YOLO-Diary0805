@@ -40,10 +40,10 @@ import com.example.service.PhotoStorageService;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 	
-	static String PhotoFILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\photo\\";
+	static String PhotoFILEPATH = "C:/Users/Administrator/Desktop/Engine0818/photo/";
 	// --> C:\engine\photo\ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
-	// --> C:\Users\Administrator\Desktop\Engine0818\photo\ -->rou's path
+	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
 	
 	@Autowired
 	PhotoStorageService photoStorageService;
