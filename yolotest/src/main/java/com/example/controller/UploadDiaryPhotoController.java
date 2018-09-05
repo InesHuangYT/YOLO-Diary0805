@@ -69,7 +69,7 @@ public class UploadDiaryPhotoController {
 			File outputfile = new File("C:\\engine\\photo\\" + name);
 			// --> C:\engine\photo\ -->windows's path
 			// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
-			// --> C:\Users\Administrator\Desktop\Engine0818\photo\
+			// --> C:\Users\Administrator\Desktop\Engine0818\photo\ -->rou's path
 
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
@@ -88,7 +88,7 @@ public class UploadDiaryPhotoController {
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
 			set.setPhotoPath("C:/engine/photo/" + photo.getPhotoName()); // 在資料表photo中加入photoPath
-			// --> C:\Users\Administrator\Desktop\Engine0818\photo\
+			// --> C:\Users\Administrator\Desktop\Engine0818\photo\ --> rou's path
 			// --> C:\engine\photo\ --> windows's path
 			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
 			return photoRepository.save(set);
