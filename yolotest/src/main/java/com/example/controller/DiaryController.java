@@ -44,7 +44,7 @@ import com.example.service.DiaryService;
 import com.example.util.AppConstants;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/diary")
 //要在那一本相簿的哪一篇日記 做新增刪除修改
 
 public class DiaryController {
@@ -64,27 +64,25 @@ public class DiaryController {
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
 
 //取得全部的日記
-	@GetMapping("/api/diary")
+	@GetMapping
 	public List<Diary> getAllDiaries() {
 		return diaryRepository.findAll();
-
 	}
-
 //取得某相簿的日記
-	@GetMapping(name = "/{albumId}")
+	@GetMapping("/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
 
 //取得某個使用者新增過的日記
-//	@GetMapping("/{createdBy}/user")
-//	public Page<Diary> getAllDiariesByUserId(@PathVariable(value = "createdBy") String createdBy, Pageable pageable) {
-//		return diaryRepository.findByCreatedBy(createdBy, pageable);
-//	}
+	@GetMapping("/user/{createdBy}")
+	public Page<Diary> getAllDiariesByUserId(@PathVariable(value = "createdBy") String createdBy, Pageable pageable) {
+		return diaryRepository.findByCreatedBy(createdBy, pageable);
+	}
 
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
-	@PostMapping("/post/{albumId}")
+	@PostMapping("/{albumId}")
 	public DiaryResponse createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
 		System.out.println(diary.getText());
 		DiaryResponse diaryResponse = new DiaryResponse();

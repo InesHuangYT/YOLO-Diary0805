@@ -118,7 +118,7 @@ public class UploadDiaryPhotoController {
 			}
 			try {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
-				engine.retrieveEngine();
+				//engine.retrieveEngine();
 				faceList = result.getResult();
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
