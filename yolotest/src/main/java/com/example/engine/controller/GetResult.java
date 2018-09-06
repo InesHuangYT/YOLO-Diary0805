@@ -39,7 +39,7 @@ import com.google.gson.reflect.TypeToken;
 @Service
 public class GetResult {
 
-	static protected String ENGINEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818";
+	static protected String ENGINEPATH = "C:\\engine";
 
 	// --> C:\engine --> windows's path
 	// --> /Users/ines/Desktop/engine --> ines'mac path

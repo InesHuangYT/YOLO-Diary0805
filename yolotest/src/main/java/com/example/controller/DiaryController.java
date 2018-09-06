@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -66,25 +67,19 @@ public class DiaryController {
 	@GetMapping
 	public List<Diary> getAllDiaries() {
 		return diaryRepository.findAll();
-
 	}
-
 //取得某相簿的日記
 	@GetMapping("/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
+
 //取得某個使用者新增過的日記
-	@GetMapping("/user/{createdBy}") 
+	@GetMapping("/user/{createdBy}")
 	public Page<Diary> getAllDiariesByUserId(@PathVariable(value = "createdBy") String createdBy, Pageable pageable) {
 		return diaryRepository.findByCreatedBy(createdBy, pageable);
 	}
-	
-//取得某個使用者新增過的相簿
-	@GetMapping("/user") 
-	public Page<Album> getAllAlbumsByUserId(@RequestParam(value = "username") String createdBy, Pageable pageable) {
-		return albumRepository.findByCreatedBy(createdBy, pageable);
-	}
+
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
@@ -101,7 +96,7 @@ public class DiaryController {
 			diaryResponse.setCreationDateTime(diary.getCreatedAt());
 			diaryResponse.setText(diary.getText());
 			diaryResponse.setAlbumId(albumId);
-			return  diaryResponse;
+			return diaryResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 

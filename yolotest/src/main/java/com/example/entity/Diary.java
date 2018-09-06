@@ -26,7 +26,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.example.entity.audit.UserDateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 //一篇日記屬於一個相簿
-@Entity
+@Entity//(name = "Diary")
 @Table(name = "diary")
 public class Diary extends UserDateAudit {
 	@Id
