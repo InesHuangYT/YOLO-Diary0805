@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -43,7 +44,7 @@ import com.example.service.DiaryService;
 import com.example.util.AppConstants;
 
 @RestController
-@RequestMapping("/api/diary")
+@RequestMapping
 //要在那一本相簿的哪一篇日記 做新增刪除修改
 
 public class DiaryController {
@@ -63,31 +64,27 @@ public class DiaryController {
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
 
 //取得全部的日記
-	@GetMapping
+	@GetMapping("/api/diary")
 	public List<Diary> getAllDiaries() {
 		return diaryRepository.findAll();
 
 	}
 
 //取得某相簿的日記
-	@GetMapping("/{albumId}")
+	@GetMapping(name = "/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
+
 //取得某個使用者新增過的日記
-	@GetMapping("/user/{createdBy}") 
-	public Page<Diary> getAllDiariesByUserId(@PathVariable(value = "createdBy") String createdBy, Pageable pageable) {
-		return diaryRepository.findByCreatedBy(createdBy, pageable);
-	}
-	
-//取得某個使用者新增過的相簿
-	@GetMapping("/user") 
-	public Page<Album> getAllAlbumsByUserId(@RequestParam(value = "username") String createdBy, Pageable pageable) {
-		return albumRepository.findByCreatedBy(createdBy, pageable);
-	}
+//	@GetMapping("/{createdBy}/user")
+//	public Page<Diary> getAllDiariesByUserId(@PathVariable(value = "createdBy") String createdBy, Pageable pageable) {
+//		return diaryRepository.findByCreatedBy(createdBy, pageable);
+//	}
+
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
-	@PostMapping("/{albumId}")
+	@PostMapping("/post/{albumId}")
 	public DiaryResponse createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
 		System.out.println(diary.getText());
 		DiaryResponse diaryResponse = new DiaryResponse();
@@ -101,7 +98,7 @@ public class DiaryController {
 			diaryResponse.setCreationDateTime(diary.getCreatedAt());
 			diaryResponse.setText(diary.getText());
 			diaryResponse.setAlbumId(albumId);
-			return  diaryResponse;
+			return diaryResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
