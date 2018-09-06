@@ -39,6 +39,12 @@ import com.example.service.PhotoStorageService;
 @RestController
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
+	
+	static String PhotoFILEPATH = "C:/Users/Administrator/Desktop/Engine0818/photo/";
+	// --> C:/engine/photo/ -->windows's path
+	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
+	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
+	
 	@Autowired
 	PhotoStorageService photoStorageService;
 	@Autowired
@@ -66,10 +72,7 @@ public class UploadDiaryPhotoController {
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			File outputfile = new File("C:\\engine\\photo\\" + name);
-			// --> C:\engine\photo\ -->windows's path
-			// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
-			// --> C:\Users\Administrator\Desktop\Engine0818\photo\
+			File outputfile = new File( PhotoFILEPATH + name);
 
 			ImageIO.write(image, "jpg", outputfile);
 		} catch (IOException e) {
@@ -83,14 +86,15 @@ public class UploadDiaryPhotoController {
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
+		
 		blob(photo.getPhotodata(), photo.getPhotoName());
+		
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
-			set.setPhotoPath("C:/engine/photo/" + photo.getPhotoName()); // 在資料表photo中加入photoPath
-			// --> C:\Users\Administrator\Desktop\Engine0818\photo\
-			// --> C:\engine\photo\ --> windows's path
-			// --> /Users/ines/Desktop/engine/photo/ --> ines's mac path
+			set.setPhotoPath( PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
+			
+			
 			return photoRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
@@ -101,20 +105,21 @@ public class UploadDiaryPhotoController {
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
+		
 		List<Face> faceList = new ArrayList<>();
+		
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
 				uploadPhoto(savefile, diaryId);
+				
 			}
 			try {
-				txt.getPhotopath("C:\\engine\\photo\\", diaryId);
-				// --> C:\\Users\\Administrator\\Desktop\\photo\\ --> rrou's path
-				// --> C:\engine\photo\ --> laboratory's path
-				// --> /Users/ines/Desktop/engine/photo --> ines's mac path
+				txt.getPhotopath( PhotoFILEPATH, diaryId);
 				engine.retrieveEngine();
+				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -125,6 +130,7 @@ public class UploadDiaryPhotoController {
 				System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 				System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 				if (hasFound == 1) {
+					System.out.println("tag 1");
 					engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
 							faceList.get(i).getImageSourcePath());
 					System.out.println("tag finish!");

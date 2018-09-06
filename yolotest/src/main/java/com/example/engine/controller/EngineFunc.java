@@ -23,18 +23,26 @@ import com.example.engine.util.TxtUtil;
  * @description:
  */
 
+//static和final的區別
+//http://blog.kenyang.net/2011/03/09/java-staticfinal
+
 @Service
 public class EngineFunc {
 
-	static protected String ENGINEPATH = "C:\\engine";
+	static protected String ENGINEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818";
 	// C:\Users\Administrator\Desktop\Engine0818 --> rrou's path
 	// C:\engine --> laboratory's path
 	
+	static String ModelFILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\eGroup\\trainTest0830.Model.binary";
+	// C:\Users\Administrator\Desktop\Engine0818\eGroup\trainTest0830.Model.binary --> rrou's path
+	// C:\engine\eGroup\trainTest0830.Model.binary
+	
+	
+	
 	public void trainEngine() {
+		 String path = "";
+		File file = new File(ModelFILEPATH);
 		
-		File file = new File("C:\\engine\\eGroup\\trainTest0830.Model.binary");
-		// C:\Users\Administrator\Desktop\Engine0818\eGroup\trainTest0830.Model.binary --> rrou's path
-		// C:\engine\eGroup\trainTest0830.Model.binary
 		// TrainFace
 		TrainFace trainFace = new TrainFace();
 		

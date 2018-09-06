@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,22 +24,17 @@ import com.example.security.CurrentUser;
 
 //記事本文字換行，為什麼要用/r/n?
 //http://catchtest.pixnet.net/blog/post/21981758-java%E7%9A%84%E6%8F%9B%E8%A1%8C%E7%AC%A6%E8%99%9F
-public class Textfile {
-//	public static void write(String photoPath, @CurrentUser String current, int i){
-//	     
-//try {
-//	File file = new File("C:\\Users\\Administrator\\Desktop\\sample.txt");
-//	file.createNewFile();
 
-//	FileWriter fw = new FileWriter("C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt", true);
-//	fw.write(photoPath+i+".jpg"+"\t"+current+"[NO]"+i+"\r\n");
-//	fw.flush();
-//	fw.close();
-//	
-//}catch(Exception e) {
-//	System.out.println("FAIL");
-//}
-//}
+//刪除資料夾下全部資料
+//https://blog.csdn.net/u010834071/article/details/46894751
+
+public class Textfile {
+    
+	static String FILEPATH = "C:\\Users\\Administrator\\Desktop\\Engine0818\\";
+	// --> C:\Users\Administrator\Desktop\Engine0818\ --> rrou's path
+	// --> C:\engine\ --> laboratory's path
+	// --> /Users/ines/Desktop/engine/ --> ines's mac path
+	
 
 	/** 我新增getphotopath，把原本的getphotopath改成getselfiepath了 **/
 
@@ -46,11 +42,8 @@ public class Textfile {
 		System.out.println("START METHOD");
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("C:\\engine\\list.txt");
+		FileWriter fw = new FileWriter(FILEPATH + "list.txt");
 		
-		// --> C:\\Users\\Administrator\\Desktop\\Engine0818\\list.txt --> rrou's path
-		// --> C:\engine\list.txt --> laboratory's path
-		// --> /Users/ines/Desktop/engine/list.txt --> ines's mac path
 
 		for (int i = 0; i < filearray.length; i++) {
 			fw.write(filearray[i] + "\t" + current + "[No]" + i + "\r\n");
@@ -68,21 +61,28 @@ public class Textfile {
 	public void getPhotopath(String diretorypath, Long diaryId) throws IOException {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
-		FileWriter fw = new FileWriter("C:\\engine\\photolist.egroupList");
-		// --> C:\Users\Administrator\Desktop\Engine0818\list.txt --> rrou's path
-		// --> C:\engine\photolist.egroupList --> laboratory's path
-		// --> /Users/ines/Desktop/engine/photolist.egroupList --> ines's mac path
+		FileWriter fw = new FileWriter(FILEPATH + "photolist.egroupList");
+		
 
 		for (int i = 0; i < filearray.length; i++) {
 			fw.write(filearray[i] + "\r\n");// C:\eGroupAI_FaceRecognitionEngine_V3.0\photo\1.jpg
 			fw.flush();
-			System.out.println(filearray[i]);
+			System.out.println("HERE!"+filearray[i]);
 
 		}
 		// close filewriter
 		// https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
 		fw.close();
 
+	}
+	
+	public void deleteAllFile(String filepath) throws IOException {
+		
+		File file = new File(filepath);
+		
+		FileUtils.cleanDirectory(file);
+		
+		
 	}
 
 }

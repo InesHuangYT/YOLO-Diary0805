@@ -51,15 +51,20 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 引擎自動標記
-	public Photo engineTag(@PathVariable(value = "personId") String personId,
-			@RequestParam("imageSourcePath") String imageSourcePath) {
+	//沒有api所以我把pathvariable這些刪掉囉
+	public Photo engineTag(String personId, String imageSourcePath) {
+		System.out.println("tag 2");
 		String photoId = findPhotoIdByPhotoPath(imageSourcePath);
+		System.out.println("tag 3");
 		String username = findUsernameByPersonId(personId);
+		System.out.println("tag 4");
 
 		return photoRepository.findById(photoId).map(photo -> {
+			System.out.println("tag 5");
 			User user = new User(username);
+			System.out.println("tag 6");
 			photo.getUser().add(user);
-
+			System.out.println("tag 7");
 			return photoRepository.save(photo);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
