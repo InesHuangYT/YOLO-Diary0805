@@ -39,13 +39,12 @@ import com.example.service.PhotoStorageService;
 @RestController
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
-
-	static String PhotoFILEPATH = "C:/engine/photo/";
-	/**只能用一條線，不然會找不到圖檔**/
+	
+	static String PhotoFILEPATH = "C:/Users/Administrator/Desktop/Engine0818/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
-
+	
 	@Autowired
 	PhotoStorageService photoStorageService;
 	@Autowired
@@ -87,14 +86,15 @@ public class UploadDiaryPhotoController {
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photoRepository.save(photo);
-
+		
 		blob(photo.getPhotodata(), photo.getPhotoName());
-
+		
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
-			set.setPhotoPath(PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
-
+			set.setPhotoPath( PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
+			
+			
 			return photoRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
@@ -105,16 +105,16 @@ public class UploadDiaryPhotoController {
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
-
+		
 		List<Face> faceList = new ArrayList<>();
-
+		
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
 				uploadPhoto(savefile, diaryId);
-
+				
 			}
 			try {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
@@ -138,7 +138,7 @@ public class UploadDiaryPhotoController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
+			
 		}
 		return null;
 	}
