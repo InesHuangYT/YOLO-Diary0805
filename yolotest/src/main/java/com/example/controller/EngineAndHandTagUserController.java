@@ -59,11 +59,12 @@ public class EngineAndHandTagUserController {
 		
 		String username = findUsernameByPersonId(personId);
 		
+		
 
 		return photoRepository.findById(photoId).map(photo -> {
 			
 			User user = new User(username);
-			
+			Long diaryId = photo.getDiary().getId();
 			//photo.getUser().add(user);
 			photo.addUser(user,diaryId);
 		
