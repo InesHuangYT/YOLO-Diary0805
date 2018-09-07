@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Album;
@@ -26,21 +27,28 @@ import com.example.repository.AlbumRepository;
 public class AlbumController {
 
 	@Autowired
-	AlbumRepository albumRepository;	
-	//取得所有相簿
+	AlbumRepository albumRepository;
+
+	// 取得所有相簿
 	@GetMapping
 	public Page<Album> getAllAlbums(Pageable pageable) {
 		return albumRepository.findAll(pageable);
 	}
 
-	//新增相簿
+	// 取得某個使用者新增過的相簿
+	@GetMapping("/user")
+	public Page<Album> getAllAlbumsByUserId(@RequestParam(value = "username") String createdBy, Pageable pageable) {
+		return albumRepository.findByCreatedBy(createdBy, pageable);
+	}
+
+	// 新增相簿
 	@PostMapping
 	public Album createAlbum(@Valid @RequestBody Album album) {
 		System.out.println(album.getName());
 		return albumRepository.save(album);
 	}
-	
-	//修改相簿
+
+	// 修改相簿
 	@PutMapping("/{albumId}")
 	public Album updateAlbum(@PathVariable Long albumId, @Valid @RequestBody Album albumRequest) {
 		return albumRepository.findById(albumId).map(album -> {
@@ -48,7 +56,8 @@ public class AlbumController {
 			return albumRepository.save(album);
 		}).orElseThrow(() -> new ResourceNotFoundException("AlbumId " + albumId + " not found", null, albumRequest));
 	}
-	//刪除相簿
+
+	// 刪除相簿
 	@DeleteMapping("/{albumId}")
 	public ResponseEntity<?> deleteAlbum(@PathVariable Long albumId) {
 		return albumRepository.findById(albumId).map(album -> {

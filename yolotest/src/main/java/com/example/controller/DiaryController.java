@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -32,6 +33,7 @@ import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.ApiResponse;
+import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
@@ -65,36 +67,36 @@ public class DiaryController {
 	@GetMapping
 	public List<Diary> getAllDiaries() {
 		return diaryRepository.findAll();
-
 	}
-
 //取得某相簿的日記
 	@GetMapping("/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
+
 //取得某個使用者新增過的日記
-	@GetMapping("/user/{createdBy}") 
+	@GetMapping("/user/{createdBy}")
 	public Page<Diary> getAllDiariesByUserId(@PathVariable(value = "createdBy") String createdBy, Pageable pageable) {
 		return diaryRepository.findByCreatedBy(createdBy, pageable);
 	}
-	
-//取得某個使用者新增過的相簿
-	@GetMapping("/user") 
-	public Page<Album> getAllAlbumsByUserId(@RequestParam(value = "username") String createdBy, Pageable pageable) {
-		return albumRepository.findByCreatedBy(createdBy, pageable);
-	}
+
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
-	public Diary createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
+	public DiaryResponse createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
 		System.out.println(diary.getText());
-
+		DiaryResponse diaryResponse = new DiaryResponse();
 		return albumRepository.findById(albumId).map(album -> {
 			diary.setAlbum(album);
 			System.out.println(albumId);// 20
 			System.out.println(album);// com.example.entity.Album@4bafd37f
-			return diaryRepository.save(diary);
+			diaryRepository.save(diary);
+			diaryResponse.setId(diary.getId());
+			diaryResponse.setCreatedBy(diary.getCreatedBy());
+			diaryResponse.setCreationDateTime(diary.getCreatedAt());
+			diaryResponse.setText(diary.getText());
+			diaryResponse.setAlbumId(albumId);
+			return diaryResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 

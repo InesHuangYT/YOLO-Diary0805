@@ -26,7 +26,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.example.entity.audit.UserDateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 //一篇日記屬於一個相簿
-@Entity
+@Entity//(name = "Diary")
 @Table(name = "diary")
 public class Diary extends UserDateAudit {
 	@Id
@@ -40,7 +40,7 @@ public class Diary extends UserDateAudit {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "album_id", nullable = false)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	//@JsonIgnore 不加才能response album json
+	@JsonIgnore //不加才能response album json
 	private Album album;
 	
 

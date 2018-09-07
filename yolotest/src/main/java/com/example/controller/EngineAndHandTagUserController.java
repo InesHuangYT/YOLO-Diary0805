@@ -19,6 +19,7 @@ import com.example.engine.controller.GetResult;
 import com.example.engine.entity.Face;
 import com.example.entity.Diary;
 import com.example.entity.Photo;
+import com.example.entity.PhotoTagUser;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.repository.DiaryRepository;
@@ -63,8 +64,9 @@ public class EngineAndHandTagUserController {
 			
 			User user = new User(username);
 			
-			photo.getUser().add(user);
-			
+			//photo.getUser().add(user);
+			photo.addUser(user,diaryId);
+		
 			return photoRepository.save(photo);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
@@ -75,7 +77,9 @@ public class EngineAndHandTagUserController {
 		String username = findUsernameByPersonId(personId);
 		return photoRepository.findById(photoId).map(photo -> {
 			User user = new User(username);
-			photo.getUser().add(user);
+			Long diaryId = photo.getDiary().getId();
+			//photo.getUser().add(user);
+			photo.addUser(user,diaryId);
 			return photoRepository.save(photo);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 

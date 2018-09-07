@@ -13,7 +13,7 @@ import com.example.entity.audit.UserDateAudit;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
 //一個相簿有很多日記
-@Entity
+@Entity(name = "Album")
 @Table(name = "album")
 public class Album extends UserDateAudit{
 

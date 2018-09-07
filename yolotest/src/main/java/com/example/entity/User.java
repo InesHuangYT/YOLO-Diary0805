@@ -1,7 +1,9 @@
 package com.example.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -20,7 +22,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.example.entity.audit.DateAudit;
 
-@Entity
+@Entity//(name = "User")
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
 		@UniqueConstraint(columnNames = { "email" }) })
 public class User extends DateAudit {
@@ -52,6 +54,8 @@ public class User extends DateAudit {
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
 //	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "user")
 //	private Set<Photo> photo = new HashSet<>();
+	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<PhotoTagUser> photo = new ArrayList<>();
 
 	public User() {
 	}
@@ -128,6 +132,30 @@ public class User extends DateAudit {
 		this.tag = tag;
 	}
 
+	public List<PhotoTagUser> getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(List<PhotoTagUser> photo) {
+		this.photo = photo;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+
+		if (o == null || getClass() != o.getClass())
+			return false;
+
+		User user = (User) o;
+		return Objects.equals(username, user.username);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(username);
+	}
 //	public Set<Photo> getPhoto() {
 //		return photo;
 //	}
