@@ -56,10 +56,7 @@ public class EngineAndHandTagUserController {
 	public Photo engineTag(String personId, String imageSourcePath) {
 		;
 		String photoId = findPhotoIdByPhotoPath(imageSourcePath);
-		
 		String username = findUsernameByPersonId(personId);
-		
-		
 
 		return photoRepository.findById(photoId).map(photo -> {
 			

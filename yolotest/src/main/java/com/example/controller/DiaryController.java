@@ -64,7 +64,7 @@ public class DiaryController {
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
 
 //取得全部的日記
-	@GetMapping
+	@GetMapping("")
 	public List<Diary> getAllDiaries() {
 		return diaryRepository.findAll();
 	}

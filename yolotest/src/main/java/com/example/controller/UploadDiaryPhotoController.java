@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -40,7 +41,7 @@ import com.example.service.PhotoStorageService;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 	
-	static String PhotoFILEPATH = "C:/Users/Administrator/Desktop/Engine0818/photo/";
+	static String PhotoFILEPATH = "C:/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
@@ -120,11 +121,13 @@ public class UploadDiaryPhotoController {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
 				engine.retrieveEngine();
 				faceList = result.getResult();
+				HashMap<String,String> hashmap = new HashMap();
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 					if (hasFound == 1) {
+						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
 						System.out.println("tag 1");
 						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
 								faceList.get(i).getImageSourcePath());
@@ -132,6 +135,8 @@ public class UploadDiaryPhotoController {
 					}
 				}
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
+				
+				//for(hashmap)
 				//做完標記再刪除
 				txt.deleteAllFile(PhotoFILEPATH);
 
