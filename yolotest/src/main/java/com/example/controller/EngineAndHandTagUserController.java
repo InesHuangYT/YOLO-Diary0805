@@ -52,14 +52,11 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 引擎自動標記
-	//沒有api所以我把pathvariable這些刪掉囉
+	// 沒有api所以我把pathvariable這些刪掉囉
 	public Photo engineTag(String personId, String imageSourcePath) {
-		;
 		String photoId = findPhotoIdByPhotoPath(imageSourcePath);
-		
+
 		String username = findUsernameByPersonId(personId);
-		
-		
 
 		return photoRepository.findById(photoId).map(photo -> {
 			
