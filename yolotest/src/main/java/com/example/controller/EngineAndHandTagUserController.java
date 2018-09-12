@@ -55,16 +55,15 @@ public class EngineAndHandTagUserController {
 	// 沒有api所以我把pathvariable這些刪掉囉
 	public Photo engineTag(String personId, String imageSourcePath) {
 		String photoId = findPhotoIdByPhotoPath(imageSourcePath);
-
 		String username = findUsernameByPersonId(personId);
 
 		return photoRepository.findById(photoId).map(photo -> {
-			
+
 			User user = new User(username);
 			Long diaryId = photo.getDiary().getId();
-			//photo.getUser().add(user);
-			photo.addUser(user,diaryId);
-		
+			// photo.getUser().add(user);
+			photo.addUser(user, diaryId);
+
 			return photoRepository.save(photo);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
@@ -76,8 +75,8 @@ public class EngineAndHandTagUserController {
 		return photoRepository.findById(photoId).map(photo -> {
 			User user = new User(username);
 			Long diaryId = photo.getDiary().getId();
-			//photo.getUser().add(user);
-			photo.addUser(user,diaryId);
+			// photo.getUser().add(user);
+			photo.addUser(user, diaryId);
 			return photoRepository.save(photo);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
