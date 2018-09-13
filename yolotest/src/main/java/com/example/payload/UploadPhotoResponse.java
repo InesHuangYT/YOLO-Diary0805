@@ -14,10 +14,12 @@ public class UploadPhotoResponse {
 		this.size = size;
 	}
 
-	public String getPhotoName() {
-		return photoName;
+	public UploadPhotoResponse(String photoDownloadUri) {
+		super();
+		this.photoDownloadUri = photoDownloadUri;
 	}
 
+	
 	public void setPhotoName(String photoName) {
 		this.photoName = photoName;
 	}
