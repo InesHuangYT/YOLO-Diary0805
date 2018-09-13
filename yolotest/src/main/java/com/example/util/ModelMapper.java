@@ -17,6 +17,7 @@ import com.example.payload.UserSummary;
 
 @Service
 //mapping the Diary entity to a DiaryResponse payload
+//AES日記加密解密https://blog.csdn.net/hbcui1984/article/details/5201247
 public class ModelMapper {
 	public static DiaryResponse mapDiaryToDiaryResponse(Diary diary, User creator) {
 		DiaryResponse diaryResponse = new DiaryResponse();
