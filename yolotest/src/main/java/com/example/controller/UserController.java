@@ -38,7 +38,6 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
-	
 
 	@Autowired
 	private DiaryService diaryService;
@@ -58,14 +57,13 @@ public class UserController {
 		UserSummary userSummary = new UserSummary(currentUser.getUsername());
 		return userSummary;
 	}
-	
-	@GetMapping("/usernameEmail") 
+
+	@GetMapping("/usernameEmail")
 	@PreAuthorize("hasRole('USER')")
 	public UserSummary getCurrentUserAndEmail(@CurrentUser UserPrincipal currentUser) {
-		UserSummary userSummary = new UserSummary(currentUser.getUsername(),currentUser.getEmail());
+		UserSummary userSummary = new UserSummary(currentUser.getUsername(), currentUser.getEmail());
 		return userSummary;
 	}
-	
 
 	@GetMapping("/checkUsernameAvailability") // 確認帳號有無重複
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
@@ -84,12 +82,13 @@ public class UserController {
 		User user = userRepository.findByUsername(username)
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
-		System.out.println(user);//com.example.entity.User@19a3673a
-		UserProfile userProfile = new UserProfile(user.getUsername(),user.getEmail(), user.getCreatedAt());
+		System.out.println(user);// com.example.entity.User@19a3673a
+		UserProfile userProfile = new UserProfile(user.getUsername(), user.getEmail(), user.getCreatedAt());
 
 		return userProfile;
 	}
 
+	// 取得某個使用者新增過的日記
 	@GetMapping("/{username}/diaries")
 	public PagedResponse<DiaryResponse> getDiariesCreatedBy(@PathVariable(value = "username") String username,
 			@CurrentUser UserPrincipal currentUser,
@@ -97,6 +96,5 @@ public class UserController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return diaryService.getDiariesCreatedBy(username, currentUser, page, size);
 	}
-	
 
 }

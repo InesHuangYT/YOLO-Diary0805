@@ -61,6 +61,31 @@ public class DiaryService {
 				diaries.getTotalPages(), diaries.isLast());
 
 	}
+	
+	public PagedResponse<DiaryResponse> getDiariesCreatedByMe(UserPrincipal currentUser, int page,
+			int size) {
+		validatePageNumberAndSize(page, size);
+		User user = userRepository.findByUsername(currentUser.getUsername())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
+		// Retrieve all diaries created by the given username
+
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+		Page<Diary> diaries = diaryRepository.findByCreatedBy(currentUser.getUsername(), pageable);
+		if (diaries.getNumberOfElements() == 0) {
+			return new PagedResponse<>(Collections.emptyList(), diaries.getNumber(), diaries.getSize(),
+					diaries.getTotalElements(), diaries.getTotalPages(), diaries.isLast());
+		}
+
+		// Map Diaries to DiaryResponses containing diary creator details
+
+//		List<Long> diaryIds = diaries.map(Diary::getId).getContent();
+		List<DiaryResponse> diaryResponses = diaries.map(diary -> {
+			return ModelMapper.mapDiaryToDiaryResponse(diary, user);
+		}).getContent();
+		return new PagedResponse<>(diaryResponses, diaries.getNumber(), diaries.getSize(), diaries.getTotalElements(),
+				diaries.getTotalPages(), diaries.isLast());
+
+	}
 
 	/* 以下為上方有使用到的方法，validatePageNumberAndSize、getDiaryCreatorMap */
 
