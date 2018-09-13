@@ -18,8 +18,8 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 	Optional<Diary> findById(Long diaryId);
 
 	Page<Diary> findByCreatedBy(String userId, Pageable pageable);
-    Page<Diary> findByAlbumId(Long albumId, Pageable pageable);
 
+	Page<Diary> findByAlbumId(Long albumId, Pageable pageable);
 
 //    long countByCreatedBy(Long userId);
 	List<Diary> findByIdIn(List<Long> diaryIds);

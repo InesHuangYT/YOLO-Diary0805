@@ -47,6 +47,7 @@ import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
 import com.example.service.DiaryService;
 import com.example.util.AppConstants;
+import com.example.util.ModelMapper;
 
 @RestController
 @RequestMapping("/api/diary")
@@ -65,6 +66,8 @@ public class DiaryController {
 
 	@Autowired
 	private DiaryService diaryService;
+	@Autowired
+	private static ModelMapper modelMapper;
 
 	private static final Logger logger = LoggerFactory.getLogger(DiaryController.class);
 
@@ -73,6 +76,7 @@ public class DiaryController {
 	public List<Diary> getAllDiaries() {
 		return diaryRepository.findAll();
 	}
+
 //取得某相簿的日記
 	@GetMapping("/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
@@ -85,24 +89,32 @@ public class DiaryController {
 		return diaryRepository.findByCreatedBy(createdBy, pageable);
 	}
 
+//取得自己新增過的日記
+	@GetMapping("/diaries")
+	public PagedResponse<DiaryResponse> getDiariesCreatedBy(@CurrentUser UserPrincipal currentUser,
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+		return diaryService.getDiariesCreatedByMe(currentUser, page, size);
+	}
+
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
 	public DiaryResponse createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
 		String content = diary.getText();
 		String password = "ahfcjuh645465645";
-		
-		System.out.println("加密前: "+ content);
+		System.out.println("加密前: " + content);
 		byte[] encryptResult = encrypt(content, password);
-		System.out.println("加密后：" + encryptResult.toString());
-		
-		
+		String encryptResultStr = modelMapper.parseByte2HexStr(encryptResult);
+		System.out.println("加密后：" + encryptResultStr);
+
 		DiaryResponse diaryResponse = new DiaryResponse();
 		return albumRepository.findById(albumId).map(album -> {
 			diary.setAlbum(album);
 			System.out.println(albumId);// 20
 			System.out.println(album);// com.example.entity.Album@4bafd37f
-			diary.setText(encryptResult.toString());
+//			diary.setText(encryptResult.toString());
+			diary.setText(encryptResultStr);
 			diaryRepository.save(diary);
 			diaryResponse.setId(diary.getId());
 			diaryResponse.setCreatedBy(diary.getCreatedBy());
@@ -158,49 +170,43 @@ public class DiaryController {
 //	                                    @PathVariable Long diaryId) {
 //	        return diaryService.getDiaryById(diaryId, currentUser);
 //	    }
-	
+
 	public static byte[] encrypt(String content, String password) {
-	    KeyGenerator kgen = null;
-	    try {
-	        kgen = KeyGenerator.getInstance("AES");
-	        kgen.init(128, new SecureRandom(password.getBytes()));
-	        SecretKey secretKey = kgen.generateKey();
-	        byte[] enCodeFormat = secretKey.getEncoded();
-	        SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-	        Cipher cipher = Cipher.getInstance("AES");// 创建密码器
-	        cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
-	        byte[] byteContent = content.getBytes("utf-8");
-	        byte[] result = cipher.doFinal(byteContent);
-	        return result;//加密
-	    } catch(Exception e) {
-	    	e.printStackTrace();
-	    }
-	    return null;
+		KeyGenerator kgen = null;
+		try {
+			kgen = KeyGenerator.getInstance("AES");
+			kgen.init(128, new SecureRandom(password.getBytes()));
+			SecretKey secretKey = kgen.generateKey();
+			byte[] enCodeFormat = secretKey.getEncoded();
+			SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+			Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+			cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
+			byte[] byteContent = content.getBytes("utf-8");
+			byte[] result = cipher.doFinal(byteContent);
+			return result;// 加密
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
-	
+
 	public static byte[] decrypt(byte[] content, String password) {
-	    KeyGenerator kgen = null;
-	    try {
-	        kgen = KeyGenerator.getInstance("AES");
-	        kgen.init(128, new SecureRandom(password.getBytes()));
-	        SecretKey secretKey = kgen.generateKey();
-	        byte[] enCodeFormat = secretKey.getEncoded();
-	        SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-	        Cipher cipher = Cipher.getInstance("AES");// 创建密码器
-	        cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
-	        byte[] result = cipher.doFinal(content);
-	        return result; // 解密
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    return null;
+		KeyGenerator kgen = null;
+		try {
+			kgen = KeyGenerator.getInstance("AES");
+			kgen.init(128, new SecureRandom(password.getBytes()));
+			SecretKey secretKey = kgen.generateKey();
+			byte[] enCodeFormat = secretKey.getEncoded();
+			SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
+			Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+			cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
+			byte[] result = cipher.doFinal(content);
+			return result; // 解密
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 
 	}
-	
-	
-	
-	
-	
-	
 
 }

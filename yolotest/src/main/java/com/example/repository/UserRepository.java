@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.entity.Role;
 import com.example.entity.User;
+import com.example.security.UserPrincipal;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +23,9 @@ public interface UserRepository extends JpaRepository<User, String> {
 
 	Optional<User> findByUsername(String username);
 
-	List<User> findByUsername(List<String> usernames);
-	
+	Optional<User> findByUsername(UserPrincipal currentUser);
 
+	List<User> findByUsername(List<String> usernames);
 
 	Boolean existsByUsername(String username);
 
