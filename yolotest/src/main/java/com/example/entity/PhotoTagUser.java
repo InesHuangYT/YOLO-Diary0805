@@ -14,6 +14,8 @@ import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+
+//前端要拿這個資料表的資料->找同DIARY ID 下的使用者->對應的人臉圖-顯示到前端
 @Entity(name = "PhotoTagUser")
 @Table(name = "photo_tag_users")
 public class PhotoTagUser {
@@ -30,6 +32,8 @@ public class PhotoTagUser {
 	private User users;
 
 	private Long diaryId;
+	
+	private String facepath;
 
 	public PhotoTagUser() {
 	}
@@ -42,13 +46,32 @@ public class PhotoTagUser {
 	}
 	
 	
-	public PhotoTagUser(Photo photo, User users, Long diaryId) {
+	public PhotoTagUser(Photo photo, User users, Long diaryId, String facepath) {
 		this.photo = photo;
 		this.users = users;
 		this.diaryId = diaryId;
 		this.id = new PhotoTagUserId(photo.getId(),users.getUsername());
+		this.facepath = facepath;
 		
 
+	}
+
+	
+	
+	public User getUsers() {
+		return users;
+	}
+
+	public void setUsers(User users) {
+		this.users = users;
+	}
+
+	public String getFacepath() {
+		return facepath;
+	}
+
+	public void setFacepath(String facepath) {
+		this.facepath = facepath;
 	}
 
 	public PhotoTagUserId getId() {

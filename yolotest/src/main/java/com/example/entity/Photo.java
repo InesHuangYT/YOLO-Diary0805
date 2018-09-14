@@ -170,8 +170,8 @@ public class Photo extends UserDateAudit {
 		this.users = users;
 	}
 
-	public void addUser(User user,Long diaryId) {
-		PhotoTagUser photoTagUser = new PhotoTagUser(this, user,diaryId);
+	public void addUser(User user,Long diaryId, String facepath) {
+		PhotoTagUser photoTagUser = new PhotoTagUser(this, user,diaryId,facepath);
 		users.add(photoTagUser);
 		user.getPhoto().add(photoTagUser);
 	}
