@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -30,10 +31,13 @@ import com.example.engine.controller.EngineFunc;
 import com.example.engine.controller.GetResult;
 import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
+import com.example.entity.Notice;
 import com.example.entity.Photo;
+import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.DiaryRepository;
+import com.example.repository.NoticeRepository;
 import com.example.repository.PhotoRepository;
 import com.example.service.PhotoStorageService;
 
@@ -60,6 +64,8 @@ public class UploadDiaryPhotoController {
 	GetResult result;
 	@Autowired
 	EngineAndHandTagUserController engineAndHandTagUserController;
+	@Autowired
+	NoticeRepository noticerepository;
 
 	/**
 	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
@@ -121,17 +127,32 @@ public class UploadDiaryPhotoController {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
 				engine.retrieveEngine();
 				faceList = result.getResult();
+				
+				//利用hashmap知道整篇日記有在照片中出現過的人(一次)
 				HashMap<String,String> hashmap = new HashMap();
+				
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 					if (hasFound == 1) {
 						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
-						System.out.println("tag 1");
+						//tag user
 						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
 								faceList.get(i).getImageSourcePath());
 						System.out.println("tag finish!");
+						
+						//send notice to user
+						Iterator collection = hashmap.keySet().iterator();
+						while(collection.hasNext()) {
+							String key = (String)collection.next();
+							Notice notice = new Notice(new User(key));
+							notice.setMessage("");
+							System.out.println("******");
+							System.out.println("key: "+key);
+							System.out.println("******");
+						}
+						
 					}
 				}
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/

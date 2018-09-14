@@ -54,6 +54,13 @@ public Notice(){}
 //		this.sender = sender;
 		this.isRead = false;
 	}
+	
+	
+	public Notice(User receive){
+		this.receive = receive;
+		this.isRead = false;
+	}
+	
 
 	public long getId() {
 		return id;

@@ -13,6 +13,9 @@ import javax.persistence.Table;
 @Entity(name = "PhotoTagUser")
 @Table(name = "photo_tag_users")
 public class PhotoTagUser {
+	
+	//private String batchid =  
+	
 	@EmbeddedId
 	private PhotoTagUserId id;
 
