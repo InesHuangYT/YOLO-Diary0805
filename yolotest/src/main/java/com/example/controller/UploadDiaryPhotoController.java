@@ -119,7 +119,6 @@ public class UploadDiaryPhotoController {
 		List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
 		int batchid = ran.nextInt(10000000);
-		System.out.println("batch id!!!!!!!!"+ batchid);
 		
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
@@ -145,7 +144,7 @@ public class UploadDiaryPhotoController {
 						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
 						//tag user
 						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-								faceList.get(i).getImageSourcePath());
+								faceList.get(i).getImageSourcePath(), faceList.get(i).getFrameFace().getFrameFacePath());
 						System.out.println("tag finish!");
 						
 						//send notice to user

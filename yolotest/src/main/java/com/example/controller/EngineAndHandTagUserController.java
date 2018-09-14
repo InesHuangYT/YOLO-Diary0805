@@ -53,7 +53,7 @@ public class EngineAndHandTagUserController {
 
 	// 引擎自動標記
 	// 沒有api所以我把pathvariable這些刪掉囉
-	public Photo engineTag(String personId, String imageSourcePath) {
+	public Photo engineTag(String personId, String imageSourcePath, String facepath) {
 		String photoId = findPhotoIdByPhotoPath(imageSourcePath);
 		
 		return photoRepository.findById(photoId).map(photo -> {
@@ -61,7 +61,7 @@ public class EngineAndHandTagUserController {
 			User user = new User(personId);
 			Long diaryId = photo.getDiary().getId();
 			// photo.getUser().add(user);
-			photo.addUser(user, diaryId);
+			photo.addUser(user, diaryId, facepath);
 
 			return photoRepository.save(photo);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
@@ -69,13 +69,13 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 手動標記 一張照片標記很多個人
-	public Photo handTag(@PathVariable(value = "photoId") String photoId, @RequestParam("username") String personId) {
+	public Photo handTag(@PathVariable(value = "photoId") String photoId, @RequestParam("username") String personId, String facepath) {
 		String username = findUsernameByPersonId(personId);
 		return photoRepository.findById(photoId).map(photo -> {
 			User user = new User(username);
 			Long diaryId = photo.getDiary().getId();
 			// photo.getUser().add(user);
-			photo.addUser(user, diaryId);
+			photo.addUser(user, diaryId, facepath);
 			return photoRepository.save(photo);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
@@ -83,11 +83,11 @@ public class EngineAndHandTagUserController {
 
 	@PostMapping("/{photoId}")
 	public List<String> handTags(@PathVariable(value = "photoId") String photoId,
-			@RequestParam("username") String[] username) {
+			@RequestParam("username") String[] username, String facepath) {
 		if (username != null && username.length > 0) {
 			for (int i = 0; i < username.length; i++) {
 				String user = username[i];
-				handTag(photoId, user);
+				handTag(photoId, user, facepath);
 			}
 		}
 
