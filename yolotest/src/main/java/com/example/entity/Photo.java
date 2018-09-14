@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -33,6 +34,9 @@ public class Photo extends UserDateAudit {
 	@GeneratedValue(generator = "uuid")
 	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	private String id;
+	
+	
+	private int batchid;
 
 	private String photoName;
 
@@ -57,6 +61,10 @@ public class Photo extends UserDateAudit {
 //	private Set<User> user = new HashSet<>();
 
 	public Photo() {
+	}
+	
+	public Photo(int batchid) {
+		this.batchid = batchid;
 	}
 
 	public Photo(String id) {
@@ -88,6 +96,14 @@ public class Photo extends UserDateAudit {
 		this.photodata = photodata;
 		this.photoUri = photoUri;
 		this.diary = diary;
+	}
+
+	public long getBatchid() {
+		return batchid;
+	}
+
+	public void setBatchid(int batchid) {
+		this.batchid = batchid;
 	}
 
 	public String getId() {

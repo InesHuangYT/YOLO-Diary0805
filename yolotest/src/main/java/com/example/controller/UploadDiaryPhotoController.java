@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -87,11 +88,13 @@ public class UploadDiaryPhotoController {
 		}
 	}
 
-	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId) {
+	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId, int batchid) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
+		photo.setBatchid(batchid);
+		
 		photoRepository.save(photo);
 		
 		blob(photo.getPhotodata(), photo.getPhotoName());
@@ -114,13 +117,16 @@ public class UploadDiaryPhotoController {
 			@PathVariable(value = "diaryId") Long diaryId) {
 		
 		List<Face> faceList = new ArrayList<>();
+		Random ran = new Random();
+		int batchid = ran.nextInt(10000000);
+		System.out.println("batch id!!!!!!!!"+ batchid);
 		
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
-				uploadPhoto(savefile, diaryId);
+				uploadPhoto(savefile, diaryId, batchid);
 				
 			}
 			try {

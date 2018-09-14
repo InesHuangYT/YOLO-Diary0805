@@ -6,15 +6,17 @@ import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity(name = "PhotoTagUser")
 @Table(name = "photo_tag_users")
 public class PhotoTagUser {
-	
-	//private String batchid =  
 	
 	@EmbeddedId
 	private PhotoTagUserId id;
@@ -36,6 +38,7 @@ public class PhotoTagUser {
 		this.photo = photo;
 		this.users = user;
 		this.id = new PhotoTagUserId(photo.getId(),user.getUsername());
+		
 	}
 	
 	
@@ -44,6 +47,7 @@ public class PhotoTagUser {
 		this.users = users;
 		this.diaryId = diaryId;
 		this.id = new PhotoTagUserId(photo.getId(),users.getUsername());
+		
 
 	}
 
