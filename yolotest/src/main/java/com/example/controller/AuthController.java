@@ -131,11 +131,11 @@ public class AuthController {
 		System.out.println(location);// http://localhost:8080/api/user/testin221111
 
 		// 信箱寄送
-		try {
-			notificationService.sendNotification(user);
-		} catch (MailException e) {
-			logger.info("Error sending email" + e.getMessage());
-		}
+//		try {
+//			notificationService.sendNotification(user);
+//		} catch (MailException e) {
+//			logger.info("Error sending email" + e.getMessage());
+//		}
 
 		return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
 	}
