@@ -12,3 +12,5 @@ https://www.getpostman.com/collections/faa04436787e4b7e9905
 INSERT INTO roles(name) VALUES('ROLE_USER');
 INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 
+
+https://blog.csdn.net/qq_35731570/article/details/77878032
