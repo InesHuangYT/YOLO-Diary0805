@@ -34,6 +34,22 @@ public class ModelMapper {
 		return diaryResponse;
 
 	}
+	
+	public static DiaryResponse mapDiaryToDiaryResponse(Diary diary) {
+		DiaryResponse diaryResponse = new DiaryResponse();
+		diaryResponse.setId(diary.getId());
+		diaryResponse.setCreatedBy(diary.getCreatedBy());
+		diaryResponse.setCreationDateTime(diary.getCreatedAt());
+//		UserSummary creatorSummary = new UserSummary(creator.getUsername());
+//		diaryResponse.setCreatedBy(creatorSummary);
+		byte[] decryptFrom = parseHexStr2Byte(diary.getText());
+		String password = "ahfcjuh645465645";
+		byte[] decrypt = decrypt(decryptFrom, password);
+		diaryResponse.setText(new String(decrypt));
+
+		return diaryResponse;
+
+	}
 
 	public static byte[] decrypt(byte[] content, String password) {
 		KeyGenerator kgen = null;

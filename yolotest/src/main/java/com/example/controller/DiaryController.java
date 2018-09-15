@@ -37,6 +37,7 @@ import com.example.entity.Diary;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.AlbumResponse;
 import com.example.payload.ApiResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
@@ -81,6 +82,15 @@ public class DiaryController {
 	@GetMapping("/{albumId}")
 	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
+	}
+
+//取得某個日記的內容
+	@GetMapping("/diaryId/{diaryId}")
+	public DiaryResponse getDiaryText(@PathVariable Long diaryId) {
+		return diaryRepository.findById(diaryId).map(diary -> {
+			DiaryResponse diaryResponse = modelMapper.mapDiaryToDiaryResponse(diary);
+			return diaryResponse;
+		}).orElseThrow(() -> new BadRequestException("DiaryId " + diaryId + " not found"));
 	}
 
 //取得某個使用者新增過的日記

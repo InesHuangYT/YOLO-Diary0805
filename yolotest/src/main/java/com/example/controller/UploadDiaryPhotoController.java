@@ -46,7 +46,7 @@ import com.example.service.PhotoStorageService;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 	
-	static String PhotoFILEPATH = "C:/engine/photo/";
+	static String PhotoFILEPATH = "/Users/ines/Desktop/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
@@ -130,7 +130,7 @@ public class UploadDiaryPhotoController {
 			}
 			try {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
-				engine.retrieveEngine();
+				//engine.retrieveEngine();
 				faceList = result.getResult();
 				
 				//利用hashmap知道整篇日記有在照片中出現過的人(一次)

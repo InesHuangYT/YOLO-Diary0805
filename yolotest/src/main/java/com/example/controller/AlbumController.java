@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Album;
+import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.AlbumResponse;
 import com.example.repository.AlbumRepository;
 
 @RestController
@@ -39,6 +41,15 @@ public class AlbumController {
 	@GetMapping("/user")
 	public Page<Album> getAllAlbumsByUserId(@RequestParam(value = "username") String createdBy, Pageable pageable) {
 		return albumRepository.findByCreatedBy(createdBy, pageable);
+	}
+
+	// 取得某個相簿的相簿名稱
+	@GetMapping("/{albumId}")
+	public AlbumResponse getAlbumName(@PathVariable Long albumId) {
+		return albumRepository.findById(albumId).map(album -> {
+			AlbumResponse albumResponse = new AlbumResponse(album.getName());
+			return albumResponse;
+		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
 	// 新增相簿
