@@ -7,6 +7,11 @@ public class AlbumResponse {
 	private Long id;
 	private String name;
 	private List<DiaryResponse> diaries;
+	
+
+	public AlbumResponse(String name) {
+		this.name = name;
+	}
 
 	public Long getId() {
 		return id;
