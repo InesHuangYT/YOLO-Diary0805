@@ -9,11 +9,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.entity.Diary;
 import com.example.entity.Photo;
+import com.example.entity.PhotoTagUser;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.MySelfieNotFoundException;
 import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
+import com.example.repository.PhotoTagUserRepository;
 import com.example.repository.UserRepository;
 
 import java.io.IOException;
@@ -25,8 +27,8 @@ public class PhotoStorageService {
 	private PhotoRepository photoRepository;
 	@Autowired
 	private DiaryRepository diaryRepository;
-
-
+	@Autowired
+	private PhotoTagUserRepository photoTagUserRepository;
 	public Photo storePhoto(MultipartFile photo, Long diaryId) {
 		// Normalize file name
 		String photoName = StringUtils.cleanPath(photo.getOriginalFilename());
@@ -54,6 +56,11 @@ public class PhotoStorageService {
 	public Photo getPhoto(String photoId) {
 		return photoRepository.findById(photoId)
 				.orElseThrow(() -> new MySelfieNotFoundException("File not found with id " + photoId));
+	}
+	public PhotoTagUser getPhotoFace(String faceRandom) {
+		return photoTagUserRepository.findByFaceRandom(faceRandom)
+				.orElseThrow(() -> new MySelfieNotFoundException("File not found with path " + faceRandom));
+
 	}
 
 }
