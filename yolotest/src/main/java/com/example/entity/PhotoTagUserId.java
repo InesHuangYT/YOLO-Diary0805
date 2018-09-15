@@ -8,21 +8,26 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class PhotoTagUserId implements Serializable {
-	
+
 	private Photo photo;
 	private User user;
+
 	public Photo getPhoto() {
 		return photo;
 	}
+
 	public void setPhoto(Photo photo) {
 		this.photo = photo;
 	}
+
 	public User getUser() {
 		return user;
 	}
+
 	public void setUser(User user) {
 		this.user = user;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -31,6 +36,7 @@ public class PhotoTagUserId implements Serializable {
 		result = prime * result + ((user == null) ? 0 : user.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -53,5 +59,4 @@ public class PhotoTagUserId implements Serializable {
 		return true;
 	}
 
-	
 }

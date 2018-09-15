@@ -8,10 +8,8 @@ import org.springframework.stereotype.Repository;
 import com.example.entity.PhotoTagUser;
 import com.example.entity.PhotoTagUserId;
 
-
-
 @Repository
-public interface PhotoTagUserRepository extends JpaRepository<PhotoTagUser, PhotoTagUserId>{
+public interface PhotoTagUserRepository extends JpaRepository<PhotoTagUser, PhotoTagUserId> {
 
-	
+	Optional<PhotoTagUser> findByFaceRandom(String faceRandom);
 }

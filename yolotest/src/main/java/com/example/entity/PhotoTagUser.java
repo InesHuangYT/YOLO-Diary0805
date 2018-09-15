@@ -23,42 +23,42 @@ import javax.validation.constraints.NotBlank;
 @IdClass(PhotoTagUserId.class)
 public class PhotoTagUser {
 
-
 	@Id
-    @ManyToOne
-    @JoinColumn(name = "photo_id", referencedColumnName = "id")
+	@ManyToOne
+	@JoinColumn(name = "photo_id", referencedColumnName = "id")
 	private Photo photo;
 
 	@Id
-    @ManyToOne
-    @JoinColumn(name = "users_username", referencedColumnName = "username")
+	@ManyToOne
+	@JoinColumn(name = "users_username", referencedColumnName = "username")
 	private User user;
 
 	private Long diaryId;
-
-	private String face_path;
-    
 	@Lob
 	private byte[] face_data;
 
+	private String facePath;
+
 	private String face_uri;
 
-	
+	private String faceRandom;
+
 	public PhotoTagUser() {
-		
+
 	}
-	
-	public PhotoTagUser(Photo photo, User user, Long diaryId, String face_path, byte[] face_data, String face_uri) {
-		
+
+	public PhotoTagUser(Photo photo, User user, Long diaryId, String face_path, byte[] face_data, String face_uri,
+			String faceRandom) {
+
 		this.photo = photo;
 		this.user = user;
 		this.diaryId = diaryId;
-		this.face_path = face_path;
+		this.facePath = face_path;
 		this.face_data = face_data;
 		this.face_uri = face_uri;
+		this.faceRandom = faceRandom;
 	}
 
-	
 	public Photo getPhoto() {
 		return photo;
 	}
@@ -83,14 +83,6 @@ public class PhotoTagUser {
 		this.diaryId = diaryId;
 	}
 
-	public String getFace_path() {
-		return face_path;
-	}
-
-	public void setFace_path(String face_path) {
-		this.face_path = face_path;
-	}
-
 	public byte[] getFace_data() {
 		return face_data;
 	}
@@ -107,6 +99,24 @@ public class PhotoTagUser {
 		this.face_uri = face_uri;
 	}
 
+	public String getFacePath() {
+		return facePath;
+	}
+
+	public void setFacePath(String facePath) {
+		this.facePath = facePath;
+	}
+
+	public String getFaceRandom() {
+		return faceRandom;
+	}
+
+	public void setFaceRandom(String faceRandom) {
+		this.faceRandom = faceRandom;
+	}
 
 	
+
+	
+
 }
