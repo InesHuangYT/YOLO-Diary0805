@@ -108,7 +108,7 @@ public class EngineAndHandTagUserController {
 			return phototaguserRepository.save(ptu);
 		 
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
-		 //不知道為什麼這個部分拿掉，資料就可以成功新增，只要增加這個，就會出現錯誤，但卻不是真的找不到photoId
+		 
 		
 		 
 	}
