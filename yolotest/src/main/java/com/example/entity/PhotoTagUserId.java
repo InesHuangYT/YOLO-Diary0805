@@ -8,51 +8,50 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class PhotoTagUserId implements Serializable {
-	@Column(name = "photo_id")
-	private String photoId;
-	@Column(name = "users_username")
-	private String userId;
-
-	public PhotoTagUserId(String photoId, String userId) {
-		this.photoId = photoId;
-		this.userId = userId;
+	
+	private Photo photo;
+	private User user;
+	public Photo getPhoto() {
+		return photo;
 	}
-
-	public PhotoTagUserId() {
+	public void setPhoto(Photo photo) {
+		this.photo = photo;
 	}
-
-
-	public String getPhotoId() {
-		return photoId;
+	public User getUser() {
+		return user;
 	}
-
-	public void setPhotoId(String photoId) {
-		this.photoId = photoId;
+	public void setUser(User user) {
+		this.user = user;
 	}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
 	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
- 
-        if (o == null || getClass() != o.getClass()) 
-            return false;
- 
-        PhotoTagUserId that = (PhotoTagUserId) o;
-        return Objects.equals(photoId, that.photoId) && 
-               Objects.equals(userId, that.userId);
-    }
- 
-    @Override
-    public int hashCode() {
-        return Objects.hash(photoId, userId);
-    }
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((photo == null) ? 0 : photo.hashCode());
+		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PhotoTagUserId other = (PhotoTagUserId) obj;
+		if (photo == null) {
+			if (other.photo != null)
+				return false;
+		} else if (!photo.equals(other.photo))
+			return false;
+		if (user == null) {
+			if (other.user != null)
+				return false;
+		} else if (!user.equals(other.user))
+			return false;
+		return true;
+	}
 
+	
 }

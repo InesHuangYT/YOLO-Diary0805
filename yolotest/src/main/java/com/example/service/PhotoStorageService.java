@@ -48,7 +48,7 @@ public class PhotoStorageService {
 			throw new BadRequestException("Could not store file " + photoName + ". Please try again!", ex);
 		}
 	}
-
+	
 	
 
 	public Photo getPhoto(String photoId) {

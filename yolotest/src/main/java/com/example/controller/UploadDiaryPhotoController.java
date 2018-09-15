@@ -34,7 +34,6 @@ import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
-import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.DiaryRepository;
@@ -88,7 +87,7 @@ public class UploadDiaryPhotoController {
 		}
 	}
 
-	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId, int batchid) {
+	public UploadPhotoResponse uploadPhoto(MultipartFile file, Long diaryId, int batchid) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
 				.path(photo.getId()).toUriString();
@@ -110,7 +109,8 @@ public class UploadDiaryPhotoController {
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
 
 	}
-
+	
+	
 //上傳照片
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
@@ -148,15 +148,17 @@ public class UploadDiaryPhotoController {
 						System.out.println("tag finish!");
 						
 						//send notice to user
-						Iterator collection = hashmap.keySet().iterator();
-						while(collection.hasNext()) {
-							String key = (String)collection.next();
-							Notice notice = new Notice(new User(key));
-							notice.setMessage("");
-							System.out.println("******");
-							System.out.println("key: "+key);
-							System.out.println("******");
-						}
+						//之後要放在別的地方
+						//Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
+//						Iterator collection = hashmap.keySet().iterator();
+//						while(collection.hasNext()) {
+//							String key = (String)collection.next();
+//							Notice notice = new Notice(new User(key));
+//							notice.setMessage("");
+//							System.out.println("******");
+//							System.out.println("key: "+key);
+//							System.out.println("******");
+//						}
 						
 					}
 				}
@@ -174,6 +176,13 @@ public class UploadDiaryPhotoController {
 		return null;
 	}
 
+	//取得同日記下的所有照片
+//	GetMapping("/downloadPhoto/{diaryId}")
+//	public 
+	
+	
+	
+	
 //下載照片
 	@GetMapping("/downloadPhoto/{photoId}")
 	public ResponseEntity<Resource> downloadPhoto(@PathVariable String photoId) {
