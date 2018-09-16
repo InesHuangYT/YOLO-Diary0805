@@ -62,7 +62,6 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 引擎自動標記
-	// 沒有api所以我把pathvariable這些刪掉囉
 	public void engineTag(String personId, String imageSourcePath, String facepath) throws IOException {
 		String photoid = findPhotoIdByPhotoPath(imageSourcePath);
 		User user = new User(personId);
@@ -139,8 +138,8 @@ public class EngineAndHandTagUserController {
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; photoname = \"" + "Face" + "\"")
 				.body(new ByteArrayResource(photoTagUser.getFace_data()));
 	}
-	
-	//取亂數字串
+
+	// 取亂數字串
 	public static String getRandomString(int length) {
 		String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 		Random random = new Random();
