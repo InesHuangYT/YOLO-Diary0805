@@ -34,7 +34,6 @@ import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
-import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.DiaryRepository;
@@ -45,12 +44,12 @@ import com.example.service.PhotoStorageService;
 @RestController
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
-	
-	static String PhotoFILEPATH = "/Users/ines/Desktop/engine/photo/";
+
+	static String PhotoFILEPATH = "C:/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
-	
+
 	@Autowired
 	PhotoStorageService photoStorageService;
 	@Autowired
@@ -88,23 +87,22 @@ public class UploadDiaryPhotoController {
 		}
 	}
 
-	public UploadPhotoResponse uploadPhoto(@RequestParam("file") MultipartFile file, Long diaryId, int batchid) {
+	public UploadPhotoResponse uploadPhoto(MultipartFile file, Long diaryId, int batchid) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photo.setBatchid(batchid);
-		
+
 		photoRepository.save(photo);
-		
+
 		blob(photo.getPhotodata(), photo.getPhotoName());
-		
+
 		String photoId = photo.getId();
 		System.out.println(photoId);
 		photoRepository.findById(photoId).map(set -> {
-			set.setPhotoPath( PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
-			
-			
+			set.setPhotoPath(PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
+
 			return photoRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
@@ -115,64 +113,71 @@ public class UploadDiaryPhotoController {
 	@PostMapping("/{diaryId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
-		
+
 		List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
 		int batchid = ran.nextInt(10000000);
-		
+
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
 				uploadPhoto(savefile, diaryId, batchid);
-				
+
 			}
 			try {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
-				//engine.retrieveEngine();
+				engine.retrieveEngine();
 				faceList = result.getResult();
-				
-				//利用hashmap知道整篇日記有在照片中出現過的人(一次)
-				HashMap<String,String> hashmap = new HashMap();
-				
+
+				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
+				HashMap<String, String> hashmap = new HashMap();
+
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 					if (hasFound == 1) {
 						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
-						//tag user
+						// tag user
 						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-								faceList.get(i).getImageSourcePath(), faceList.get(i).getFrameFace().getFrameFacePath());
+								faceList.get(i).getImageSourcePath(),
+								faceList.get(i).getFrameFace().getFrameFacePath());
 						System.out.println("tag finish!");
-						
-						//send notice to user
-						Iterator collection = hashmap.keySet().iterator();
-						while(collection.hasNext()) {
-							String key = (String)collection.next();
-							Notice notice = new Notice(new User(key));
-							notice.setMessage("");
-							System.out.println("******");
-							System.out.println("key: "+key);
-							System.out.println("******");
-						}
-						
+
+						// send notice to user
+						// 之後要放在別的地方
+						// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
+//						Iterator collection = hashmap.keySet().iterator();
+//						while(collection.hasNext()) {
+//							String key = (String)collection.next();
+//							Notice notice = new Notice(new User(key));
+//							notice.setMessage("");
+//							System.out.println("******");
+//							System.out.println("key: "+key);
+//							System.out.println("******");
+//						}
+
 					}
 				}
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
-				
-				//for(hashmap)
-				//做完標記再刪除
+
+				// for(hashmap)
+				// 做完標記再刪除
 				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 		}
 		return null;
 	}
+
+	// 取得同日記下的所有照片
+//	GetMapping("/downloadPhoto/{diaryId}")
+//	public 
 
 //下載照片
 	@GetMapping("/downloadPhoto/{photoId}")

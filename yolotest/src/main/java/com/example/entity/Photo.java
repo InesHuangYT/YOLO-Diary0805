@@ -70,6 +70,7 @@ public class Photo extends UserDateAudit {
 	public Photo(String id) {
 		this.id = id;
 	}
+	
 
 //	public Photo(Set<User> user) {
 //		this.user = user;
@@ -79,6 +80,11 @@ public class Photo extends UserDateAudit {
 		super();
 		this.photoName = photoName;
 		this.photoType = photoType;
+		this.photodata = photodata;
+	}
+
+	public Photo(byte[] photodata) {
+		super();
 		this.photodata = photodata;
 	}
 
@@ -170,24 +176,30 @@ public class Photo extends UserDateAudit {
 		this.users = users;
 	}
 
-	public void addUser(User user,Long diaryId, String facepath) {
-		PhotoTagUser photoTagUser = new PhotoTagUser(this, user,diaryId,facepath);
-		users.add(photoTagUser);
-		user.getPhoto().add(photoTagUser);
-	}
+//	public void addUser(User user,Long diaryId, String facepath, byte[] facedata, String uri) {
+//		PhotoTagUser photoTagUser = new PhotoTagUser(this, user,diaryId,facepath, facedata, uri);
+//		users.add(photoTagUser);
+//		user.getPhoto().add(photoTagUser);
+//	}
+//	public void addUser(User user,Long diaryId, String facepath) {
+//		PhotoTagUser photoTagUser = new PhotoTagUser(this, user,diaryId,facepath);
+//		users.add(photoTagUser);
+//		user.getPhoto().add(photoTagUser);
+//	}
 
-	public void removeUser(User user) {
-		for (Iterator<PhotoTagUser> iterator = users.iterator(); iterator.hasNext();) {
-			PhotoTagUser photoTagUser = iterator.next();
 
-			if (photoTagUser.getPhoto().equals(this) && photoTagUser.getUser().equals(user)) {
-				iterator.remove();
-				photoTagUser.getUser().getPhoto().remove(photoTagUser);
-				photoTagUser.setPhoto(null);
-				photoTagUser.setUser(null);
-			}
-		}
-	}
+//	public void removeUser(User user) {
+//		for (Iterator<PhotoTagUser> iterator = users.iterator(); iterator.hasNext();) {
+//			PhotoTagUser photoTagUser = iterator.next();
+//
+//			if (photoTagUser.getPhoto().equals(this) && photoTagUser.getUser().equals(user)) {
+//				iterator.remove();
+//				photoTagUser.getUser().getPhoto().remove(photoTagUser);
+//				photoTagUser.setPhoto(null);
+//				photoTagUser.setUser(null);
+//			}
+//		}
+//	}
 
 	@Override
 	public boolean equals(Object o) {

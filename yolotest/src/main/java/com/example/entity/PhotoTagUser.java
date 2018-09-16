@@ -9,77 +9,54 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
-
 //前端要拿這個資料表的資料->找同DIARY ID 下的使用者->對應的人臉圖-顯示到前端
 @Entity(name = "PhotoTagUser")
 @Table(name = "photo_tag_users")
+@IdClass(PhotoTagUserId.class)
 public class PhotoTagUser {
-	
-	@EmbeddedId
-	private PhotoTagUserId id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("photoId")
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "photo_id", referencedColumnName = "id")
 	private Photo photo;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("userId")
-	private User users;
+	@Id
+	@ManyToOne
+	@JoinColumn(name = "users_username", referencedColumnName = "username")
+	private User user;
 
 	private Long diaryId;
-	
-	private String facepath;
+	@Lob
+	private byte[] face_data;
+
+	private String facePath;
+
+	private String face_uri;
+
+	private String faceRandom;
 
 	public PhotoTagUser() {
+
 	}
 
-	public PhotoTagUser(Photo photo, User user) {
+	public PhotoTagUser(Photo photo, User user, Long diaryId, String face_path, byte[] face_data, String face_uri,
+			String faceRandom) {
+
 		this.photo = photo;
-		this.users = user;
-		this.id = new PhotoTagUserId(photo.getId(),user.getUsername());
-		
-	}
-	
-	
-	public PhotoTagUser(Photo photo, User users, Long diaryId, String facepath) {
-		this.photo = photo;
-		this.users = users;
+		this.user = user;
 		this.diaryId = diaryId;
-		this.id = new PhotoTagUserId(photo.getId(),users.getUsername());
-		this.facepath = facepath;
-		
-
-	}
-
-	
-	
-	public User getUsers() {
-		return users;
-	}
-
-	public void setUsers(User users) {
-		this.users = users;
-	}
-
-	public String getFacepath() {
-		return facepath;
-	}
-
-	public void setFacepath(String facepath) {
-		this.facepath = facepath;
-	}
-
-	public PhotoTagUserId getId() {
-		return id;
-	}
-
-	public void setId(PhotoTagUserId id) {
-		this.id = id;
+		this.facePath = face_path;
+		this.face_data = face_data;
+		this.face_uri = face_uri;
+		this.faceRandom = faceRandom;
 	}
 
 	public Photo getPhoto() {
@@ -91,11 +68,11 @@ public class PhotoTagUser {
 	}
 
 	public User getUser() {
-		return users;
+		return user;
 	}
 
 	public void setUser(User user) {
-		this.users = user;
+		this.user = user;
 	}
 
 	public Long getDiaryId() {
@@ -105,22 +82,41 @@ public class PhotoTagUser {
 	public void setDiaryId(Long diaryId) {
 		this.diaryId = diaryId;
 	}
+
+	public byte[] getFace_data() {
+		return face_data;
+	}
+
+	public void setFace_data(byte[] face_data) {
+		this.face_data = face_data;
+	}
+
+	public String getFace_uri() {
+		return face_uri;
+	}
+
+	public void setFace_uri(String face_uri) {
+		this.face_uri = face_uri;
+	}
+
+	public String getFacePath() {
+		return facePath;
+	}
+
+	public void setFacePath(String facePath) {
+		this.facePath = facePath;
+	}
+
+	public String getFaceRandom() {
+		return faceRandom;
+	}
+
+	public void setFaceRandom(String faceRandom) {
+		this.faceRandom = faceRandom;
+	}
+
 	
-	@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
- 
-        if (o == null || getClass() != o.getClass())
-            return false;
- 
-        PhotoTagUser that = (PhotoTagUser) o;
-        return Objects.equals(photo, that.photo) &&
-               Objects.equals(users, that.users);
-    }
- 
-    @Override
-    public int hashCode() {
-        return Objects.hash(photo, users);
-    }
+
+	
 
 }

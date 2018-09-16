@@ -54,8 +54,8 @@ public class User extends DateAudit {
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
 //	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "user")
 //	private Set<Photo> photo = new HashSet<>();
-	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<PhotoTagUser> photo = new ArrayList<>();
+//	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
+//	private List<PhotoTagUser> photo = new ArrayList<>();
 
 	public User() {
 	}
@@ -132,13 +132,13 @@ public class User extends DateAudit {
 		this.tag = tag;
 	}
 
-	public List<PhotoTagUser> getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(List<PhotoTagUser> photo) {
-		this.photo = photo;
-	}
+//	public List<PhotoTagUser> getPhoto() {
+//		return photo;
+//	}
+//
+//	public void setPhoto(List<PhotoTagUser> photo) {
+//		this.photo = photo;
+//	}
 
 	@Override
 	public boolean equals(Object o) {

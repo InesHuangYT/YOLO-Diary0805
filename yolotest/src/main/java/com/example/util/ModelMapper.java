@@ -10,8 +10,10 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.stereotype.Service;
 
+import com.example.entity.Album;
 import com.example.entity.Diary;
 import com.example.entity.User;
+import com.example.payload.AlbumResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.UserSummary;
 
@@ -34,6 +36,18 @@ public class ModelMapper {
 		return diaryResponse;
 
 	}
+	
+	public static AlbumResponse mapAlbumToAlbumResponse(Album album, User creator) {
+		AlbumResponse albumResponse = new AlbumResponse();
+		albumResponse.setId(album.getId());
+//		UserSummary creatorSummary = new UserSummary(creator.getUsername());
+//		diaryResponse.setCreatedBy(creatorSummary);
+		albumResponse.setName(album.getName());
+
+		return albumResponse;
+
+	}
+	
 	
 	public static DiaryResponse mapDiaryToDiaryResponse(Diary diary) {
 		DiaryResponse diaryResponse = new DiaryResponse();
