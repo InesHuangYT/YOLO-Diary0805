@@ -13,4 +13,3 @@ INSERT INTO roles(name) VALUES('ROLE_USER');
 INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 
 
-https://blog.csdn.net/qq_35731570/article/details/77878032
