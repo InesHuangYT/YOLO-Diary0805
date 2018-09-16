@@ -9,6 +9,9 @@ public class AlbumResponse {
 	private List<DiaryResponse> diaries;
 	
 
+	public AlbumResponse() {
+	}
+
 	public AlbumResponse(String name) {
 		this.name = name;
 	}

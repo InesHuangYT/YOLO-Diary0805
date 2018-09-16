@@ -21,7 +21,13 @@ import com.example.entity.Album;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.AlbumResponse;
+import com.example.payload.DiaryResponse;
+import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
+import com.example.security.CurrentUser;
+import com.example.security.UserPrincipal;
+import com.example.service.AlbumService;
+import com.example.util.AppConstants;
 
 @RestController
 @RequestMapping("/api/album")
@@ -30,7 +36,8 @@ public class AlbumController {
 
 	@Autowired
 	AlbumRepository albumRepository;
-
+	@Autowired
+	private AlbumService albumService;
 	// 取得所有相簿
 	@GetMapping
 	public Page<Album> getAllAlbums(Pageable pageable) {
@@ -42,6 +49,13 @@ public class AlbumController {
 	public Page<Album> getAllAlbumsByUserId(@RequestParam(value = "username") String createdBy, Pageable pageable) {
 		return albumRepository.findByCreatedBy(createdBy, pageable);
 	}
+	//取得自己新增過的相簿
+		@GetMapping("/albums")
+		public PagedResponse<AlbumResponse> getDiariesCreatedBy(@CurrentUser UserPrincipal currentUser,
+				@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+				@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+			return albumService.getAlbumsCreatedByMe(currentUser, page, size);
+		}
 
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
