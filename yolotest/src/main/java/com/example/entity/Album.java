@@ -48,13 +48,6 @@ public class Album extends UserDateAudit{
 	public Album() {
 	}
 
-//	public List<Photo> getPhoto() {
-//		return photo;
-//	}
-//
-//	public void setPhoto(List<Photo> photo) {
-//		this.photo = photo;
-//	}
 
 	public Album(Long id) {
 		this.id = id;

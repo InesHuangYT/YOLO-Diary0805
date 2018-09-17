@@ -2,12 +2,14 @@ package com.example.payload;
 
 import java.util.List;
 
+import com.example.entity.Diary;
+
 public class AlbumResponse {
 
 	private Long id;
 	private String name;
-	private List<DiaryResponse> diaries;
-	
+	private List<Diary> diaries;
+//	private List<DiaryResponse> diaries;
 
 	public AlbumResponse() {
 	}
@@ -32,12 +34,12 @@ public class AlbumResponse {
 		this.name = name;
 	}
 
-	public List<DiaryResponse> getDiaries() {
+	public List<Diary> getDiaries() {
 		return diaries;
 	}
 
-	public void setDiaries(List<DiaryResponse> diaries) {
-		this.diaries = diaries;
+	public void setDiaries(List<Diary> diary) {
+		this.diaries = diary;
 	}
 
 }

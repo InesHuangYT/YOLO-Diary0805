@@ -43,7 +43,6 @@ public class AlbumService {
 		validatePageNumberAndSize(page, size);
 		User user = userRepository.findByUsername(currentUser.getUsername())
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
-		// Retrieve all diaries created by the given username
 
 		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 		Page<Album> albums = albumRepository.findByCreatedBy(currentUser.getUsername(), pageable);

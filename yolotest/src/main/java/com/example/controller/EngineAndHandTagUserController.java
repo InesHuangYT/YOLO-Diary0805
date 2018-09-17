@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +41,7 @@ public class EngineAndHandTagUserController {
 	@Autowired
 	PhotoRepository photoRepository;
 	@Autowired
-	PhotoTagUserRepository phototaguserRepository;
+	PhotoTagUserRepository photoTagUserRepository;
 	@Autowired
 	PhotoStorageService photoStorageService;
 	@Autowired
@@ -97,33 +98,46 @@ public class EngineAndHandTagUserController {
 				e.printStackTrace();
 			}
 
-			return phototaguserRepository.save(ptu);
+			return photoTagUserRepository.save(ptu);
 
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
 
 	}
 
 	// 手動標記 一張照片標記很多個人
-	public Photo handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri) {
+	public void handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri) throws IOException {
 		String username = findUsernameByPersonId(personId);
+		User user = new User(username);
 		String path = "C:/engine/" + facepath;
-		return photoRepository.findById(photoId).map(photo -> {
+		File face = new File(path);
+		FileInputStream readfile = new FileInputStream(face);
+		MultipartFile multi = new MockMultipartFile(path, readfile);
+		String random = getRandomString(10);
+		 photoRepository.findById(photoId).map(photo -> {
 //			User user = new User(username);
 //			Long diaryId = photo.getDiary().getId();
 //			 photo.getUser().add(user);
 //			 photo.addUser(user, diaryId, facepath);
-			return photoRepository.save(photo);
+			PhotoTagUser ptu = null;
+			Long diaryId = photo.getDiary().getId();
+			try {
+				ptu = new PhotoTagUser(photo, user, diaryId, path, multi.getBytes(), faceUri, random);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return photoTagUserRepository.save(ptu);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
 	}
 
 	@PostMapping("/{photoId}")
 	public List<String> handTags(@PathVariable(value = "photoId") String photoId,
-			@RequestParam("username") String[] username, String facepath) {
+			@RequestParam("username") String[] username, @RequestParam("facepath")String facepath,@RequestParam("faceUri")String faceUri) throws IOException {
 		if (username != null && username.length > 0) {
 			for (int i = 0; i < username.length; i++) {
 				String user = username[i];
-				// handTag(photoId, user, facepath);
+				handTag(photoId, user, facepath,faceUri);
 			}
 		}
 
