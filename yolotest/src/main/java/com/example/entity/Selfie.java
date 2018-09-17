@@ -27,9 +27,9 @@ public class Selfie {
 	
 
 	/* 一個使用者可以上傳多張頭貼 */
+	// @OnDelete(action = OnDeleteAction.CASCADE)
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "username", nullable = false)
-	// @OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private User user;
 
