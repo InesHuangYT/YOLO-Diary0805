@@ -52,9 +52,11 @@ public class Photo extends UserDateAudit {
 	@JoinColumn(name = "diary_id", nullable = false)
 	@JsonIgnore
 	private Diary diary;
+	
+	
 
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
-	@OneToMany(mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "photo", orphanRemoval = true)
 	private List<PhotoTagUser> users = new ArrayList<>();
 //	@ManyToMany(fetch = FetchType.LAZY)
 //	@JoinTable(name = "photo_tag_users", joinColumns = @JoinColumn(name = "photo_id"), inverseJoinColumns = @JoinColumn(name = "user_name"))
