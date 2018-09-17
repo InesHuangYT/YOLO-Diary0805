@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.persistence.*;
@@ -12,6 +13,11 @@ import com.example.entity.audit.UserDateAudit;
 
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Fetch;
+
+//FetchType資料
+//https://openhome.cc/Gossip/EJB3Gossip/CascadeTypeFetchType.html
+
+
 //一個相簿有很多日記
 @Entity(name = "Album")
 @Table(name = "album")
@@ -24,6 +30,10 @@ public class Album extends UserDateAudit{
 	@NotBlank
 	@Size(max = 15)
 	private String name;
+	
+	//一個相簿對多張照片
+	@OneToMany(mappedBy = "album", fetch = FetchType.LAZY, orphanRemoval = true)
+	private List<Photo> photo;
 
 	/*一個相簿可以有很多日記*/
 	@OneToMany(mappedBy = "album",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)

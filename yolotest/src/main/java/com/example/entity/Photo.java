@@ -46,6 +46,12 @@ public class Photo extends UserDateAudit {
 	private byte[] photodata;
 	private String photoUri;
 	private String photoPath;
+	
+	//一個相簿存放多張相片
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "album_id", nullable = false)
+	@JsonIgnore
+	private Album album;
 
 	/* 一個日記可以存放很多相片 */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -53,8 +59,6 @@ public class Photo extends UserDateAudit {
 	@JsonIgnore
 	private Diary diary;
 	
-	
-
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
 	@OneToMany(mappedBy = "photo", orphanRemoval = true)
 	private List<PhotoTagUser> users = new ArrayList<>();
