@@ -105,7 +105,8 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 手動標記 一張照片標記很多個人
-	public void handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri) throws IOException {
+	public void handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri)
+			throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
 		String path = "C:/engine/" + facepath;
@@ -113,7 +114,7 @@ public class EngineAndHandTagUserController {
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
 		String random = getRandomString(10);
-		 photoRepository.findById(photoId).map(photo -> {
+		photoRepository.findById(photoId).map(photo -> {
 //			User user = new User(username);
 //			Long diaryId = photo.getDiary().getId();
 //			 photo.getUser().add(user);
@@ -133,11 +134,12 @@ public class EngineAndHandTagUserController {
 
 	@PostMapping("/{photoId}")
 	public List<String> handTags(@PathVariable(value = "photoId") String photoId,
-			@RequestParam("username") String[] username, @RequestParam("facepath")String facepath,@RequestParam("faceUri")String faceUri) throws IOException {
+			@RequestParam("username") String[] username, @RequestParam("facepath") String facepath,
+			@RequestParam("faceUri") String faceUri) throws IOException {
 		if (username != null && username.length > 0) {
 			for (int i = 0; i < username.length; i++) {
 				String user = username[i];
-				handTag(photoId, user, facepath,faceUri);
+				handTag(photoId, user, facepath, faceUri);
 			}
 		}
 
