@@ -110,6 +110,15 @@ public class Photo extends UserDateAudit {
 		this.diary = diary;
 	}
 
+	
+	public Album getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(Album album) {
+		this.album = album;
+	}
+
 	public long getBatchid() {
 		return batchid;
 	}

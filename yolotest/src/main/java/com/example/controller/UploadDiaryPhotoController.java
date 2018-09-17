@@ -110,7 +110,8 @@ public class UploadDiaryPhotoController {
 	}
 
 //上傳照片
-	@PostMapping("/{diaryId}")
+	//diaryId改成albumId *因為前端只能先拿到albumId
+	@PostMapping("/{albumId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
 
