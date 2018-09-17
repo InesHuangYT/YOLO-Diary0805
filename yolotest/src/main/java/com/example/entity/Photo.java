@@ -55,7 +55,7 @@ public class Photo extends UserDateAudit {
 
 	/* 一個日記可以存放很多相片 */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "diary_id", nullable = false)
+	@JoinColumn(name = "diary_id", nullable = true)
 	@JsonIgnore
 	private Diary diary;
 	
@@ -94,20 +94,20 @@ public class Photo extends UserDateAudit {
 		this.photodata = photodata;
 	}
 
-	public Photo(String photoName, String photoType, byte[] photodata, Diary diary) {
+	public Photo(String photoName, String photoType, byte[] photodata, Album album) {
 		this.photoName = photoName;
 		this.photoType = photoType;
 		this.photodata = photodata;
-		this.diary = diary;
+		this.album = album;
 	}
 
-	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Diary diary) {
+	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Album album)  {
 		super();
 		this.photoName = photoName;
 		this.photoType = photoType;
 		this.photodata = photodata;
 		this.photoUri = photoUri;
-		this.diary = diary;
+		this.album = album;
 	}
 
 	
