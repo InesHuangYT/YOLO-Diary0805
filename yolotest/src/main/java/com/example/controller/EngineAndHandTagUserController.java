@@ -41,7 +41,7 @@ public class EngineAndHandTagUserController {
 	@Autowired
 	PhotoRepository photoRepository;
 	@Autowired
-	PhotoTagUserRepository phototaguserRepository;
+	PhotoTagUserRepository photoTagUserRepository;
 	@Autowired
 	PhotoStorageService photoStorageService;
 	@Autowired
@@ -98,14 +98,14 @@ public class EngineAndHandTagUserController {
 				e.printStackTrace();
 			}
 
-			return phototaguserRepository.save(ptu);
+			return photoTagUserRepository.save(ptu);
 
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
 
 	}
 
 	// 手動標記 一張照片標記很多個人
-	public Photo handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri) throws IOException {
+	public void handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri) throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
 		String path = "C:/engine/" + facepath;
@@ -113,7 +113,7 @@ public class EngineAndHandTagUserController {
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
 		String random = getRandomString(10);
-		return photoRepository.findById(photoId).map(photo -> {
+		 photoRepository.findById(photoId).map(photo -> {
 //			User user = new User(username);
 //			Long diaryId = photo.getDiary().getId();
 //			 photo.getUser().add(user);
@@ -126,7 +126,7 @@ public class EngineAndHandTagUserController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return photoRepository.save(photo);
+			return photoTagUserRepository.save(ptu);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
 	}
