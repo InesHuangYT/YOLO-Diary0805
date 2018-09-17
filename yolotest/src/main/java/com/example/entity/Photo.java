@@ -48,10 +48,10 @@ public class Photo extends UserDateAudit {
 	private String photoPath;
 	
 	//一個相簿存放多張相片
-	@ManyToOne(fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "album_id", nullable = false)
-	@JsonIgnore
-	private Album album;
+//	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+//	@JoinColumn(name = "album_id", nullable = false)
+//	@JsonIgnore
+//	private Album album;
 
 	/* 一個日記可以存放很多相片 */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -94,30 +94,30 @@ public class Photo extends UserDateAudit {
 		this.photodata = photodata;
 	}
 
-	public Photo(String photoName, String photoType, byte[] photodata, Album album) {
+	public Photo(String photoName, String photoType, byte[] photodata, Diary diary) {
 		this.photoName = photoName;
 		this.photoType = photoType;
 		this.photodata = photodata;
-		this.album = album;
+		this.diary = diary;
 	}
 
-	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Album album)  {
+	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Diary diary)  {
 		super();
 		this.photoName = photoName;
 		this.photoType = photoType;
 		this.photodata = photodata;
 		this.photoUri = photoUri;
-		this.album = album;
+		this.diary = diary;
 	}
 
 	
-	public Album getAlbum() {
-		return album;
-	}
-
-	public void setAlbum(Album album) {
-		this.album = album;
-	}
+//	public Album getAlbum() {
+//		return album;
+//	}
+//
+//	public void setAlbum(Album album) {
+//		this.album = album;
+//	}
 
 	public long getBatchid() {
 		return batchid;

@@ -111,21 +111,21 @@ public class UploadDiaryPhotoController {
 	}
 
 //上傳照片
-	//diaryId改成albumId *因為前端只能先拿到albumId
-	@RequestMapping(value = "/{albumId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
-			@PathVariable(value = "albumId") Long albumId) {
-
-		List<Face> faceList = new ArrayList<>();
+	
+	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
+	public List<UploadPhotoResponse> uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
+			@PathVariable(value = "diaryId") Long diaryId) {
+		System.out.println("upload photo!!!!!!!!!!!!!!("+file.length+")");
+		//List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
 		int batchid = ran.nextInt(10000000);
-
+        
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
-				uploadPhoto(savefile, albumId, batchid);
+				uploadPhoto(savefile, diaryId, batchid);
 
 			}
 //			try {

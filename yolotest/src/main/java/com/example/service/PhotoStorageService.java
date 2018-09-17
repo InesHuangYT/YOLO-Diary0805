@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.entity.Album;
+import com.example.entity.Diary;
 import com.example.entity.Photo;
 import com.example.entity.PhotoTagUser;
 import com.example.entity.User;
@@ -29,10 +30,10 @@ public class PhotoStorageService {
 	private DiaryRepository diaryRepository;
 	@Autowired
 	private PhotoTagUserRepository photoTagUserRepository;
-	public Photo storePhoto(MultipartFile photo, Long albumId) {
+	public Photo storePhoto(MultipartFile photo, Long diaryId) {
 		// Normalize file name
 		String photoName = StringUtils.cleanPath(photo.getOriginalFilename());
-		Album album = new Album(albumId);
+		Diary diary = new Diary(diaryId);
 
 		try {
 			// Check if the file's name contains invalid characters
@@ -40,11 +41,11 @@ public class PhotoStorageService {
 				throw new BadRequestException("Sorry! Filename contains invalid path sequence " + photoName);
 			}
 
-			Photo photos = new Photo(photoName, photo.getContentType(), photo.getBytes(), album);
+			Photo photos = new Photo(photoName, photo.getContentType(), photo.getBytes(), diary);
 
-			//return diaryRepository.findById(albumId).map(diaryy -> {
+			return diaryRepository.findById(diaryId).map(diaryy -> {
 				return photoRepository.save(photos);
-			//}).orElseThrow(() -> new BadRequestException("DiaryId " + diaryId + "not found"));
+			}).orElseThrow(() -> new BadRequestException("DiaryId " + diaryId + "not found"));
 
 		} catch (IOException ex) {
 			throw new BadRequestException("Could not store file " + photoName + ". Please try again!", ex);

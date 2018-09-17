@@ -127,7 +127,7 @@ public class UploadSelfieController {
 	@RequestMapping(value = "/uploadmany", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	public List<UploadSelfieResponse> uploadSelfies(@RequestParam(value = "file", required = true) MultipartFile[] file,
 			@CurrentUser UserPrincipal currentUser) {
-
+		System.out.println("upload selfie!!!!!!!!!!!!!!("+file.length+")");
 		String username = currentUser.getUsername();
 		if (file != null && file.length > 0) {
 
