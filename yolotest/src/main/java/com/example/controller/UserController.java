@@ -103,7 +103,7 @@ public class UserController {
 	}
 	
 	// 確認頭貼是否存在 存在"available": true 不存在"available": false
-	@PostMapping("/mySelfie")
+	@GetMapping("/mySelfie")
 	public UserIdentityAvailability selfieCheck(@CurrentUser UserPrincipal currentUser) {
 		String me = currentUser.getUsername();
 		Optional<User> user = userRepository.findByUsername(me);
