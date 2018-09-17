@@ -32,8 +32,8 @@ public class Album extends UserDateAudit{
 	private String name;
 	
 	//一個相簿對多張照片
-	@OneToMany(mappedBy = "album", fetch = FetchType.LAZY, orphanRemoval = true)
-	private List<Photo> photo;
+//	@OneToMany(mappedBy = "album", fetch = FetchType.LAZY, orphanRemoval = true)
+//	private List<Photo> photo;
 
 	/*一個相簿可以有很多日記*/
 	@OneToMany(mappedBy = "album",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -48,13 +48,13 @@ public class Album extends UserDateAudit{
 	public Album() {
 	}
 
-	public List<Photo> getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(List<Photo> photo) {
-		this.photo = photo;
-	}
+//	public List<Photo> getPhoto() {
+//		return photo;
+//	}
+//
+//	public void setPhoto(List<Photo> photo) {
+//		this.photo = photo;
+//	}
 
 	public Album(Long id) {
 		this.id = id;

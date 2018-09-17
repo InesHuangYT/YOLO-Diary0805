@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -110,21 +111,21 @@ public class UploadDiaryPhotoController {
 	}
 
 //上傳照片
-	//diaryId改成albumId *因為前端只能先拿到albumId
-	@PostMapping("/{albumId}")
-	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
-			@PathVariable(value = "albumId") Long albumId) {
-
-		List<Face> faceList = new ArrayList<>();
+	
+	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
+	public List<UploadPhotoResponse> uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
+			@PathVariable(value = "diaryId") Long diaryId) {
+		System.out.println("upload photo!!!!!!!!!!!!!!("+file.length+")");
+		//List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
 		int batchid = ran.nextInt(10000000);
-
+        
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
-				uploadPhoto(savefile, albumId, batchid);
+				uploadPhoto(savefile, diaryId, batchid);
 
 			}
 //			try {
