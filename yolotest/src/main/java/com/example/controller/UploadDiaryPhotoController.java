@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -111,7 +112,7 @@ public class UploadDiaryPhotoController {
 
 //上傳照片
 	//diaryId改成albumId *因為前端只能先拿到albumId
-	@PostMapping("/{albumId}")
+	@RequestMapping(value = "/{albumId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
 			@PathVariable(value = "albumId") Long albumId) {
 
