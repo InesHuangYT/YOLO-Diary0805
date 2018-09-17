@@ -38,9 +38,8 @@ public class AlbumService {
 	private UserRepository userRepository;
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
-	
-	public PagedResponse<AlbumResponse> getAlbumsCreatedByMe(UserPrincipal currentUser, int page,
-			int size) {
+
+	public PagedResponse<AlbumResponse> getAlbumsCreatedByMe(UserPrincipal currentUser, int page, int size) {
 		validatePageNumberAndSize(page, size);
 		User user = userRepository.findByUsername(currentUser.getUsername())
 				.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
@@ -72,17 +71,5 @@ public class AlbumService {
 			throw new BadRequestException("Page size must not be greater than " + AppConstants.MAX_PAGE_SIZE);
 		}
 	}
-
-//Get Diary Creator details of the given list of diaries
-	Map<String, User> getDiaryCreatorMap(List<Diary> diaries) { // use String not long
-		List<String> creatorIds = diaries.stream().map(Diary::getCreatedBy).distinct().collect(Collectors.toList());
-		List<User> creators = userRepository.findByUsername(creatorIds);
-		Map<String, User> creatorMap = creators.stream()
-				.collect(Collectors.toMap(User::getUsername, Function.identity()));
-		return creatorMap;
-
-	}
-
-
 
 }

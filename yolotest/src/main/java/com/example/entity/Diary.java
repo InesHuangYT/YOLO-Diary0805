@@ -47,10 +47,6 @@ public class Diary extends UserDateAudit {
 	/*一個日記可以有很多張照片*/
 	@OneToMany(mappedBy = "diary", fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<Photo> photo;
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "tag", joinColumns = @JoinColumn(name = "diary_id"), inverseJoinColumns = @JoinColumn(name = "tag_account"))
-	private Set<User> tag_user = new HashSet<>();
 	
 	
 	public Diary() {
@@ -103,15 +99,6 @@ public class Diary extends UserDateAudit {
 
 	public void setPhoto(List<Photo> photo) {
 		this.photo = photo;
-	}
-
-	public Set<User> getTag_user() {
-		return tag_user;
-	}
-
-	public void setTag_user(Set<User> tag_user) {
-		this.tag_user = tag_user;
-
 	}
 
 	@Override
