@@ -53,10 +53,10 @@ import com.mysql.fabric.xmlrpc.base.Array;
 public class UploadSelfieController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UploadSelfieController.class);
-	
+
 	static String SelfieFILEPATH = "C:\\engine\\selfie\\";
 	// /Users/ines/Desktop/photo --> ines mac's path
-    // C:\Users\Administrator\Desktop\Engine0818\selfie\ --> rrou's path
+	// C:\Users\Administrator\Desktop\Engine0818\selfie\ --> rrou's path
 	// C:\engine\selfie\ --> laboratory's path
 
 	@Autowired
@@ -73,22 +73,18 @@ public class UploadSelfieController {
 
 //將檔案blob轉成絕對路徑
 	public static void blob(byte[] imageByte, String name) { // 改成username
-        
+
 		BufferedImage image = null;
 		try {
-			
+
 			// imageByte = DatatypeConverter.parseBase64Binary(imageString);
 			ByteArrayInputStream bis = new ByteArrayInputStream(imageByte);
 			image = ImageIO.read(new ByteArrayInputStream(imageByte));
 			bis.close();
 
-			
-			File outputfile = new File(SelfieFILEPATH + name+ ".jpg");
+			File outputfile = new File(SelfieFILEPATH + name + ".jpg");
 
-			
-			
 			ImageIO.write(image, "jpg", outputfile);
-			
 
 		} catch (IOException e) {
 
@@ -98,8 +94,9 @@ public class UploadSelfieController {
 
 //上傳頭貼
 
-	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {// @PathVariable(value = "username")
-
+	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {// @PathVariable(value
+																														// =
+																														// "username")
 
 		Selfie selfie = selfieStorageService.storeSelfie(file, current);
 
@@ -111,13 +108,12 @@ public class UploadSelfieController {
 		blob(selfie.getSelfiedata(), current);
 		String selfieId = selfie.getId();
 		selfieRepository.findById(selfieId).map(set -> {
-			//改成使用使用者帳號(唯一值)只會用在大頭照的部分
+			// 改成使用使用者帳號(唯一值)只會用在大頭照的部分
 			set.setSelfiePath(SelfieFILEPATH + current + ".jpg");
-			
 
 			return selfieRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("SelfieId " + selfieId + "not found"));
-		
+
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
 
@@ -127,7 +123,7 @@ public class UploadSelfieController {
 	@RequestMapping(value = "/uploadmany", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	public List<UploadSelfieResponse> uploadSelfies(@RequestParam(value = "file", required = true) MultipartFile[] file,
 			@CurrentUser UserPrincipal currentUser) {
-		System.out.println("upload selfie!!!!!!!!!!!!!!("+file.length+")");
+		System.out.println("upload selfie!!!!!!!!!!!!!!(" + file.length + ")");
 		String username = currentUser.getUsername();
 		if (file != null && file.length > 0) {
 
@@ -143,17 +139,15 @@ public class UploadSelfieController {
 			try {
 				System.out.println("START　Write!");
 				txt.getSelfiepath(SelfieFILEPATH, currentUser.getUsername());
-				
 
 				// System.out.println("TRAIN!");
 
 				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");
 
-				
 				File selfiefile = new File(SelfieFILEPATH + username + ".jpg");
-			    selfiefile.delete();
-			    System.out.println("DELETE SELFIE!");
+				selfiefile.delete();
+				System.out.println("DELETE SELFIE!");
 
 			} catch (Exception e) {
 				e.printStackTrace();
