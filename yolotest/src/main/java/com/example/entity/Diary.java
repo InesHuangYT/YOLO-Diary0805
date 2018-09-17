@@ -45,7 +45,7 @@ public class Diary extends UserDateAudit {
 	
 
 	/*一個日記可以有很多張照片*/
-	@OneToMany(mappedBy = "diary",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "diary", fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<Photo> photo;
 
 	@ManyToMany(fetch = FetchType.LAZY)
