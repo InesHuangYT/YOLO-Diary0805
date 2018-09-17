@@ -110,9 +110,10 @@ public class UploadDiaryPhotoController {
 	}
 
 //上傳照片
-	@PostMapping("/{diaryId}")
+	//diaryId改成albumId *因為前端只能先拿到albumId
+	@PostMapping("/{albumId}")
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam("file") MultipartFile[] file,
-			@PathVariable(value = "diaryId") Long diaryId) {
+			@PathVariable(value = "albumId") Long albumId) {
 
 		List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
@@ -123,7 +124,7 @@ public class UploadDiaryPhotoController {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
-				uploadPhoto(savefile, diaryId, batchid);
+				uploadPhoto(savefile, albumId, batchid);
 
 			}
 //			try {

@@ -44,7 +44,16 @@ public class Album extends UserDateAudit{
 	
 	
 	//For deserialisation purposes Album must have a zero-arg constructor.
+	
 	public Album() {
+	}
+
+	public List<Photo> getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(List<Photo> photo) {
+		this.photo = photo;
 	}
 
 	public Album(Long id) {
