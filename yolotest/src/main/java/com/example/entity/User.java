@@ -48,8 +48,6 @@ public class User extends DateAudit {
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "tag_user")
-	private Set<Diary> tag = new HashSet<>();
 
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
 //	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "user")
@@ -124,13 +122,7 @@ public class User extends DateAudit {
 		this.enabled = enabled;
 	}
 
-	public Set<Diary> getTag() {
-		return tag;
-	}
 
-	public void setTag(Set<Diary> tag) {
-		this.tag = tag;
-	}
 
 //	public List<PhotoTagUser> getPhoto() {
 //		return photo;
