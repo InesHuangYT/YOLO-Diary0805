@@ -28,38 +28,29 @@ public class Selfie {
 
 	/* 一個使用者可以上傳一張頭貼 */
 	// @OnDelete(action = OnDeleteAction.CASCADE)
-	@OneToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "username", nullable = false)
-	@JsonIgnore
-	private User user;
+//	@OneToOne(fetch = FetchType.LAZY, optional = false)
+//	@JoinColumn(name = "username", nullable = false)
+//	@JsonIgnore
+//	private User user;
 
 	public Selfie() {
 	}
 
-	public Selfie(User user) {
-		this.user = user;
-	}
-
+	
+	
 	public Selfie(String selfieName, String selfieType, byte[] selfiedata) {
 		this.selfieName = selfieName;
 		this.selfieType = selfieType;
 		this.selfiedata = selfiedata;
 	}
-	
 
-	public Selfie(String selfieName, String selfieType, byte[] selfiedata, User user) {
-		this.selfieName = selfieName;
-		this.selfieType = selfieType;
-		this.selfiedata = selfiedata;
-		this.user = user;
-	}
 
-	public Selfie(String selfieName, String selfieType, byte[] selfiedata, String selfieUri, User user) {
+	public Selfie(String selfieName, String selfieType, byte[] selfiedata, String selfieUri) {
 		this.selfieName = selfieName;
 		this.selfieType = selfieType;
 		this.selfiedata = selfiedata;
 		this.selfieUri = selfieUri;
-		this.user = user;
+		
 	}
 
 	public String getSelfieName() {
@@ -94,14 +85,7 @@ public class Selfie {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
+	
 	public String getSelfieUri() {
 		return selfieUri;
 	}
