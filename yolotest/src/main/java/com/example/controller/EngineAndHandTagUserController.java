@@ -106,8 +106,8 @@ public class EngineAndHandTagUserController {
 
 	}
 
-	// 手動標記 一張照片標記很多個人
-	public void handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri)
+	
+	public void handTag(String photoId, @RequestParam("username") String personId, String facepath)
 			throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
@@ -116,6 +116,8 @@ public class EngineAndHandTagUserController {
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
 		String random = getRandomString(10);
+		String faceUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/engineTag/downloadFace/")
+				.path(random).toUriString();
 		photoRepository.findById(photoId).map(photo -> {
 //			User user = new User(username);
 //			Long diaryId = photo.getDiary().getId();
@@ -133,7 +135,7 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
 	}
-
+	// 手動標記-->將這張人臉圖拿去訓練 需要參數（使用者名稱、人臉圖facepath）
 	@PostMapping("/{photoId}")
 	public List<String> handTags(@PathVariable(value = "photoId") String photoId,
 			@RequestParam("username") String[] username, @RequestParam("facepath") String facepath,
@@ -141,7 +143,7 @@ public class EngineAndHandTagUserController {
 		if (username != null && username.length > 0) {
 			for (int i = 0; i < username.length; i++) {
 				String user = username[i];
-				handTag(photoId, user, facepath, faceUri);
+				handTag(photoId, user, facepath);
 			}
 		}
 

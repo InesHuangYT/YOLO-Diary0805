@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -37,6 +38,7 @@ import com.example.engine.util.CmdUtil;
 import com.example.engine.util.Textfile;
 import com.example.engine.util.TxtUtil;
 import com.example.entity.Selfie;
+import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.payload.UploadSelfieResponse;
 import com.example.repository.SelfieRepository;
@@ -64,6 +66,8 @@ public class UploadSelfieController {
     
 	@Autowired
 	SelfieRepository selfieRepository;
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	Textfile txt;
@@ -97,7 +101,6 @@ public class UploadSelfieController {
 	private UploadSelfieResponse uploadSelfie(@RequestParam("file") MultipartFile file, @CurrentUser String current) {// @PathVariable(value
 																														// =
 																														// "username")
-
 		Selfie selfie = selfieStorageService.storeSelfie(file, current);
 
 		String selfieDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -158,6 +161,7 @@ public class UploadSelfieController {
 		return null;
 	}
 
+//透過uri讀取頭貼
 	@GetMapping("/downloadSelfie/{selfieId}")
 	public ResponseEntity<Resource> downloadSelfie(@PathVariable String selfieId) {
 
@@ -165,6 +169,20 @@ public class UploadSelfieController {
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.getSelfieType()))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
 				.body(new ByteArrayResource(selfie.getSelfiedata()));
+	}
+
+//透過使用者讀取頭貼
+	@RequestMapping(value = "/myDownloadSelfie", method = RequestMethod.GET)
+	public ResponseEntity<Resource> downloadSelfieByUsername(@CurrentUser UserPrincipal currentUser,
+			Optional<Selfie> selfie) {
+		String username = currentUser.getUsername();
+		User user = new User(username);
+		selfie = selfieRepository.findByUser(user);
+		System.out.println(username);
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.get().getSelfieType()))
+				.header(HttpHeaders.CONTENT_DISPOSITION,
+						"attachment; selfiename = \"" + selfie.get().getSelfieName() + "\"")
+				.body(new ByteArrayResource(selfie.get().getSelfiedata()));
 	}
 
 }

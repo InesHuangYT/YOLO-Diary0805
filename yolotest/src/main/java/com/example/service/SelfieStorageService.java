@@ -15,7 +15,9 @@ import com.example.repository.UserRepository;
 
 import java.io.IOException;
 import java.util.Optional;
+
 import java.util.function.Function;
+
 
 @Service
 public class SelfieStorageService {
@@ -23,7 +25,7 @@ public class SelfieStorageService {
 	private SelfieRepository selfieRepository;
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	public Selfie storeSelfie(MultipartFile selfie, String username) {
 		// Normalize file name
 		String selfieName = StringUtils.cleanPath(selfie.getOriginalFilename());
@@ -55,5 +57,7 @@ public class SelfieStorageService {
 		return selfieRepository.findById(selfieId)
 				.orElseThrow(() -> new MySelfieNotFoundException("File not found with id " + selfieId));
 	}
+	
+
 
 }
