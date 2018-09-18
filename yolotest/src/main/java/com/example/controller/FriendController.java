@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Notice;
+import com.example.entity.Selfie;
 import com.example.entity.User;
 import com.example.entity.UserFriend;
 import com.example.entity.UserFriendId;
@@ -131,6 +132,8 @@ public class FriendController {
 	@GetMapping("/find/{friendname}")
 	public User findfriend(@PathVariable("friendname")String fname) {
 		return userRepository.findByUsername(fname).map(friend ->{
+			Selfie selfie = friend.getSelfie();
+			String uri = selfie.getSelfieUri();
 			return friend;
 		}).orElseThrow(() -> new ResourceNotFoundException("User" + fname + "not found", null, null));
 		
