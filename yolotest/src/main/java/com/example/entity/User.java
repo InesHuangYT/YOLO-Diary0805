@@ -44,9 +44,6 @@ public class User extends DateAudit {
 	@JoinColumn(name = "selfie_id", referencedColumnName = "id")
 	private Selfie selfie;
 
-	
-	
-
 	private boolean enabled;
 
 	@ManyToMany(fetch = FetchType.LAZY)
