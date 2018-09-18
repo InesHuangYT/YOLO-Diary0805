@@ -26,9 +26,9 @@ public class Selfie {
 	private String selfiePath;
 	
 
-	/* 一個使用者可以上傳多張頭貼 */
+	/* 一個使用者可以上傳一張頭貼 */
 	// @OnDelete(action = OnDeleteAction.CASCADE)
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "username", nullable = false)
 	@JsonIgnore
 	private User user;

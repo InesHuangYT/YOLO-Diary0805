@@ -38,9 +38,11 @@ public class User extends DateAudit {
 	@NotBlank
 	private String password;
 
-	/* 一個使用者可以上傳多張頭貼 */
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private List<Selfie> selfie;
+//	/* 一個使用者可以上傳一張頭貼 */
+//	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+//	private List<Selfie> selfie;
+
+	
 
 	private boolean enabled;
 
