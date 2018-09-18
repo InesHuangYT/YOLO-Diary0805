@@ -40,7 +40,8 @@ public class User extends DateAudit {
 	private String password;
 
 	//一個使用者可以上傳一張頭貼 
-	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "selfie_id", referencedColumnName = "id")
 	private Selfie selfie;
 
 	

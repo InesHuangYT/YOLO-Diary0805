@@ -25,10 +25,10 @@ public class Selfie {
 	private String selfieUri;
 	private String selfiePath;
 	
-
-	/* 一個使用者可以上傳一張頭貼 */
+    //使用者改成上傳一張
+	/* 一個使用者可以上傳多張頭貼 */
 	// @OnDelete(action = OnDeleteAction.CASCADE)
-//	@OneToOne(fetch = FetchType.LAZY, optional = false)
+//	@OneToMany(fetch = FetchType.LAZY, optional = false)
 //	@JoinColumn(name = "username", nullable = false)
 //	@JsonIgnore
 //	private User user;
