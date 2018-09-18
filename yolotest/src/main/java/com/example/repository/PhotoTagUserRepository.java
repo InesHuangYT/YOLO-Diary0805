@@ -12,4 +12,5 @@ import com.example.entity.PhotoTagUserId;
 public interface PhotoTagUserRepository extends JpaRepository<PhotoTagUser, PhotoTagUserId> {
 
 	Optional<PhotoTagUser> findByFaceRandom(String faceRandom);
+	
 }
