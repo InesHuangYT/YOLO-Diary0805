@@ -163,7 +163,7 @@ public class UploadSelfieController {
 
 		Selfie selfie = selfieStorageService.getSelfie(selfieId);
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.getSelfieType()))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
+				//.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
 				.body(new ByteArrayResource(selfie.getSelfiedata()));
 	}
 
