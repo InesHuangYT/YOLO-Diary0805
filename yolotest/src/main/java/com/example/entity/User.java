@@ -68,6 +68,15 @@ public class User extends DateAudit {
 		this.enabled = false;
 	}
 
+	
+	public Selfie getSelfie() {
+		return selfie;
+	}
+
+	public void setSelfie(Selfie selfie) {
+		this.selfie = selfie;
+	}
+
 	public User(@NotBlank String username) {
 		this.username = username;
 	}
@@ -154,6 +163,8 @@ public class User extends DateAudit {
 //	public void setPhoto(Set<Photo> photo) {
 //		this.photo = photo;
 //	}
+
+	
 
 }
 
