@@ -32,6 +32,9 @@ public class Selfie {
 //	@JoinColumn(name = "username", nullable = false)
 //	@JsonIgnore
 //	private User user;
+	
+	@OneToOne(mappedBy = "selfie")
+	private User user;
 
 	public Selfie() {
 	}

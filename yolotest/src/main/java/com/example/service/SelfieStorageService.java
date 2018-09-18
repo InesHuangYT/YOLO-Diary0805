@@ -38,8 +38,8 @@ public class SelfieStorageService {
 			Selfie selfies = new Selfie(selfieName, selfie.getContentType(), selfie.getBytes());
 			userRepository.findByUsername(username).map(user -> {
 				user.setSelfie(selfies);
-				return userRepository.save(user);
-			}).orElseThrow(() -> new ResourceNotFoundException("Username" + username + "not found", null, null));
+				return user;
+			}).orElseThrow(() -> new ResourceNotFoundException("Username = " + username + "not found", null, null));
 			
 			
 			
