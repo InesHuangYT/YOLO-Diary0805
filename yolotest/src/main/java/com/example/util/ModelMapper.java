@@ -1,7 +1,9 @@
 package com.example.util;
 
+import java.awt.List;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -43,7 +45,8 @@ public class ModelMapper {
 //		UserSummary creatorSummary = new UserSummary(creator.getUsername());
 //		diaryResponse.setCreatedBy(creatorSummary);
 		albumResponse.setName(album.getName());
-
+		java.util.List<Diary> diary = album.getDiary();
+		albumResponse.setDiaries(diary);
 		return albumResponse;
 
 	}

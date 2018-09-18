@@ -43,18 +43,25 @@ public class Photo extends UserDateAudit {
 	private String photoType;
 
 	@Lob
+	@JsonIgnore
 	private byte[] photodata;
 	private String photoUri;
 	private String photoPath;
+	
+	//一個相簿存放多張相片
+//	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+//	@JoinColumn(name = "album_id", nullable = false)
+//	@JsonIgnore
+//	private Album album;
 
 	/* 一個日記可以存放很多相片 */
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "diary_id", nullable = false)
+	@JoinColumn(name = "diary_id", nullable = true)
 	@JsonIgnore
 	private Diary diary;
-
+	
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
-	@OneToMany(mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "photo", orphanRemoval = true)
 	private List<PhotoTagUser> users = new ArrayList<>();
 //	@ManyToMany(fetch = FetchType.LAZY)
 //	@JoinTable(name = "photo_tag_users", joinColumns = @JoinColumn(name = "photo_id"), inverseJoinColumns = @JoinColumn(name = "user_name"))
@@ -95,7 +102,7 @@ public class Photo extends UserDateAudit {
 		this.diary = diary;
 	}
 
-	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Diary diary) {
+	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Diary diary)  {
 		super();
 		this.photoName = photoName;
 		this.photoType = photoType;
@@ -103,6 +110,15 @@ public class Photo extends UserDateAudit {
 		this.photoUri = photoUri;
 		this.diary = diary;
 	}
+
+	
+//	public Album getAlbum() {
+//		return album;
+//	}
+//
+//	public void setAlbum(Album album) {
+//		this.album = album;
+//	}
 
 	public long getBatchid() {
 		return batchid;

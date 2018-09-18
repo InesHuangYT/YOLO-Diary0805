@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.entity.Album;
 import com.example.entity.Diary;
 import com.example.entity.Photo;
 import com.example.entity.PhotoTagUser;

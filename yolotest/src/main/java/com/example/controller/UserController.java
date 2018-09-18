@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.entity.Selfie;
 import com.example.entity.User;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.DiaryResponse;
@@ -19,6 +22,7 @@ import com.example.payload.PagedResponse;
 import com.example.payload.UserIdentityAvailability;
 import com.example.payload.UserProfile;
 import com.example.payload.UserSummary;
+import com.example.repository.SelfieRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
@@ -38,9 +42,10 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepository;
-
 	@Autowired
 	private DiaryService diaryService;
+	@Autowired
+	SelfieRepository selfieRepository;
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -95,6 +100,15 @@ public class UserController {
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return diaryService.getDiariesCreatedBy(username, currentUser, page, size);
+	}
+	
+	// 確認頭貼是否存在 存在"available": true 不存在"available": false
+	@GetMapping("/mySelfie")
+	public UserIdentityAvailability selfieCheck(@CurrentUser UserPrincipal currentUser) {
+		String me = currentUser.getUsername();
+		Optional<User> user = userRepository.findByUsername(me);
+		Boolean isAvailable = selfieRepository.existsByUser(user);
+		return new UserIdentityAvailability(isAvailable);
 	}
 
 }
