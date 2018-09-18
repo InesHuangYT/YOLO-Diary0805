@@ -171,7 +171,7 @@ public class UploadSelfieController {
 	}
 
 //透過使用者讀取頭貼
-	@GetMapping("/myDownloadSelfie")
+	@RequestMapping(value = "/myDownloadSelfie", method = RequestMethod.GET)
 	public ResponseEntity<Resource> downloadSelfieByUsername(@CurrentUser UserPrincipal currentUser,
 			Optional<Selfie> selfie) {
 		String username = currentUser.getUsername();

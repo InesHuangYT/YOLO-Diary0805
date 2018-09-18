@@ -106,7 +106,7 @@ public class EngineAndHandTagUserController {
 
 	}
 
-	// 手動標記-->將這張人臉圖拿去訓練 需要參數（使用者名稱、人臉圖facepath）
+	
 	public void handTag(String photoId, @RequestParam("username") String personId, String facepath)
 			throws IOException {
 		String username = findUsernameByPersonId(personId);
@@ -135,7 +135,7 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
 	}
-
+	// 手動標記-->將這張人臉圖拿去訓練 需要參數（使用者名稱、人臉圖facepath）
 	@PostMapping("/{photoId}")
 	public List<String> handTags(@PathVariable(value = "photoId") String photoId,
 			@RequestParam("username") String[] username, @RequestParam("facepath") String facepath,
