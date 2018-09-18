@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,7 @@ import com.example.entity.Photo;
 import com.example.entity.PhotoTagUser;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
+import com.example.exception.ResourceNotFoundException;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
 import com.example.repository.UserRepository;
@@ -168,5 +170,21 @@ public class EngineAndHandTagUserController {
 		}
 		return sb.toString();
 	}
+	
+	
+	//修正人臉圖使用者名稱
+	@PutMapping("/updateface/{username}")
+	public PhotoTagUser updatefaceusername(@PathVariable String username, String new_username) {
+		User new_user = new User(new_username);
+		//要用findby其他，等要怎麼找人臉圖確定後再寫
+		return photoTagUserRepository.findByFaceRandom(username).map(faceuser->{
+			faceuser.setUser(new_user);
+			return photoTagUserRepository.save(faceuser);
+		}).orElseThrow(() -> new ResourceNotFoundException("face username="+ username + "Not Found", null, null)); 
+		
+		
+	}
+		
+	
 
 }
