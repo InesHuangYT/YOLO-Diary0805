@@ -63,7 +63,7 @@ public class UploadSelfieController {
 
 	@Autowired
 	SelfieStorageService selfieStorageService;
-    
+
 	@Autowired
 	SelfieRepository selfieRepository;
 	@Autowired
@@ -116,7 +116,6 @@ public class UploadSelfieController {
 
 			return selfieRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("SelfieId " + selfieId + "not found"));
-		
 
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
@@ -167,22 +166,22 @@ public class UploadSelfieController {
 
 		Selfie selfie = selfieStorageService.getSelfie(selfieId);
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.getSelfieType()))
-				//.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
+				// .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" +
+				// selfie.getSelfieName() + "\"")
 				.body(new ByteArrayResource(selfie.getSelfiedata()));
 	}
 
 //透過使用者讀取頭貼
 	@RequestMapping(value = "/myDownloadSelfie", method = RequestMethod.GET)
-	public ResponseEntity<Resource> downloadSelfieByUsername(@CurrentUser UserPrincipal currentUser,
-			Optional<Selfie> selfie) {
+	public ResponseEntity<Resource> downloadSelfieByUsername(@CurrentUser UserPrincipal currentUser, Selfie selfie) {
 		String username = currentUser.getUsername();
-		User user = new User(username);
-		selfie = selfieRepository.findByUser(user);
+//		selfie = selfieRepository.findByUser(user);
+		Optional<User> user = userRepository.findByUsername(username);
+		selfie = user.get().getSelfie();
 		System.out.println(username);
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.get().getSelfieType()))
-				.header(HttpHeaders.CONTENT_DISPOSITION,
-						"attachment; selfiename = \"" + selfie.get().getSelfieName() + "\"")
-				.body(new ByteArrayResource(selfie.get().getSelfiedata()));
+		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.getSelfieType()))
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
+				.body(new ByteArrayResource(selfie.getSelfiedata()));
 	}
 
 }
