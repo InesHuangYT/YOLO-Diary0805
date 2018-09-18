@@ -1,9 +1,12 @@
 package com.example.controller;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,18 +100,10 @@ public class FriendController {
 		frienduserId.setUser(friend);
 		frienduserId.setFriend(user);
 		userfriendrepository.deleteById(userfriendId);
-		userfriendrepository.deleteById(frienduserId);
-		
-		
-		
-			
-			
-			
-			
-			
-		
+		userfriendrepository.deleteById(frienduserId);	
 		}
-		
+	}
+
 //			else {
 //		userRepository.findByUsername(username).map(users ->{
 //			System.out.println("User List:");
@@ -131,6 +126,14 @@ public class FriendController {
 //			    
 //		
 //		}).orElseThrow(()->new ResourceNotFoundException("Faill!!!!!!", currentUser.getUsername(), null));
+	
+	
+	@GetMapping("/find/{friendname}")
+	public User findfriend(@PathVariable("friendname")String fname) {
+		return userRepository.findByUsername(fname).map(friend ->{
+			return friend;
+		}).orElseThrow(() -> new ResourceNotFoundException("User" + fname + "not found", null, null));
+		
 	}
 
 

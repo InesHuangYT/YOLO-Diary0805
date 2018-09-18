@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
@@ -38,9 +39,13 @@ public class User extends DateAudit {
 	@NotBlank
 	private String password;
 
-	/* 一個使用者可以上傳多張頭貼 */
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-	private List<Selfie> selfie;
+	//一個使用者可以上傳一張頭貼 
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "selfie_id", referencedColumnName = "id")
+	private Selfie selfie;
+
+	
+	
 
 	private boolean enabled;
 
@@ -61,6 +66,15 @@ public class User extends DateAudit {
 	public User(boolean enabled) {
 		super();
 		this.enabled = false;
+	}
+
+	
+	public Selfie getSelfie() {
+		return selfie;
+	}
+
+	public void setSelfie(Selfie selfie) {
+		this.selfie = selfie;
 	}
 
 	public User(@NotBlank String username) {
@@ -106,13 +120,7 @@ public class User extends DateAudit {
 		this.roles = roles;
 	}
 
-	public List<Selfie> getSelfie() {
-		return selfie;
-	}
-
-	public void setSelfie(List<Selfie> selfie) {
-		this.selfie = selfie;
-	}
+	
 
 	public boolean isEnabled() {
 		return enabled;
@@ -155,6 +163,8 @@ public class User extends DateAudit {
 //	public void setPhoto(Set<Photo> photo) {
 //		this.photo = photo;
 //	}
+
+	
 
 }
 

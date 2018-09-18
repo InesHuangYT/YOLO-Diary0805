@@ -107,7 +107,7 @@ public class UserController {
 	public UserIdentityAvailability selfieCheck(@CurrentUser UserPrincipal currentUser) {
 		String me = currentUser.getUsername();
 		Optional<User> user = userRepository.findByUsername(me);
-		Boolean isAvailable = selfieRepository.existsByUser(user);
+		Boolean isAvailable = user.isPresent();
 		return new UserIdentityAvailability(isAvailable);
 	}
 

@@ -63,7 +63,7 @@ public class UploadSelfieController {
 
 	@Autowired
 	SelfieStorageService selfieStorageService;
-
+    
 	@Autowired
 	SelfieRepository selfieRepository;
 	@Autowired
@@ -116,6 +116,7 @@ public class UploadSelfieController {
 
 			return selfieRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("SelfieId " + selfieId + "not found"));
+		
 
 		return new UploadSelfieResponse(selfie.getSelfieName(), file.getContentType(), selfieDownloadURI,
 				file.getSize());
