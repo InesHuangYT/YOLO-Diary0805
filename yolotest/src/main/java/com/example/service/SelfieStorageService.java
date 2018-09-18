@@ -29,7 +29,7 @@ public class SelfieStorageService {
 				throw new BadRequestException("Sorry! Filename contains invalid path sequence " + selfieName);
 			}
 
-			Selfie selfies = new Selfie(selfieName, selfie.getContentType(), selfie.getBytes() ,user);
+			Selfie selfies = new Selfie(selfieName, selfie.getContentType(), selfie.getBytes());
 
 			return selfieRepository.save(selfies);
 		} catch (IOException ex) {
