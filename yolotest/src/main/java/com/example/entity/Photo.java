@@ -36,7 +36,7 @@ public class Photo extends UserDateAudit {
 	private String id;
 	
 	
-	private int batchid;
+	private long batchid;
 
 	private String photoName;
 
@@ -70,7 +70,7 @@ public class Photo extends UserDateAudit {
 	public Photo() {
 	}
 	
-	public Photo(int batchid) {
+	public Photo(long batchid) {
 		this.batchid = batchid;
 	}
 
@@ -124,7 +124,7 @@ public class Photo extends UserDateAudit {
 		return batchid;
 	}
 
-	public void setBatchid(int batchid) {
+	public void setBatchid(long batchid) {
 		this.batchid = batchid;
 	}
 
