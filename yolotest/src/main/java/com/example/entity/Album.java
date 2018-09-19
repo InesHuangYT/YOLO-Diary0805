@@ -17,11 +17,10 @@ import org.hibernate.annotations.Fetch;
 //FetchType資料
 //https://openhome.cc/Gossip/EJB3Gossip/CascadeTypeFetchType.html
 
-
 //一個相簿有很多日記
 @Entity(name = "Album")
 @Table(name = "album")
-public class Album extends UserDateAudit{
+public class Album extends UserDateAudit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,24 +29,23 @@ public class Album extends UserDateAudit{
 	@NotBlank
 	@Size(max = 15)
 	private String name;
-	
-	//一個相簿對多張照片
+
+	// 一個相簿對多張照片
 //	@OneToMany(mappedBy = "album", fetch = FetchType.LAZY, orphanRemoval = true)
 //	private List<Photo> photo;
 
-	/*一個相簿可以有很多日記*/
-	@OneToMany(mappedBy = "album",cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	/* 一個相簿可以有很多日記 */
+	@OneToMany(mappedBy = "album", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 //	@Size(min = 1)
 //	@Fetch(FetchMode.SELECT)
 //	@BatchSize(size = 30)
-	private List<Diary> diary ;
-	
-	
-	//For deserialisation purposes Album must have a zero-arg constructor.
-	
+	private List<Diary> diary;
+	private String photoUri;
+
+	// For deserialisation purposes Album must have a zero-arg constructor.
+
 	public Album() {
 	}
-
 
 	public Album(Long id) {
 		this.id = id;
@@ -77,8 +75,13 @@ public class Album extends UserDateAudit{
 		this.diary = diary;
 	}
 
-	
-	
+	public String getPhotoUri() {
+		return photoUri;
+	}
+
+	public void setPhotoUri(String photoUri) {
+		this.photoUri = photoUri;
+	}
 
 //	public void addDiary(Diary diary) {
 //		addDiary(diary);

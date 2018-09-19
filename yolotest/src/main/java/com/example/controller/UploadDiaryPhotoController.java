@@ -8,9 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -33,13 +38,17 @@ import com.example.engine.controller.EngineFunc;
 import com.example.engine.controller.GetResult;
 import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
+import com.example.entity.Album;
+import com.example.entity.Diary;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
 import com.example.payload.UploadPhotoResponse;
+import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.NoticeRepository;
 import com.example.repository.PhotoRepository;
+import com.example.service.AlbumService;
 import com.example.service.PhotoStorageService;
 
 @RestController
@@ -58,6 +67,8 @@ public class UploadDiaryPhotoController {
 	@Autowired
 	DiaryRepository diaryRepository;
 	@Autowired
+	AlbumService albumService;
+	@Autowired
 	Textfile txt;
 	@Autowired
 	EngineFunc engine;
@@ -65,6 +76,8 @@ public class UploadDiaryPhotoController {
 	GetResult result;
 	@Autowired
 	EngineAndHandTagUserController engineAndHandTagUserController;
+	@Autowired
+	AlbumRepository albumRepository;
 	@Autowired
 	NoticeRepository noticerepository;
 
@@ -88,15 +101,13 @@ public class UploadDiaryPhotoController {
 		}
 	}
 
-	public UploadPhotoResponse uploadPhoto(MultipartFile file, Long diaryId, int batchid) {
+	public UploadPhotoResponse uploadPhoto(MultipartFile file, Long diaryId, Long batchid) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
 		photo.setBatchid(batchid);
-
 		photoRepository.save(photo);
-
 		blob(photo.getPhotodata(), photo.getPhotoName());
 
 		String photoId = photo.getId();
@@ -104,6 +115,15 @@ public class UploadDiaryPhotoController {
 		photoRepository.findById(photoId).map(set -> {
 			set.setPhotoPath(PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
 
+			Optional<Diary> diary = diaryRepository.findById(diaryId);
+			Album album = diary.get().getAlbum();
+			System.out.println("albumId : " + album.getId());
+			if (album.getPhotoUri() == null) {
+				System.out.println("photoUri : " + album.getPhotoUri());
+				Optional<Photo> photos = photoRepository.findByDiary(diary.get());
+				album.setPhotoUri(photos.get().getPhotoUri());
+				albumRepository.save(album);
+			}
 			return photoRepository.save(set);
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		return new UploadPhotoResponse(photo.getPhotoName(), file.getContentType(), photoDownloadURI, file.getSize());
@@ -111,26 +131,27 @@ public class UploadDiaryPhotoController {
 	}
 
 //上傳照片
-	
+
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
-		System.out.println("upload photo!!!!!!!!!!!!!!("+file.length+")");
-		//List<Face> faceList = new ArrayList<>();
+		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
+		// List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
-		int batchid = ran.nextInt(10000000);
-        
+		long batchid = ran.nextInt(10000000);
+
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
+				System.out.println("上傳照片 ： " + file.length);
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
 				uploadPhoto(savefile, diaryId, batchid);
-
 			}
+
 //			try {
 //				txt.getPhotopath(PhotoFILEPATH, diaryId);
-				//engine.retrieveEngine();
+			// engine.retrieveEngine();
 //				faceList = result.getResult();
 //
 //				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
@@ -148,9 +169,9 @@ public class UploadDiaryPhotoController {
 //								faceList.get(i).getFrameFace().getFrameFacePath());
 //						System.out.println("tag finish!");
 
-						// send notice to user
-						// 之後要放在別的地方
-						// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
+			// send notice to user
+			// 之後要放在別的地方
+			// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
 //						Iterator collection = hashmap.keySet().iterator();
 //						while(collection.hasNext()) {
 //							String key = (String)collection.next();
@@ -161,12 +182,12 @@ public class UploadDiaryPhotoController {
 //							System.out.println("******");
 //						}
 
-			//}
-				//}
-				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
+			// }
+			// }
+			/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
-				// for(hashmap)
-				// 做完標記再刪除
+			// for(hashmap)
+			// 做完標記再刪除
 //				txt.deleteAllFile(PhotoFILEPATH);
 
 //			} catch (Exception e) {
@@ -176,11 +197,7 @@ public class UploadDiaryPhotoController {
 		}
 		return null;
 	}
-
-	// 取得同日記下的所有照片
-//	GetMapping("/downloadPhoto/{diaryId}")
-//	public 
-
+//取得同日記的所有相片（記得寫）
 //下載照片
 	@GetMapping("/downloadPhoto/{photoId}")
 	public ResponseEntity<Resource> downloadPhoto(@PathVariable String photoId) {
