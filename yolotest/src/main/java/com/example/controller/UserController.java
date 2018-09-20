@@ -101,13 +101,21 @@ public class UserController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return diaryService.getDiariesCreatedBy(username, currentUser, page, size);
 	}
-	
+
 	// 確認頭貼是否存在 存在"available": true 不存在"available": false
 	@GetMapping("/mySelfie")
 	public UserIdentityAvailability selfieCheck(@CurrentUser UserPrincipal currentUser) {
 		String me = currentUser.getUsername();
+		Boolean isAvailable;
 		Optional<User> user = userRepository.findByUsername(me);
-		Boolean isAvailable = selfieRepository.existsByUser(user);
+		System.out.println("me : " + me);
+		if (user.get().getSelfie() != null) {
+			System.out.println("selfie exist");
+			isAvailable = false;
+		} else {
+			System.out.println("selfie isn't exist");
+			isAvailable = true;
+		}
 		return new UserIdentityAvailability(isAvailable);
 	}
 

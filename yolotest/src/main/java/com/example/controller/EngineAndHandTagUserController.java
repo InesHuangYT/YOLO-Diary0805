@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +30,7 @@ import com.example.entity.Photo;
 import com.example.entity.PhotoTagUser;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
+import com.example.exception.ResourceNotFoundException;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
 import com.example.repository.UserRepository;
@@ -104,8 +106,8 @@ public class EngineAndHandTagUserController {
 
 	}
 
-	// 手動標記 一張照片標記很多個人
-	public void handTag(String photoId, @RequestParam("username") String personId, String facepath, String faceUri)
+	
+	public void handTag(String photoId, @RequestParam("username") String personId, String facepath)
 			throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
@@ -114,6 +116,8 @@ public class EngineAndHandTagUserController {
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
 		String random = getRandomString(10);
+		String faceUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/engineTag/downloadFace/")
+				.path(random).toUriString();
 		photoRepository.findById(photoId).map(photo -> {
 //			User user = new User(username);
 //			Long diaryId = photo.getDiary().getId();
@@ -131,7 +135,7 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
 	}
-
+	// 手動標記-->將這張人臉圖拿去訓練 需要參數（使用者名稱、人臉圖facepath）
 	@PostMapping("/{photoId}")
 	public List<String> handTags(@PathVariable(value = "photoId") String photoId,
 			@RequestParam("username") String[] username, @RequestParam("facepath") String facepath,
@@ -139,7 +143,7 @@ public class EngineAndHandTagUserController {
 		if (username != null && username.length > 0) {
 			for (int i = 0; i < username.length; i++) {
 				String user = username[i];
-				handTag(photoId, user, facepath, faceUri);
+				handTag(photoId, user, facepath);
 			}
 		}
 
@@ -166,5 +170,21 @@ public class EngineAndHandTagUserController {
 		}
 		return sb.toString();
 	}
+	
+	
+	//修正人臉圖使用者名稱
+	@PutMapping("/updateface/{username}")
+	public PhotoTagUser updatefaceusername(@PathVariable String username, String new_username) {
+		User new_user = new User(new_username);
+		//要用findby其他，等要怎麼找人臉圖確定後再寫
+		return photoTagUserRepository.findByFaceRandom(username).map(faceuser->{
+			faceuser.setUser(new_user);
+			return photoTagUserRepository.save(faceuser);
+		}).orElseThrow(() -> new ResourceNotFoundException("face username="+ username + "Not Found", null, null)); 
+		
+		
+	}
+		
+	
 
 }

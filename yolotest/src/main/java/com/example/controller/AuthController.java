@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
@@ -70,10 +71,10 @@ public class AuthController {
 
 	@Autowired
 	NotificationService notificationService;
-	
+
 	@Autowired
 	CookieUtil cookieUtil;
-	
+
 	@PreAuthorize("hasRole('USER')")
 	@GetMapping("/private")
 	public String privateArea() {
@@ -83,20 +84,21 @@ public class AuthController {
 	}
 
 	// 登入
-	//Session Management using Spring Session with JDBC DataStore
-	//https://sivalabs.in/2018/02/session-management-using-spring-session-jdbc-datastore/
+	// Session Management using Spring Session with JDBC DataStore
+	// https://sivalabs.in/2018/02/session-management-using-spring-session-jdbc-datastore/
 	@PostMapping("/login")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,  HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		System.out.println(authentication);
-		
+
 		System.out.println(authentication.getAuthorities());// [ROLE_USER]
 		String jwt = tokenProvider.generateToken(authentication);
-		
+
 		cookieUtil.setLoginTokenCookie(jwt, response);
 
 		return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
@@ -105,6 +107,14 @@ public class AuthController {
 	// 註冊
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+//		String [] arrayRole = new String[2];
+//		arrayRole[0] = "ROLE_USER";
+//		arrayRole[1] = "ROLE_ADMIN";
+//		for (int i = 0; i <= 1; i++) {
+//			Role setRole = new Role();
+//			setRole.setName(arrayRole[i]);
+//			roleRepository.save(setRole);
+//		}
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return new ResponseEntity(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
 		}
@@ -119,6 +129,7 @@ public class AuthController {
 
 		Role userRole = roleRepository.findByName(RoleName.ROLE_USER)
 				.orElseThrow(() -> new AppException("User Role not set."));
+
 		System.out.println(userRole);
 
 		user.setRoles(Collections.singleton(userRole));
@@ -156,6 +167,5 @@ public class AuthController {
 		userRepository.deleteById(username);
 
 	}
-	
 
 }
