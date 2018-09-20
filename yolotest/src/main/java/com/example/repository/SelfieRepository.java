@@ -13,6 +13,8 @@ import com.example.entity.User;
 public interface SelfieRepository extends JpaRepository<Selfie, String> {
 	Boolean existsByUser(Optional<User> user);
 
+	Optional<Selfie> findByUser(Optional<User> user);
 	Optional<Selfie> findByUser(User user);
+
 
 }

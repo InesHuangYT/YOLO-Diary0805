@@ -15,6 +15,10 @@ import org.hibernate.annotations.NaturalId;
 @Table(name = "roles")
 
 public class Role {
+/**
+ * INSERT INTO roles(name) VALUES('ROLE_USER'); 
+ * INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+ */
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
