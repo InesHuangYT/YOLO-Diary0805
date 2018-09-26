@@ -9,7 +9,7 @@ public class AlbumResponse {
 	private Long id;
 	private String name;
 	private List<Diary> diaries;
-	private String photouri;
+	private String photoCover;
 //	private List<DiaryResponse> diaries;
 
 	public AlbumResponse() {
@@ -17,14 +17,14 @@ public class AlbumResponse {
 	
 	
 
-	public String getPhotouri() {
-		return photouri;
+	public String getphotoCover() {
+		return photoCover;
 	}
 
 
 
-	public void setPhotouri(String photouri) {
-		this.photouri = photouri;
+	public void setphotoCover(String photoCover) {
+		this.photoCover = photoCover;
 	}
 
 
