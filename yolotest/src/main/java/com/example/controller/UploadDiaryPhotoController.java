@@ -43,6 +43,7 @@ import com.example.entity.Diary;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
+import com.example.payload.PhotoResponse;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
@@ -151,7 +152,7 @@ public class UploadDiaryPhotoController {
 
 			try {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
-			 engine.retrieveEngine();
+			    engine.retrieveEngine();
 				faceList = result.getResult();
 
 				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
@@ -199,14 +200,13 @@ public class UploadDiaryPhotoController {
 	}
 //取得同日記的所有相片（記得寫）
 //下載照片
-	@GetMapping("/downloadPhoto/{photoId}")
-	public ResponseEntity<Resource> downloadPhoto(@PathVariable String photoId) {
-		Photo photo = photoStorageService.getPhoto(photoId);
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType(photo.getPhotoType()))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; photoname = \"" + photo.getPhotoName() + "\"")
-				.body(new ByteArrayResource(photo.getPhotodata()));
+	@GetMapping("/downloadPhotos/{photoId}")
+	public PhotoResponse getPhoto(@PathVariable String photoId) {
+		return photoRepository.findById(photoId).map(photo -> {
+			PhotoResponse photoResponse = new PhotoResponse(photoId,photo.getPhotodata());
+			return photoResponse;
+		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 	}
-
 //刪除照片
 	@DeleteMapping("/{diaryId}/{photoId}")
 	public ResponseEntity<?> deletePhoto(@PathVariable(value = "diaryId") Long diaryId,

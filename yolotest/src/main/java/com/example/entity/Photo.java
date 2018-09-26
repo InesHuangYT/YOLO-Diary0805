@@ -43,7 +43,7 @@ public class Photo extends UserDateAudit {
 	private String photoType;
 
 	@Lob
-	@JsonIgnore
+//	@JsonIgnore
 	private byte[] photodata;
 	private String photoUri;
 	private String photoPath;
