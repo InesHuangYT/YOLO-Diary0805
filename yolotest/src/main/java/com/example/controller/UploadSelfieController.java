@@ -143,7 +143,7 @@ public class UploadSelfieController {
 				System.out.println("START　Write!");
 				txt.getSelfiepath(SelfieFILEPATH, currentUser.getUsername());
 
-				// System.out.println("TRAIN!");
+				System.out.println("TRAIN!");
 
 				engine.trainEngine();
 				System.out.println("OVER!!!!!!!");

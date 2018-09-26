@@ -198,6 +198,7 @@ public class UploadDiaryPhotoController {
 		}
 		return null;
 	}
+
 //取得同日記的所有相片（記得寫）
 //下載照片
 	@GetMapping("/downloadPhotos/{photoId}")
@@ -207,6 +208,7 @@ public class UploadDiaryPhotoController {
 			return photoResponse;
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 	}
+
 //刪除照片
 	@DeleteMapping("/{diaryId}/{photoId}")
 	public ResponseEntity<?> deletePhoto(@PathVariable(value = "diaryId") Long diaryId,
