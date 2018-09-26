@@ -106,12 +106,12 @@ public class EngineAndHandTagUserController {
 
 	}
 
-	
-	public void handTag(String photoId, @RequestParam("username") String personId, String facepath)
-			throws IOException {
+	public void handTag(String photoId, String personId, String facepath) throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
 		String path = "C:/engine/" + facepath;
+		// C:/engine/
+		// /Users/ines/Desktop/photo --> ines mac's path
 		File face = new File(path);
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
@@ -135,11 +135,11 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
 	}
-	// 手動標記-->將這張人臉圖拿去訓練 需要參數（使用者名稱、人臉圖facepath）
+
+	// 手動標記-->將這張人臉圖拿去訓練 需要參數（使用者名稱、人臉圖路徑facePath）
 	@PostMapping("/{photoId}")
 	public List<String> handTags(@PathVariable(value = "photoId") String photoId,
-			@RequestParam("username") String[] username, @RequestParam("facepath") String facepath,
-			@RequestParam("faceUri") String faceUri) throws IOException {
+			@RequestParam("username") String[] username, @RequestParam("facepath") String facepath) throws IOException {
 		if (username != null && username.length > 0) {
 			for (int i = 0; i < username.length; i++) {
 				String user = username[i];
@@ -170,21 +170,17 @@ public class EngineAndHandTagUserController {
 		}
 		return sb.toString();
 	}
-	
-	
-	//修正人臉圖使用者名稱
+
+	// 修正人臉圖使用者名稱
 	@PutMapping("/updateface/{username}")
 	public PhotoTagUser updatefaceusername(@PathVariable String username, String new_username) {
 		User new_user = new User(new_username);
-		//要用findby其他，等要怎麼找人臉圖確定後再寫
-		return photoTagUserRepository.findByFaceRandom(username).map(faceuser->{
+		// 要用findby其他，等要怎麼找人臉圖確定後再寫
+		return photoTagUserRepository.findByFaceRandom(username).map(faceuser -> {
 			faceuser.setUser(new_user);
 			return photoTagUserRepository.save(faceuser);
-		}).orElseThrow(() -> new ResourceNotFoundException("face username="+ username + "Not Found", null, null)); 
-		
-		
+		}).orElseThrow(() -> new ResourceNotFoundException("face username=" + username + "Not Found", null, null));
+
 	}
-		
-	
 
 }

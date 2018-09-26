@@ -136,7 +136,7 @@ public class UploadDiaryPhotoController {
 	public List<UploadPhotoResponse> uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
-		// List<Face> faceList = new ArrayList<>();
+		List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
 
@@ -149,29 +149,29 @@ public class UploadDiaryPhotoController {
 				uploadPhoto(savefile, diaryId, batchid);
 			}
 
-//			try {
-//				txt.getPhotopath(PhotoFILEPATH, diaryId);
-			// engine.retrieveEngine();
-//				faceList = result.getResult();
-//
-//				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
-//				HashMap<String, String> hashmap = new HashMap();
-//
-//				for (int i = 0; i < faceList.size(); i++) {
-//					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-//					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
-//					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-//					if (hasFound == 1) {
-//						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
-//						// tag user
-//						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-//								faceList.get(i).getImageSourcePath(),
-//								faceList.get(i).getFrameFace().getFrameFacePath());
-//						System.out.println("tag finish!");
+			try {
+				txt.getPhotopath(PhotoFILEPATH, diaryId);
+				engine.retrieveEngine();
+				faceList = result.getResult();
 
-			// send notice to user
-			// 之後要放在別的地方
-			// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
+				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
+				HashMap<String, String> hashmap = new HashMap();
+
+				for (int i = 0; i < faceList.size(); i++) {
+					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
+					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+					if (hasFound == 1) {
+						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
+						// tag user
+						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
+								faceList.get(i).getImageSourcePath(),
+								faceList.get(i).getFrameFace().getFrameFacePath());
+						System.out.println("tag finish!");
+
+						// send notice to user
+						// 之後要放在別的地方
+						// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
 //						Iterator collection = hashmap.keySet().iterator();
 //						while(collection.hasNext()) {
 //							String key = (String)collection.next();
@@ -182,21 +182,22 @@ public class UploadDiaryPhotoController {
 //							System.out.println("******");
 //						}
 
-			// }
-			// }
-			/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
+					}
+				}
+				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
-			// for(hashmap)
-			// 做完標記再刪除
-//				txt.deleteAllFile(PhotoFILEPATH);
+				// for(hashmap)
+				// 做完標記再刪除
+				txt.deleteAllFile(PhotoFILEPATH);
 
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 		}
 		return null;
 	}
+
 //取得同日記的所有相片（記得寫）
 //下載照片
 	@GetMapping("/downloadPhoto/{photoId}")
