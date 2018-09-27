@@ -9,10 +9,25 @@ public class AlbumResponse {
 	private Long id;
 	private String name;
 	private List<Diary> diaries;
+	private String photoCover;
 //	private List<DiaryResponse> diaries;
 
 	public AlbumResponse() {
 	}
+	
+	
+
+	public String getphotoCover() {
+		return photoCover;
+	}
+
+
+
+	public void setphotoCover(String photoCover) {
+		this.photoCover = photoCover;
+	}
+
+
 
 	public AlbumResponse(String name) {
 		this.name = name;
