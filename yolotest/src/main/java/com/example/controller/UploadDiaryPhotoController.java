@@ -20,6 +20,8 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,7 @@ import com.example.entity.Diary;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
+import com.example.payload.PagedResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.AlbumRepository;
@@ -56,7 +59,7 @@ import com.example.service.PhotoStorageService;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 
-	static String PhotoFILEPATH = "C:/engine/photo/";
+	static String PhotoFILEPATH = "/Users/ines/Desktop/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
@@ -152,7 +155,7 @@ public class UploadDiaryPhotoController {
 
 			try {
 				txt.getPhotopath(PhotoFILEPATH, diaryId);
-			    engine.retrieveEngine();
+				engine.retrieveEngine();
 				faceList = result.getResult();
 
 				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
@@ -170,9 +173,9 @@ public class UploadDiaryPhotoController {
 								faceList.get(i).getFrameFace().getFrameFacePath());
 						System.out.println("tag finish!");
 
-			// send notice to user
-			// 之後要放在別的地方
-			// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
+						// send notice to user
+						// 之後要放在別的地方
+						// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
 //						Iterator collection = hashmap.keySet().iterator();
 //						while(collection.hasNext()) {
 //							String key = (String)collection.next();
@@ -183,12 +186,12 @@ public class UploadDiaryPhotoController {
 //							System.out.println("******");
 //						}
 //
-			 }
-			 }
-			/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
+					}
+				}
+				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
-			// for(hashmap)
-			// 做完標記再刪除
+				// for(hashmap)
+				// 做完標記再刪除
 				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {
@@ -199,12 +202,18 @@ public class UploadDiaryPhotoController {
 		return null;
 	}
 
-//取得同日記的所有相片（記得寫）
+//取得同日記的所有相片
+	@GetMapping("/downloadDiaryPhoto/{diaryId}")
+	public Page<Photo> getDiaryPhoto(@PathVariable(value = "diaryId") Long diaryId, Pageable pageable) {
+		Diary diary = new Diary(diaryId);
+		return photoRepository.findByDiary(diary, pageable);
+	}
+
 //下載照片
-	@GetMapping("/downloadPhotos/{photoId}")
+	@GetMapping("/downloadPhoto/{photoId}")
 	public PhotoResponse getPhoto(@PathVariable String photoId) {
 		return photoRepository.findById(photoId).map(photo -> {
-			PhotoResponse photoResponse = new PhotoResponse(photoId,photo.getPhotodata());
+			PhotoResponse photoResponse = new PhotoResponse(photoId, photo.getPhotodata());
 			return photoResponse;
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 	}
