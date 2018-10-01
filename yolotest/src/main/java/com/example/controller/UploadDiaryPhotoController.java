@@ -201,7 +201,7 @@ public class UploadDiaryPhotoController {
 
 //取得同日記的所有相片（記得寫）
 //下載照片
-	@GetMapping("/downloadPhotos/{photoId}")
+	@GetMapping("/downloadPhoto/{photoId}")
 	public PhotoResponse getPhoto(@PathVariable String photoId) {
 		return photoRepository.findById(photoId).map(photo -> {
 			PhotoResponse photoResponse = new PhotoResponse(photoId,photo.getPhotodata());
