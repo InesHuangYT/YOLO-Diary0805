@@ -60,6 +60,7 @@ public class AlbumService {
 
 	}
 	
+	
 
 
 	/* 以下為上方有使用到的方法，validatePageNumberAndSize、getDiaryCreatorMap */
