@@ -58,6 +58,7 @@ public class AlbumService {
 				albums.getTotalPages(), albums.isLast());
 
 	}
+	
 
 	/* 以下為上方有使用到的方法，validatePageNumberAndSize、getDiaryCreatorMap */
 

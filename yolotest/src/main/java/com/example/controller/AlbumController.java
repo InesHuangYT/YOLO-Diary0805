@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ import com.example.security.UserPrincipal;
 import com.example.service.AlbumService;
 import com.example.util.AppConstants;
 
+import antlr.collections.List;
+
 @RestController
 @RequestMapping("/api/album")
 
@@ -59,6 +63,7 @@ public class AlbumController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsCreatedByMe(currentUser, page, size);
 	}
+
 
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
