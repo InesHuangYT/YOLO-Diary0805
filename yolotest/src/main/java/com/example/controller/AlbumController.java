@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -32,8 +32,6 @@ import com.example.security.UserPrincipal;
 import com.example.service.AlbumService;
 import com.example.util.AppConstants;
 
-import antlr.collections.List;
-
 @RestController
 @RequestMapping("/api/album")
 
@@ -58,12 +56,12 @@ public class AlbumController {
 
 	// 取得自己新增過的相簿
 	@GetMapping("/albums")
-	public PagedResponse<AlbumResponse> getDiariesCreatedBy(@CurrentUser UserPrincipal currentUser,
+	public List<AlbumResponse> getDiariesCreatedBy(@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsCreatedByMe(currentUser, page, size);
+//		return albumService.getAlbumsCreatedByMe(currentUser);
 	}
-
 
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
