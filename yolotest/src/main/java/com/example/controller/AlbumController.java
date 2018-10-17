@@ -31,6 +31,7 @@ import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
 import com.example.service.AlbumService;
 import com.example.util.AppConstants;
+import com.example.util.ModelMapper;
 
 @RestController
 @RequestMapping("/api/album")
@@ -41,11 +42,15 @@ public class AlbumController {
 	AlbumRepository albumRepository;
 	@Autowired
 	private AlbumService albumService;
-	
+
 	// 取得所有相簿
 	@GetMapping
-	public Page<Album> getAllAlbums(Pageable pageable) {
-		return albumRepository.findAll(pageable);
+	public List<AlbumResponse> getAllAlbums(Pageable pageable) {
+		Page<Album> albums = albumRepository.findAll(pageable);
+		List<AlbumResponse> albumResponses = albums.map(album -> {
+			return ModelMapper.mapAlbumToAlbumResponse(album);
+		}).getContent();
+		return albumResponses;
 	}
 
 	// 取得某個使用者新增過的相簿
