@@ -35,6 +35,7 @@ import com.example.entity.PhotoTagUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
@@ -74,7 +75,7 @@ public class EngineAndHandTagUserController {
 		String photoid = findPhotoIdByPhotoPath(imageSourcePath);
 		User user = new User(personId);
 		String path = "C:/engine/" + facepath;
-        
+
 		// 將File convert to MultipartFile
 		File face = new File(path);
 		FileInputStream readfile = new FileInputStream(face);
@@ -114,11 +115,12 @@ public class EngineAndHandTagUserController {
 	// 修改photoTagUser標記人名
 	@PutMapping("/{photoId}/{username}")
 	public PhotoTagUser updatePhotoTagUser(@PathVariable(value = "photoId") String photoId,
-			@PathVariable(value = "username") String username, @Valid @RequestBody PhotoTagUserResponse photoTagUserRequest) {
+			@PathVariable(value = "username") String username,
+			@Valid @RequestBody PhotoTagUserResponse photoTagUserRequest) {
 		Photo photo = new Photo(photoId);
 		User user = new User(username);
 		PhotoTagUserId photoTagUserId = new PhotoTagUserId(photo, user);
-		System.out.println("photoTagUserId "+photoTagUserId);
+		System.out.println("photoTagUserId " + photoTagUserId);
 		if (!photoTagUserRepository.existsById(photoTagUserId)) {
 			throw new BadRequestException("PhotoTagUserId " + photoTagUserId.getPhoto().getId() + "&"
 					+ photoTagUserId.getUser().getUsername() + " not found");
@@ -176,14 +178,22 @@ public class EngineAndHandTagUserController {
 		return Arrays.asList(username);
 	}
 
-	// 下載人臉圖
+//	下載人臉圖（URI）
 	@GetMapping("/downloadFace/{random}")
-	public ResponseEntity<Resource> downloadPhoto(@PathVariable String random) throws IOException {
-		PhotoTagUser photoTagUser = photoStorageService.getPhotoFace(random);
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/jpeg"))
-				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; photoname = \"" + "Face" + "\"")
-				.body(new ByteArrayResource(photoTagUser.getFace_data()));
+	public PhotoResponse getFace(@PathVariable String random) {
+		return photoTagUserRepository.findByFaceRandom(random).map(face -> {
+			PhotoResponse photoResponse = new PhotoResponse(face.getFace_uri(), face.getFace_data());
+			return photoResponse;
+		}).orElseThrow(() -> new BadRequestException("FaceRandom " + random + " not found"));
 	}
+	// 下載人臉圖
+//	@GetMapping("/downloadFace/{random}")
+//	public ResponseEntity<Resource> downloadPhoto(@PathVariable String random) throws IOException {
+//		PhotoTagUser photoTagUser = photoStorageService.getPhotoFace(random);
+//		return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/jpeg"))
+//				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; photoname = \"" + "Face" + "\"")
+//				.body(new ByteArrayResource(photoTagUser.getFace_data()));
+//	}
 
 	// 取亂數字串
 	public static String getRandomString(int length) {
