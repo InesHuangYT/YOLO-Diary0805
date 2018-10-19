@@ -14,6 +14,17 @@ public class SuccessMessage extends RuntimeException {
 		this.user = user;
 		this.friend = friend;
 	}
+
+	public String getUser() {
+		return user;
+	}
+
+
+	public String getFriend() {
+		return friend;
+	}
+
+	
 	
 	
 
