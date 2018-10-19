@@ -130,11 +130,11 @@ public class FriendController {
 	
 	
 	@GetMapping("/find/{friendname}")
-	public User findfriend(@PathVariable("friendname")String fname) {
+	public String findfriend(@PathVariable("friendname")String fname) {
 		return userRepository.findByUsername(fname).map(friend ->{
 			Selfie selfie = friend.getSelfie();
 			String uri = selfie.getSelfieUri();
-			return friend;
+			return uri;
 		}).orElseThrow(() -> new ResourceNotFoundException("User" + fname + "not found", null, null));
 		
 	}
