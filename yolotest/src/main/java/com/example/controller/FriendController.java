@@ -19,6 +19,7 @@ import com.example.entity.User;
 import com.example.entity.UserFriend;
 import com.example.entity.UserFriendId;
 import com.example.exception.ResourceNotFoundException;
+import com.example.exception.SuccessMessage;
 import com.example.payload.FindFriendResponse;
 import com.example.repository.NoticeRepository;
 import com.example.repository.UserFriendRepository;
@@ -42,7 +43,7 @@ public class FriendController {
 	
 	//新增好友 一個人加，對方確認，雙方互為好友
 	@PostMapping(value = "/add/{username}")
-	public UserFriend addFriend(@PathVariable String username , @CurrentUser UserPrincipal currentUser){
+	public SuccessMessage addFriend(@PathVariable String username , @CurrentUser UserPrincipal currentUser){
 	//	if (userfriendrepository.existsById(username))
 	//	if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 	//		return new ResponseEntity(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
@@ -72,7 +73,9 @@ public class FriendController {
 //				notice.setSender(userdata);
 				notice.setReceive(friend);
 				noticerepository.save(notice);
-			    return userfriendrepository.save(findfriend);
+				userfriendrepository.save(findfriend);
+				SuccessMessage sucmes = new SuccessMessage(current, friend.getUsername());
+			    return sucmes;
 				}).orElseThrow(()->new ResourceNotFoundException("Fail!!!!!!", username, currentUser));	
 				}
 			
