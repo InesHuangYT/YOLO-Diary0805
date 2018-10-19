@@ -11,6 +11,12 @@ public class PhotoTagUserId implements Serializable {
 
 	private Photo photo;
 	private User user;
+	
+
+	public PhotoTagUserId(Photo photo, User user) {
+		this.photo = photo;
+		this.user = user;
+	}
 
 	public Photo getPhoto() {
 		return photo;

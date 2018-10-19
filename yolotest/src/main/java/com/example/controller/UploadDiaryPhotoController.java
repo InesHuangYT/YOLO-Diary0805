@@ -206,6 +206,7 @@ public class UploadDiaryPhotoController {
 	@GetMapping("/downloadDiaryPhoto/{diaryId}")
 	public Page<Photo> getDiaryPhoto(@PathVariable(value = "diaryId") Long diaryId, Pageable pageable) {
 		Diary diary = new Diary(diaryId);
+		System.out.println(diary.getText());
 		return photoRepository.findByDiary(diary, pageable);
 	}
 
