@@ -112,23 +112,23 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 修改photoTagUser標記人名
-//	@PutMapping("/{photoId}/{username}")
-//	public PhotoTagUser updatePhotoTagUser(@PathVariable(value = "photoId") String photoId,
-//			@PathVariable(value = "username") String username, @Valid @RequestBody PhotoTagUserResponse photoTagUserRequest) {
-//		Photo photo = new Photo(photoId);
-//		User user = new User(username);
-//		PhotoTagUserId photoTagUserId = new PhotoTagUserId(photo, user);
-//		System.out.println("photoTagUserId "+photoTagUserId);
-//		if (!photoTagUserRepository.existsById(photoTagUserId)) {
-//			throw new BadRequestException("PhotoTagUserId " + photoTagUserId.getPhoto().getId() + "&"
-//					+ photoTagUserId.getUser().getUsername() + " not found");
-//		}
-//		return photoTagUserRepository.findById(photoTagUserId).map(tag -> {
-//			User users = new User(photoTagUserRequest.getUsername());
-//			tag.setUser(users);
-//			return photoTagUserRepository.save(tag);
-//		}).orElseThrow(() -> new ResourceNotFoundException("Username not found", null, photoTagUserRequest));
-//	}
+	@PutMapping("/{photoId}/{username}")
+	public PhotoTagUser updatePhotoTagUser(@PathVariable(value = "photoId") String photoId,
+			@PathVariable(value = "username") String username, @Valid @RequestBody PhotoTagUserResponse photoTagUserRequest) {
+		Photo photo = new Photo(photoId);
+		User user = new User(username);
+		PhotoTagUserId photoTagUserId = new PhotoTagUserId(photo, user);
+		System.out.println("photoTagUserId "+photoTagUserId);
+		if (!photoTagUserRepository.existsById(photoTagUserId)) {
+			throw new BadRequestException("PhotoTagUserId " + photoTagUserId.getPhoto().getId() + "&"
+					+ photoTagUserId.getUser().getUsername() + " not found");
+		}
+		return photoTagUserRepository.findById(photoTagUserId).map(tag -> {
+			User users = new User(photoTagUserRequest.getUsername());
+			tag.setUser(users);
+			return photoTagUserRepository.save(tag);
+		}).orElseThrow(() -> new ResourceNotFoundException("Username not found", null, photoTagUserRequest));
+	}
 
 	// 刪除photoTagUser那張人臉圖
 

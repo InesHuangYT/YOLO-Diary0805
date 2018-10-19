@@ -8,6 +8,10 @@ public class PhotoResponse {
 	private String id;
 
 	private byte[] photodata;
+	
+
+	public PhotoResponse() {
+	}
 
 	public PhotoResponse(String id) {
 		this.id = id;
