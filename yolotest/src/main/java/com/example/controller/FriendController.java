@@ -19,6 +19,7 @@ import com.example.entity.User;
 import com.example.entity.UserFriend;
 import com.example.entity.UserFriendId;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.FindFriendResponse;
 import com.example.repository.NoticeRepository;
 import com.example.repository.UserFriendRepository;
 import com.example.repository.UserRepository;
@@ -130,11 +131,14 @@ public class FriendController {
 	
 	
 	@GetMapping("/find/{friendname}")
-	public String findfriend(@PathVariable("friendname")String fname) {
+	public FindFriendResponse findfriend(@PathVariable("friendname")String fname) {
 		return userRepository.findByUsername(fname).map(friend ->{
 			Selfie selfie = friend.getSelfie();
 			String uri = selfie.getSelfieUri();
-			return uri;
+			String friendname = friend.getUsername();
+			FindFriendResponse findfriendres = new FindFriendResponse(friendname, uri);
+			
+			return findfriendres;
 		}).orElseThrow(() -> new ResourceNotFoundException("User" + fname + "not found", null, null));
 		
 	}
