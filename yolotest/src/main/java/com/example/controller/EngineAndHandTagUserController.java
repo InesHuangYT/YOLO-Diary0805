@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,9 +31,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.engine.controller.GetResult;
 import com.example.entity.Photo;
 import com.example.entity.PhotoTagUser;
+import com.example.entity.PhotoTagUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.PhotoTagUserResponse;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
 import com.example.repository.UserRepository;
@@ -69,7 +74,7 @@ public class EngineAndHandTagUserController {
 		String photoid = findPhotoIdByPhotoPath(imageSourcePath);
 		User user = new User(personId);
 		String path = "C:/engine/" + facepath;
-
+        
 		// 將File convert to MultipartFile
 		File face = new File(path);
 		FileInputStream readfile = new FileInputStream(face);
@@ -105,6 +110,27 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
 
 	}
+
+	// 修改photoTagUser標記人名
+	@PutMapping("/{photoId}/{username}")
+	public PhotoTagUser updatePhotoTagUser(@PathVariable(value = "photoId") String photoId,
+			@PathVariable(value = "username") String username, @Valid @RequestBody PhotoTagUserResponse photoTagUserRequest) {
+		Photo photo = new Photo(photoId);
+		User user = new User(username);
+		PhotoTagUserId photoTagUserId = new PhotoTagUserId(photo, user);
+		System.out.println("photoTagUserId "+photoTagUserId);
+		if (!photoTagUserRepository.existsById(photoTagUserId)) {
+			throw new BadRequestException("PhotoTagUserId " + photoTagUserId.getPhoto().getId() + "&"
+					+ photoTagUserId.getUser().getUsername() + " not found");
+		}
+		return photoTagUserRepository.findById(photoTagUserId).map(tag -> {
+			User users = new User(photoTagUserRequest.getUsername());
+			tag.setUser(users);
+			return photoTagUserRepository.save(tag);
+		}).orElseThrow(() -> new ResourceNotFoundException("Username not found", null, photoTagUserRequest));
+	}
+
+	// 刪除photoTagUser那張人臉圖
 
 	public void handTag(String photoId, String personId, String facepath) throws IOException {
 		String username = findUsernameByPersonId(personId);

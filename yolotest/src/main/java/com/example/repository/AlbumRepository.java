@@ -16,5 +16,4 @@ import antlr.collections.List;
 public interface AlbumRepository extends JpaRepository<Album, Long> {
 	Optional<Album> findByName(String albumName);
 	Page<Album> findByCreatedBy(String userId, Pageable pageable);
-    Optional<Album> findByCreatedBy(String userId);
 }

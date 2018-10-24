@@ -52,6 +52,16 @@ public class ModelMapper {
 
 	}
 	
+	public static AlbumResponse mapAlbumToAlbumResponse(Album album) {
+		AlbumResponse albumResponse = new AlbumResponse();
+		albumResponse.setId(album.getId());
+		albumResponse.setphotoCover(album.getPhotoUri());
+		albumResponse.setName(album.getName());
+		java.util.List<Diary> diary = album.getDiary();
+		albumResponse.setDiaries(diary);
+		return albumResponse;
+
+	}
 	
 	public static DiaryResponse mapDiaryToDiaryResponse(Diary diary) {
 		DiaryResponse diaryResponse = new DiaryResponse();

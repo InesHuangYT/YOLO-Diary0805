@@ -204,9 +204,18 @@ public class UploadDiaryPhotoController {
 
 //取得同日記的所有相片
 	@GetMapping("/downloadDiaryPhoto/{diaryId}")
-	public Page<Photo> getDiaryPhoto(@PathVariable(value = "diaryId") Long diaryId, Pageable pageable) {
+	public List<PhotoResponse> getDiaryPhoto(@PathVariable(value = "diaryId") Long diaryId, Pageable pageable) {
 		Diary diary = new Diary(diaryId);
-		return photoRepository.findByDiary(diary, pageable);
+		Page<Photo> photos = photoRepository.findByDiary(diary, pageable);
+		List <PhotoResponse> photoResponse = photos.map(photo -> {
+			PhotoResponse photoResponses = new PhotoResponse();
+			photoResponses.setId(photo.getId());
+			photoResponses.setPhotodata(photo.getPhotodata());
+			return photoResponses;
+		}).getContent();
+
+		System.out.println("text"+diary.getId());
+		return photoResponse;
 	}
 
 //下載照片
