@@ -126,17 +126,16 @@ public class UploadDiaryPhotoController {
 			System.out.println("albumId : " + album.getId());
 			if (album.getPhotoUri() == null) {
 				System.out.println("photoUri : " + album.getPhotoUri());
-			    uri = album.getPhotoUri();
 				Optional<Photo> photos = photoRepository.findByDiary(diary.get());
 				album.setPhotoUri(photos.get().getPhotoUri());
 				albumRepository.save(album);
-			}else {
-			    uri = album.getPhotoUri();
 			}
 			System.out.println("SetphotoUri : " + album.getPhotoUri());
-			photoRepository.save(photo);
+			 uri = album.getPhotoUri();
+			 photoRepository.save(set);
 			return uri;
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
+		
 		
 		return catchuri;
 
