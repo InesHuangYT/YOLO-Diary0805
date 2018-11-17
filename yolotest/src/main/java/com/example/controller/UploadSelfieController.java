@@ -56,7 +56,7 @@ public class UploadSelfieController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UploadSelfieController.class);
 
-	static String SelfieFILEPATH = "/Users/ines/Desktop/photo";
+	static String SelfieFILEPATH = "C:\\engine\\selfie\\";
 	// /Users/ines/Desktop/photo --> ines mac's path
 	// C:\Users\Administrator\Desktop\Engine0818\selfie\ --> rrou's path
 	// C:\engine\selfie\ --> laboratory's path
