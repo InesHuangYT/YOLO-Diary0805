@@ -19,6 +19,7 @@ import com.example.entity.User;
 import com.example.entity.UserFriend;
 import com.example.entity.UserFriendId;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.FindFriendResponse;
 import com.example.repository.NoticeRepository;
 import com.example.repository.UserFriendRepository;
 import com.example.repository.UserRepository;
@@ -41,7 +42,7 @@ public class FriendController {
 	
 	//新增好友 一個人加，對方確認，雙方互為好友
 	@PostMapping(value = "/add/{username}")
-	public UserFriend addFriend(@PathVariable String username , @CurrentUser UserPrincipal currentUser){
+	public String addFriend(@PathVariable String username , @CurrentUser UserPrincipal currentUser){
 	//	if (userfriendrepository.existsById(username))
 	//	if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 	//		return new ResponseEntity(new ApiResponse(false, "Username is already taken!"), HttpStatus.BAD_REQUEST);
@@ -71,7 +72,9 @@ public class FriendController {
 //				notice.setSender(userdata);
 				notice.setReceive(friend);
 				noticerepository.save(notice);
-			    return userfriendrepository.save(findfriend);
+				userfriendrepository.save(findfriend);
+				
+			    return "["+current+"]"+" add "+"["+frienddata.getUsername()+"]"+" to friend list";
 				}).orElseThrow(()->new ResourceNotFoundException("Fail!!!!!!", username, currentUser));	
 				}
 			
@@ -130,11 +133,14 @@ public class FriendController {
 	
 	
 	@GetMapping("/find/{friendname}")
-	public User findfriend(@PathVariable("friendname")String fname) {
+	public FindFriendResponse findfriend(@PathVariable("friendname")String fname) {
 		return userRepository.findByUsername(fname).map(friend ->{
 			Selfie selfie = friend.getSelfie();
 			String uri = selfie.getSelfieUri();
-			return friend;
+			String friendname = friend.getUsername();
+			FindFriendResponse findfriendres = new FindFriendResponse(friendname, uri);
+			
+			return findfriendres;
 		}).orElseThrow(() -> new ResourceNotFoundException("User" + fname + "not found", null, null));
 		
 	}

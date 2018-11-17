@@ -5,14 +5,14 @@ import com.example.entity.Selfie;
 public class FindFriendResponse {
 	
 	private String friendname;
-	private Selfie selfie;
+	private String selfieURI;
 	
 	
 	
 
-	public FindFriendResponse(String friendname, Selfie selfie) {
+	public FindFriendResponse(String friendname, String selfieURI) {
 		this.friendname = friendname;
-		this.selfie = selfie;
+		this.selfieURI = selfieURI;
 	}
 	
 	
@@ -24,11 +24,11 @@ public class FindFriendResponse {
 	public void setFriendname(String friendname) {
 		this.friendname = friendname;
 	}
-	public Selfie getSelfie() {
-		return selfie;
+	public String getSelfieURI() {
+		return selfieURI;
 	}
-	public void setSelfie(Selfie selfie) {
-		this.selfie = selfie;
+	public void setSelfieURI(String selfieURI) {
+		this.selfieURI = selfieURI;
 	}
-
+	
 }

@@ -33,7 +33,7 @@ public class EngineFunc {
 	// C:\Users\Administrator\Desktop\Engine0818 --> rrou's path
 	// C:\engine --> laboratory's path
 	
-	static String ModelFILEPATH = "C:\\engine\\eGroup\\trainTest0920.Model.binary";
+	static String ModelFILEPATH = "C:\\engine\\eGroup\\trainTest0830.Model.binary";
 	// C:\Users\Administrator\Desktop\Engine0818\eGroup\trainTest0830.Model.binary --> rrou's path
 	// C:\engine\eGroup\trainTest0830.Model.binary
 	
@@ -54,7 +54,7 @@ public class EngineFunc {
 			System.out.println("Model Not EXIST");
 		}
 		trainFace.setTrainListPath("list.txt");
-		trainFace.setModelPath("eGroup\\trainTest0920.Model");
+		trainFace.setModelPath("eGroup\\trainTest0830.Model");
 		trainFace(trainFace);
 	}
 
@@ -64,14 +64,14 @@ public class EngineFunc {
 		retrieveFace.setThreshold(0.7);
 		retrieveFace.setHideMainWindow(false);
 		retrieveFace.setResolution("720p");
-		retrieveFace.setOutputFacePath("outputFace0920");
-		retrieveFace.setOutputFramePath("outputFrame0920");
+		retrieveFace.setOutputFacePath("outputFace0830");
+		retrieveFace.setOutputFramePath("outputFrame0830");
 //		retrieveFace.setCam("0");
 		retrieveFace.setPhotoListPath("photolist.egroupList");
 		retrieveFace.setMinimumFaceSize(100);
 		retrieveFace.setThreads(1);
-		retrieveFace.setTrainedBinaryPath("eGroup\\trainTest0920.Model.binary");
-		retrieveFace.setTrainedFaceInfoPath("eGroup\\trainTest0920.Model.faceInfor");
+		retrieveFace.setTrainedBinaryPath("eGroup\\trainTest0830.Model.binary");
+		retrieveFace.setTrainedFaceInfoPath("eGroup\\trainTest0830.Model.faceInfor");
 		retrieveFace.setJsonPath("output");
 		retrieveFace(retrieveFace);
 
