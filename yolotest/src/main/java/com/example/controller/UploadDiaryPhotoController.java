@@ -143,12 +143,13 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public List<UploadPhotoResponse> uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
+	public String uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") Long diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
+		String catchCoverUri = null;
 
 		if (file != null && file.length > 0) {
 			for (int i = 0; i < file.length; i++) {
@@ -156,7 +157,7 @@ public class UploadDiaryPhotoController {
 				System.out.println("第" + (i + 1) + "張");
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
-				uploadPhoto(savefile, diaryId, batchid);
+				catchCoverUri = uploadPhoto(savefile, diaryId, batchid);
 			}
 
 //			try {
@@ -205,7 +206,7 @@ public class UploadDiaryPhotoController {
 //			}
 
 		}
-		return null;
+		return catchCoverUri;
 	}
 
 //取得同日記的所有相片
