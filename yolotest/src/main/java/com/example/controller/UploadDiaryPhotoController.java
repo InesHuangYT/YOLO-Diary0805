@@ -133,6 +133,7 @@ public class UploadDiaryPhotoController {
 			}else {
 			    uri = album.getPhotoUri();
 			}
+			System.out.println("SetphotoUri : " + album.getPhotoUri());
 			return uri;
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		
