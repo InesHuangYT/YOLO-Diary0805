@@ -107,7 +107,7 @@ public class UploadDiaryPhotoController {
 
 	public String uploadPhoto(MultipartFile file, Long diaryId, Long batchid) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
-		
+		String catchuri = null;
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
 				.path(photo.getId()).toUriString();
 		photo.setPhotoUri(photoDownloadURI);
@@ -117,7 +117,7 @@ public class UploadDiaryPhotoController {
 
 		String photoId = photo.getId();
 		System.out.println(photoId);
-		String catchuri = photoRepository.findById(photoId).map(set -> {
+		catchuri = photoRepository.findById(photoId).map(set -> {
 			set.setPhotoPath(PhotoFILEPATH + photo.getPhotoName()); // 在資料表photo中加入photoPath
 
 			Optional<Diary> diary = diaryRepository.findById(diaryId);
@@ -134,6 +134,7 @@ public class UploadDiaryPhotoController {
 			    uri = album.getPhotoUri();
 			}
 			System.out.println("SetphotoUri : " + album.getPhotoUri());
+			photoRepository.save(photo);
 			return uri;
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
 		
