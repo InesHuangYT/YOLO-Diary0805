@@ -61,8 +61,8 @@ public class Photo extends UserDateAudit {
 	private Diary diary;
 	
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
-	@OneToMany(mappedBy = "photo", orphanRemoval = true)
-	private List<PhotoTagUser> users = new ArrayList<>();
+//	@OneToMany(mappedBy = "photo", orphanRemoval = true)
+//	private List<PhotoTagUser> users = new ArrayList<>();
 //	@ManyToMany(fetch = FetchType.LAZY)
 //	@JoinTable(name = "photo_tag_users", joinColumns = @JoinColumn(name = "photo_id"), inverseJoinColumns = @JoinColumn(name = "user_name"))
 //	private Set<User> user = new HashSet<>();
@@ -184,13 +184,13 @@ public class Photo extends UserDateAudit {
 		this.photoPath = photoPath;
 	}
 
-	public List<PhotoTagUser> getUsers() {
-		return users;
-	}
-
-	public void setUsers(List<PhotoTagUser> users) {
-		this.users = users;
-	}
+//	public List<PhotoTagUser> getUsers() {
+//		return users;
+//	}
+//
+//	public void setUsers(List<PhotoTagUser> users) {
+//		this.users = users;
+//	}
 
 //	public void addUser(User user,Long diaryId, String facepath, byte[] facedata, String uri) {
 //		PhotoTagUser photoTagUser = new PhotoTagUser(this, user,diaryId,facepath, facedata, uri);

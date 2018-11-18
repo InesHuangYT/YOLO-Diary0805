@@ -139,7 +139,7 @@ public class EngineAndHandTagUserController {
 		User user = new User(username);
 		String path = "C:/engine/" + facepath;
 		// C:/engine/
-		// /Users/ines/Desktop/photo --> ines mac's path
+		// /Users/ines/Desktop/photo/ --> ines mac's path
 		File face = new File(path);
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
