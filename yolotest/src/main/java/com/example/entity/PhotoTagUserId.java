@@ -13,6 +13,10 @@ public class PhotoTagUserId implements Serializable {
 	private User user;
 	
 
+	
+	public PhotoTagUserId() {
+	}
+
 	public PhotoTagUserId(Photo photo, User user) {
 		this.photo = photo;
 		this.user = user;

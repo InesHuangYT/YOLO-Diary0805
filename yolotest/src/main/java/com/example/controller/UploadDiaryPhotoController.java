@@ -175,7 +175,7 @@ public class UploadDiaryPhotoController {
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 					if (hasFound == 1) {
 						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
-						// tag user
+						// tag user2
 						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
 								faceList.get(i).getImageSourcePath(),
 								faceList.get(i).getFrameFace().getFrameFacePath());
