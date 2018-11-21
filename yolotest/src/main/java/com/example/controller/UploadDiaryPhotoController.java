@@ -159,6 +159,9 @@ public class UploadDiaryPhotoController {
 				System.out.println("共" + (i + 1) + "張照片");
 				MultipartFile savefile = file[i];
 				catchCoverUri = uploadPhoto(savefile, diaryId, batchid);
+				System.out.println("--------");
+				System.out.println("Cover Uri:"+ catchCoverUri);
+				System.out.println("--------");
 			}
 
 			try {
@@ -218,7 +221,7 @@ public class UploadDiaryPhotoController {
 		List <PhotoResponse> photoResponse = photos.map(photo -> {
 			PhotoResponse photoResponses = new PhotoResponse();
 			photoResponses.setId(photo.getId());
-			photoResponses.setphotoUri(photo.getPhotoUri());
+			photoResponses.setPhotodata(photo.getPhotodata());
 			return photoResponses;
 		}).getContent();
 
@@ -233,7 +236,7 @@ public class UploadDiaryPhotoController {
 	@GetMapping("/downloadPhoto/{photoId}")
 	public PhotoResponse getPhoto(@PathVariable String photoId) {
 		return photoRepository.findById(photoId).map(photo -> {
-			PhotoResponse photoResponse = new PhotoResponse(photoId, photo.getPhotoUri());
+			PhotoResponse photoResponse = new PhotoResponse(photoId, photo.getPhotodata());
 			return photoResponse;
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 	}
