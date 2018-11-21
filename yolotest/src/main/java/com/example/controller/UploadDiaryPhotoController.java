@@ -218,7 +218,7 @@ public class UploadDiaryPhotoController {
 		List <PhotoResponse> photoResponse = photos.map(photo -> {
 			PhotoResponse photoResponses = new PhotoResponse();
 			photoResponses.setId(photo.getId());
-			photoResponses.setPhotodata(photo.getPhotodata());
+			photoResponses.setphotoUri(photo.getPhotoUri());
 			return photoResponses;
 		}).getContent();
 
@@ -233,7 +233,7 @@ public class UploadDiaryPhotoController {
 	@GetMapping("/downloadPhoto/{photoId}")
 	public PhotoResponse getPhoto(@PathVariable String photoId) {
 		return photoRepository.findById(photoId).map(photo -> {
-			PhotoResponse photoResponse = new PhotoResponse(photoId, photo.getPhotodata());
+			PhotoResponse photoResponse = new PhotoResponse(photoId, photo.getPhotoUri());
 			return photoResponse;
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 	}
