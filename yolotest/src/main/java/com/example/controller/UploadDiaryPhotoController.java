@@ -218,7 +218,7 @@ public class UploadDiaryPhotoController {
 		List <PhotoResponse> photoResponse = photos.map(photo -> {
 			PhotoResponse photoResponses = new PhotoResponse();
 			photoResponses.setId(photo.getId());
-			photoResponses.setPhotodata(photo.getPhotodata());
+			photoResponses.setphotoUri(photo.getPhotoUri());
 			return photoResponses;
 		}).getContent();
 
