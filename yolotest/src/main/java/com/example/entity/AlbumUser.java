@@ -32,7 +32,7 @@ public class AlbumUser{
 
 	public AlbumUser(Album album, User user) {
 
-		this.album = album;
+		this.album =  album;
 		this.user = user;
 	}
 
