@@ -190,21 +190,15 @@ public class EngineAndHandTagUserController {
 	}
 
 //	下載人臉圖（URI）
-	@GetMapping("/downloadFace/{random}")
-	public PhotoResponse getFace(@PathVariable String random) {
-		return photoTagUserRepository.findByFaceRandom(random).map(face -> {
-			PhotoResponse photoResponse = new PhotoResponse(face.getFace_uri(), face.getFace_data());
-			return photoResponse;
-		}).orElseThrow(() -> new BadRequestException("FaceRandom " + random + " not found"));
-	}
-	// 下載人臉圖
 //	@GetMapping("/downloadFace/{random}")
-//	public ResponseEntity<Resource> downloadPhoto(@PathVariable String random) throws IOException {
-//		PhotoTagUser photoTagUser = photoStorageService.getPhotoFace(random);
-//		return ResponseEntity.ok().contentType(MediaType.parseMediaType("image/jpeg"))
-//				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; photoname = \"" + "Face" + "\"")
-//				.body(new ByteArrayResource(photoTagUser.getFace_data()));
+//	public PhotoResponse getFace(@PathVariable String random) {
+//		return photoTagUserRepository.findByFaceRandom(random).map(face -> {
+//			PhotoResponse photoResponse = new PhotoResponse(face.getFace_uri(), face.getFace_data());
+//			return photoResponse;
+//		}).orElseThrow(() -> new BadRequestException("FaceRandom " + random + " not found"));
 //	}
+	
+
 
 	// 取亂數字串
 	public static String getRandomString(int length) {
