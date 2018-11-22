@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.validation.Valid;
@@ -29,6 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.engine.controller.GetResult;
+import com.example.entity.Album;
+import com.example.entity.Diary;
 import com.example.entity.Photo;
 import com.example.entity.PhotoTagUser;
 import com.example.entity.PhotoTagUserId;
@@ -37,6 +40,7 @@ import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
+import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
 import com.example.repository.UserRepository;
@@ -56,6 +60,8 @@ public class EngineAndHandTagUserController {
 	UserRepository userRepository;
 	@Autowired
 	GetResult getResult;
+	@Autowired
+	DiaryRepository diaryRepository;
 
 	public String findPhotoIdByPhotoPath(String imageSourcePath) {
 		return photoRepository.findByPhotoPath(imageSourcePath).map(photo -> {
@@ -137,7 +143,7 @@ public class EngineAndHandTagUserController {
 	public void handTag(String photoId, String personId, String facepath) throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
-		String path = "C:/engine/" + facepath;
+		String path = "/Users/ines/Desktop/photo/" + facepath;
 		// C:/engine/
 		// /Users/ines/Desktop/photo/ --> ines mac's path
 		File face = new File(path);
@@ -153,12 +159,16 @@ public class EngineAndHandTagUserController {
 //			 photo.addUser(user, diaryId, facepath);
 			PhotoTagUser ptu = null;
 			Long diaryId = photo.getDiary().getId();
+			System.out.println("diaryId : " + diaryId);
 			try {
 				ptu = new PhotoTagUser(photo, user, diaryId, path, multi.getBytes(), faceUri, random);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			Optional<Diary> diary = diaryRepository.findById(diaryId);
+			Album album = diary.get().getAlbum();
+			System.out.println("albumId : " + album.getId());
 			return photoTagUserRepository.save(ptu);
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 
@@ -170,6 +180,7 @@ public class EngineAndHandTagUserController {
 			@RequestParam("username") String[] username, @RequestParam("facepath") String facepath) throws IOException {
 		if (username != null && username.length > 0) {
 			for (int i = 0; i < username.length; i++) {
+
 				String user = username[i];
 				handTag(photoId, user, facepath);
 			}

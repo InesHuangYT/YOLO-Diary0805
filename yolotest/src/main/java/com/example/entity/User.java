@@ -60,6 +60,7 @@ public class User extends DateAudit {
 	public User() {
 	}
 
+
 	public User(boolean enabled) {
 		super();
 		this.enabled = false;

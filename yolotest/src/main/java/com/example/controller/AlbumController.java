@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -20,12 +21,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Album;
+import com.example.entity.AlbumUser;
+import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.AlbumResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
+import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
@@ -42,6 +46,8 @@ public class AlbumController {
 	AlbumRepository albumRepository;
 	@Autowired
 	private AlbumService albumService;
+	@Autowired
+	AlbumUserRepository albumUserRepository;
 
 	// 取得所有相簿
 	@GetMapping
@@ -77,11 +83,22 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-	// 新增相簿
+	// 新增相簿 
 	@PostMapping
 	public Album createAlbum(@Valid @RequestBody Album album) {
 		System.out.println(album.getName());
-		return albumRepository.save(album);
+		albumRepository.save(album);
+		System.out.println(album.getId());
+		System.out.println(album.getCreatedBy());
+		Long albumId = album.getId();
+		AlbumUser albumUser = new AlbumUser();
+		return albumRepository.findById(albumId).map(albums ->{
+//			User user = new User(albums.getCreatedBy());
+//			albumUser.setAlbum(albums);
+//			albumUser.setUser(user);
+//			albumUserRepository.save(albumUser);
+			return albums;
+		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
 	// 修改相簿
