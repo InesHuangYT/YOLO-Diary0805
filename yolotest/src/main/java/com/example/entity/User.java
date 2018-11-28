@@ -23,7 +23,7 @@ import javax.validation.constraints.NotBlank;
 
 import com.example.entity.audit.DateAudit;
 
-@Entity//(name = "User")
+@Entity(name = "User")
 @Table(name = "users", uniqueConstraints = { @UniqueConstraint(columnNames = { "username" }),
 		@UniqueConstraint(columnNames = { "email" }) })
 public class User extends DateAudit {
@@ -39,7 +39,7 @@ public class User extends DateAudit {
 	@NotBlank
 	private String password;
 
-	//一個使用者可以上傳一張頭貼 
+	// 一個使用者可以上傳一張頭貼
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "selfie_id", referencedColumnName = "id")
 	private Selfie selfie;
@@ -50,23 +50,23 @@ public class User extends DateAudit {
 	@JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<>();
 
-
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
 //	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "user")
 //	private Set<Photo> photo = new HashSet<>();
 //	@OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private List<PhotoTagUser> photo = new ArrayList<>();
 
+	// 11/28
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "users")
+	private Set<Album> albums = new HashSet<>();
+
 	public User() {
 	}
 
-
 	public User(boolean enabled) {
-		super();
 		this.enabled = false;
 	}
 
-	
 	public Selfie getSelfie() {
 		return selfie;
 	}
@@ -118,8 +118,6 @@ public class User extends DateAudit {
 		this.roles = roles;
 	}
 
-	
-
 	public boolean isEnabled() {
 		return enabled;
 	}
@@ -128,8 +126,6 @@ public class User extends DateAudit {
 		this.enabled = enabled;
 	}
 
-
-
 //	public List<PhotoTagUser> getPhoto() {
 //		return photo;
 //	}
@@ -137,6 +133,22 @@ public class User extends DateAudit {
 //	public void setPhoto(List<PhotoTagUser> photo) {
 //		this.photo = photo;
 //	}
+
+//	public List<AlbumUser> getAlbum() {
+//		return album;
+//	}
+//
+//	public void setAlbum(List<AlbumUser> album) {
+//		this.album = album;
+//	}
+
+	public Set<Album> getAlbums() {
+		return albums;
+	}
+
+	public void setAlbums(Set<Album> albums) {
+		this.albums = albums;
+	}
 
 	@Override
 	public boolean equals(Object o) {
@@ -154,15 +166,6 @@ public class User extends DateAudit {
 	public int hashCode() {
 		return Objects.hash(username);
 	}
-//	public Set<Photo> getPhoto() {
-//		return photo;
-//	}
-//
-//	public void setPhoto(Set<Photo> photo) {
-//		this.photo = photo;
-//	}
-
-	
 
 }
 

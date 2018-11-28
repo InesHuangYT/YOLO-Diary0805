@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Album;
-import com.example.entity.AlbumUser;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -29,8 +29,8 @@ import com.example.payload.AlbumResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
-import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
+import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
 import com.example.service.AlbumService;
@@ -47,7 +47,7 @@ public class AlbumController {
 	@Autowired
 	private AlbumService albumService;
 	@Autowired
-	AlbumUserRepository albumUserRepository;
+	UserRepository userRepository;
 
 	// 取得所有相簿
 	@GetMapping
@@ -83,22 +83,25 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-	// 新增相簿 
+	// 新增相簿
 	@PostMapping
-	public Album createAlbum(@Valid @RequestBody Album album) {
+	public AlbumResponse createAlbum(@Valid @RequestBody Album album) {
 		System.out.println(album.getName());
 		albumRepository.save(album);
 		System.out.println(album.getId());
 		System.out.println(album.getCreatedBy());
-		Long albumId = album.getId();
-		AlbumUser albumUser = new AlbumUser();
-		return albumRepository.findById(albumId).map(albums ->{
-//			User user = new User(albums.getCreatedBy());
-//			albumUser.setAlbum(albums);
-//			albumUser.setUser(user);
-//			albumUserRepository.save(albumUser);
-			return albums;
-		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
+		Optional<User> user = userRepository.findByUsername(album.getCreatedBy());
+// Add user references in the album
+		User users = user.get();
+		album.getUsers().add(users);
+		System.out.println("finish this0");
+		albumRepository.save(album);
+		System.out.println("finish this1");
+		AlbumResponse albumResponse = new AlbumResponse();
+		albumResponse.setId(album.getId());
+		albumResponse.setName(album.getName());
+		albumResponse.setPhotoCover(album.getPhotoUri());
+		return albumResponse;
 	}
 
 	// 修改相簿

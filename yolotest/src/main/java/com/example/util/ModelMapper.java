@@ -44,7 +44,7 @@ public class ModelMapper {
 		albumResponse.setId(album.getId());
 //		UserSummary creatorSummary = new UserSummary(creator.getUsername());
 //		diaryResponse.setCreatedBy(creatorSummary);
-		albumResponse.setphotoCover(album.getPhotoUri());
+		albumResponse.setPhotoCover(album.getPhotoUri());
 		albumResponse.setName(album.getName());
 		java.util.List<Diary> diary = album.getDiary();
 		albumResponse.setDiaries(diary);
@@ -55,7 +55,7 @@ public class ModelMapper {
 	public static AlbumResponse mapAlbumToAlbumResponse(Album album) {
 		AlbumResponse albumResponse = new AlbumResponse();
 		albumResponse.setId(album.getId());
-		albumResponse.setphotoCover(album.getPhotoUri());
+		albumResponse.setPhotoCover(album.getPhotoUri());
 		albumResponse.setName(album.getName());
 		java.util.List<Diary> diary = album.getDiary();
 		albumResponse.setDiaries(diary);
