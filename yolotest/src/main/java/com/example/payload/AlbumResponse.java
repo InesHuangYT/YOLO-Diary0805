@@ -15,12 +15,9 @@ public class AlbumResponse {
 	public AlbumResponse() {
 	}
 
-	public String getphotoCover() {
-		return photoCover;
-	}
-
-	public void setphotoCover(String photoCover) {
-		this.photoCover = photoCover;
+	public AlbumResponse(Long id, String name) {
+		this.id = id;
+		this.name = name;
 	}
 
 	public AlbumResponse(String name) {
@@ -51,4 +48,13 @@ public class AlbumResponse {
 		this.diaries = diary;
 	}
 
+	public String getPhotoCover() {
+		return photoCover;
+	}
+
+	public void setPhotoCover(String photoCover) {
+		this.photoCover = photoCover;
+	}
+
+	
 }
