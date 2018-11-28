@@ -7,7 +7,7 @@ import com.example.entity.Diary;
 public class PhotoResponse {
 	private String id;
 
-	private String photoUri;
+	private byte[] photodata;
 	
 
 	public PhotoResponse() {
@@ -17,9 +17,9 @@ public class PhotoResponse {
 		this.id = id;
 	}
 
-	public PhotoResponse(String id, String photoUri) {
+	public PhotoResponse(String id, byte[] photodata) {
 		this.id = id;
-		this.photoUri = photoUri;
+		this.photodata = photodata;
 	}
 
 	public String getId() {
@@ -30,12 +30,12 @@ public class PhotoResponse {
 		this.id = id;
 	}
 
-	public String photoUri() {
-		return photoUri;
+	public byte[] getPhotodata() {
+		return photodata;
 	}
 
-	public void setphotoUri(String photoUri) {
-		this.photoUri = photoUri;
+	public void setPhotodata(byte[] photodata) {
+		this.photodata = photodata;
 	}
 	
 
