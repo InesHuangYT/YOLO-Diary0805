@@ -53,13 +53,9 @@ public class Diary extends UserDateAudit {
 	public Diary() {
 	}
 
-	
-
 	public Diary(String id) {
 		this.id = id;
 	}
-
-
 
 	public String getId() {
 		return id;

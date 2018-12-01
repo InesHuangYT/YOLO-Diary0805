@@ -27,6 +27,7 @@ import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.AlbumResponse;
+import com.example.payload.AlbumUserResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
@@ -78,7 +79,7 @@ public class AlbumController {
 //		return albumService.getAlbumsCreatedByMe(currentUser);
 	}
 
-	// 取得自己新增過的相簿以及被標記的相簿（全部）**等到標記完albumUser table之後還要改
+	// 找相同username出現的albumId（自己新增＆被標記的全部相簿）
 	@GetMapping("/allAlbums")
 	public List<AlbumResponse> getAllAlbumsOfMe(@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
@@ -95,7 +96,7 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-//新增相簿後加進AalbumUser資料表
+	//新增相簿後加進AalbumUser資料表
 	public void insertToAlbumUser(String albumId) {
 		albumRepository.findById(albumId).map(albums -> {
 			Optional<User> userr = userRepository.findById(albums.getCreatedBy());
@@ -114,12 +115,6 @@ public class AlbumController {
 		albumRepository.save(album);
 		System.out.println(album.getId());
 		System.out.println(album.getCreatedBy());
-//		albumRepository.findById(album.getId()).map(albums -> {
-//			AlbumUser albumUser = null;
-//			albumUser = new AlbumUser(albums, user);
-//			return albumUserRepository.save(albumUser);
-//		}).orElseThrow(() -> new BadRequestException("albumId" + album.getId() + " not found"));
-
 		// Add user references in the album
 //		Optional<User> user = userRepository.findByUsername(album.getCreatedBy());
 //		User users = user.get();

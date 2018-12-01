@@ -13,9 +13,11 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Album;
+import com.example.entity.AlbumUser;
 import com.example.entity.Diary;
 import com.example.entity.User;
 import com.example.payload.AlbumResponse;
+import com.example.payload.AlbumUserResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.UserSummary;
 
@@ -38,7 +40,7 @@ public class ModelMapper {
 		return diaryResponse;
 
 	}
-	
+
 	public static AlbumResponse mapAlbumToAlbumResponse(Album album, User creator) {
 		AlbumResponse albumResponse = new AlbumResponse();
 		albumResponse.setId(album.getId());
@@ -51,7 +53,7 @@ public class ModelMapper {
 		return albumResponse;
 
 	}
-	
+
 	public static AlbumResponse mapAlbumToAlbumResponse(Album album) {
 		AlbumResponse albumResponse = new AlbumResponse();
 		albumResponse.setId(album.getId());
@@ -62,7 +64,18 @@ public class ModelMapper {
 		return albumResponse;
 
 	}
-	
+
+	public static AlbumResponse mapAlbumUserToAlbumUserResponse(AlbumUser albumUser) {
+		AlbumResponse albumResponse = new AlbumResponse();
+		albumResponse.setId(albumUser.getAlbum().getId());
+		albumResponse.setPhotoCover(albumUser.getAlbum().getPhotoUri());
+		albumResponse.setName(albumUser.getAlbum().getName());
+		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
+		albumResponse.setDiaries(diary);
+		return albumResponse;
+
+	}
+
 	public static DiaryResponse mapDiaryToDiaryResponse(Diary diary) {
 		DiaryResponse diaryResponse = new DiaryResponse();
 		diaryResponse.setId(diary.getId());

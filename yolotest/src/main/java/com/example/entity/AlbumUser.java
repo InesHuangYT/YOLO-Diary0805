@@ -10,11 +10,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.entity.audit.UserDateAudit;
+
 @Entity(name = "AlbumUser")
 @Table(name = "album_users")
 @IdClass(AlbumUserId.class)
 
-public class AlbumUser {
+public class AlbumUser extends UserDateAudit {
 
 	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
