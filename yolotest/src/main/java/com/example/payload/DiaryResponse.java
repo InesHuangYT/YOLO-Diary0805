@@ -3,19 +3,19 @@ package com.example.payload;
 import java.time.Instant;
 
 public class DiaryResponse {
-	private Long id;
+	private String id;
 	private String text;
 	private String createdBy;
 
 //	private UserSummary createdBy;
 	private Instant creationDateTime;
-	private Long albumId;
+	private String albumId;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -50,11 +50,11 @@ public class DiaryResponse {
 		this.creationDateTime = creationDateTime;
 	}
 
-	public Long getAlbumId() {
+	public String getAlbumId() {
 		return albumId;
 	}
 
-	public void setAlbumId(Long albumId) {
+	public void setAlbumId(String albumId) {
 		this.albumId = albumId;
 	}
 

@@ -57,8 +57,8 @@ public class User extends DateAudit {
 //	private List<PhotoTagUser> photo = new ArrayList<>();
 
 	// 11/28
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "users")
-	private Set<Album> albums = new HashSet<>();
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "users")
+//	private Set<Album> albums = new HashSet<>();
 
 	public User() {
 	}
@@ -126,29 +126,14 @@ public class User extends DateAudit {
 		this.enabled = enabled;
 	}
 
-//	public List<PhotoTagUser> getPhoto() {
-//		return photo;
+//11/28
+//	public Set<Album> getAlbums() {
+//		return albums;
 //	}
 //
-//	public void setPhoto(List<PhotoTagUser> photo) {
-//		this.photo = photo;
+//	public void setAlbums(Set<Album> albums) {
+//		this.albums = albums;
 //	}
-
-//	public List<AlbumUser> getAlbum() {
-//		return album;
-//	}
-//
-//	public void setAlbum(List<AlbumUser> album) {
-//		this.album = album;
-//	}
-
-	public Set<Album> getAlbums() {
-		return albums;
-	}
-
-	public void setAlbums(Set<Album> albums) {
-		this.albums = albums;
-	}
 
 	@Override
 	public boolean equals(Object o) {

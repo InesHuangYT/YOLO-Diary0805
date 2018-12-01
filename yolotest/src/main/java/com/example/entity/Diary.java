@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -27,12 +28,13 @@ import com.example.entity.audit.UserDateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 //一篇日記屬於一個相簿
-@Entity // (name = "Diary")
+@Entity(name = "Diary")
 @Table(name = "diary")
 public class Diary extends UserDateAudit {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private String id;
 
 	@NotBlank
 	@Size(min = 5)
@@ -51,20 +53,19 @@ public class Diary extends UserDateAudit {
 	public Diary() {
 	}
 
-	public Diary(Long id) {
-		super();
+	
+
+	public Diary(String id) {
 		this.id = id;
 	}
 
-	public Diary(@NotBlank @Size(min = 5) String text) {
-		this.text = text;
-	}
 
-	public Long getId() {
+
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -118,4 +119,3 @@ public class Diary extends UserDateAudit {
 //@ManyToMany(fetch = FetchType.LAZY)
 //@JoinTable(name = "users_diaries", joinColumns = @JoinColumn(name = "diary_id"), inverseJoinColumns = @JoinColumn(name = "username"))
 //private Set<User> users = new HashSet<>();
-

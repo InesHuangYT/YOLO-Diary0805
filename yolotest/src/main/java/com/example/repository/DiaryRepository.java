@@ -13,17 +13,19 @@ import com.example.entity.Diary;
 
 @Repository
 
-public interface DiaryRepository extends JpaRepository<Diary, Long> {
+public interface DiaryRepository extends JpaRepository<Diary, String> {
 
-	Optional<Diary> findById(Long diaryId);
+	Optional<Diary> findById(String diaryId);
+	Optional<Diary> findByPhotoId(String photoId);
+
 
 	Page<Diary> findByCreatedBy(String userId, Pageable pageable);
 
-	Page<Diary> findByAlbumId(Long albumId, Pageable pageable);
+	Page<Diary> findByAlbumId(String albumId, Pageable pageable);
 
 //    long countByCreatedBy(Long userId);
-	List<Diary> findByIdIn(List<Long> diaryIds);
+	List<Diary> findByIdIn(List<String> diaryIds);
 
-	List<Diary> findByIdIn(List<Long> diaryIds, Sort sort);
+	List<Diary> findByIdIn(List<String> diaryIds, Sort sort);
 
 }

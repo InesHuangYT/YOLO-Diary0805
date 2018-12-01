@@ -3,6 +3,7 @@ package com.example.service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -59,10 +60,27 @@ public class AlbumService {
 		return albumResponses;
 
 	}
-	
-	
-	
 
+	public List<AlbumResponse> getAlbumsAboutMe(UserPrincipal currentUser, int page, int size) {
+		validatePageNumberAndSize(page, size);
+		User user = userRepository.findByUsername(currentUser.getUsername())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
+
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+		Page<Album> albums = albumRepository.findByCreatedBy(currentUser.getUsername(), pageable);
+		if (albums.getNumberOfElements() == 0) {
+//			return new PagedResponse<>(Collections.emptyList(), albums.getNumber(), albums.getSize(),
+//					albums.getTotalElements(), albums.getTotalPages(), albums.isLast());
+		}
+
+		List<AlbumResponse> albumResponses = albums.map(album -> {
+			return ModelMapper.mapAlbumToAlbumResponse(album, user);
+		}).getContent();
+//		return new PagedResponse<>(albumResponses, albums.getNumber(), albums.getSize(), albums.getTotalElements(),
+//				albums.getTotalPages(), albums.isLast());
+		return albumResponses;
+
+	}
 
 	/* 以下為上方有使用到的方法，validatePageNumberAndSize、getDiaryCreatorMap */
 

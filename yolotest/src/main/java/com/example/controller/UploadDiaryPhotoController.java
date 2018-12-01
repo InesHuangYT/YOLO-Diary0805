@@ -105,7 +105,7 @@ public class UploadDiaryPhotoController {
 		}
 	}
 
-	public String uploadPhoto(MultipartFile file, Long diaryId, Long batchid) {
+	public String uploadPhoto(MultipartFile file, String diaryId, Long batchid) {
 		Photo photo = photoStorageService.storePhoto(file, diaryId);
 		String catchuri = null;
 		String photoDownloadURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/photo/downloadPhoto/")
@@ -145,7 +145,7 @@ public class UploadDiaryPhotoController {
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	public String uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
-			@PathVariable(value = "diaryId") Long diaryId) {
+			@PathVariable(value = "diaryId") String diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
 		Random ran = new Random();
@@ -215,7 +215,7 @@ public class UploadDiaryPhotoController {
 
 //取得同日記的所有相片
 	@GetMapping("/downloadDiaryPhoto/{diaryId}")
-	public List<PhotoResponse> getDiaryPhoto(@PathVariable(value = "diaryId") Long diaryId, Pageable pageable) {
+	public List<PhotoResponse> getDiaryPhoto(@PathVariable(value = "diaryId") String diaryId, Pageable pageable) {
 		Diary diary = new Diary(diaryId);
 		Page<Photo> photos = photoRepository.findByDiary(diary, pageable);
 		List <PhotoResponse> photoResponse = photos.map(photo -> {
@@ -243,7 +243,7 @@ public class UploadDiaryPhotoController {
 
 //刪除照片
 	@DeleteMapping("/{diaryId}/{photoId}")
-	public ResponseEntity<?> deletePhoto(@PathVariable(value = "diaryId") Long diaryId,
+	public ResponseEntity<?> deletePhoto(@PathVariable(value = "diaryId") String diaryId,
 			@PathVariable(value = "photoId") String photoId) {
 		if (!diaryRepository.existsById(diaryId)) {
 			throw new BadRequestException("DiaryId " + diaryId + " not found");

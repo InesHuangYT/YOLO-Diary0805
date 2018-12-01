@@ -30,7 +30,7 @@ public class PhotoStorageService {
 	private DiaryRepository diaryRepository;
 	@Autowired
 	private PhotoTagUserRepository photoTagUserRepository;
-	public Photo storePhoto(MultipartFile photo, Long diaryId) {
+	public Photo storePhoto(MultipartFile photo, String diaryId) {
 		// Normalize file name
 		String photoName = StringUtils.cleanPath(photo.getOriginalFilename());
 		Diary diary = new Diary(diaryId);

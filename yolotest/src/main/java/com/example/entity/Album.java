@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.GenericGenerator;
 
 import com.example.entity.audit.UserDateAudit;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -26,8 +27,9 @@ import org.hibernate.annotations.Fetch;
 public class Album extends UserDateAudit {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	private String id;
 
 	@NotBlank
 	@Size(max = 15)
@@ -47,25 +49,25 @@ public class Album extends UserDateAudit {
 
 // 11/28
 //	@JsonIgnore
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinTable(name = "album_users", joinColumns = { @JoinColumn(name = "album_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "users_username") })
-	private Set<User> users = new HashSet<>();
+//	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+//	@JoinTable(name = "album_users", joinColumns = { @JoinColumn(name = "album_id") }, inverseJoinColumns = {
+//			@JoinColumn(name = "users_username") })
+//	private Set<User> users = new HashSet<>();
 
 	// For deserialisation purposes Album must have a zero-arg constructor.
 
 	public Album() {
 	}
 
-	public Album(Long id) {
+	public Album(String id) {
 		this.id = id;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -92,54 +94,63 @@ public class Album extends UserDateAudit {
 	public void setPhotoUri(String photoUri) {
 		this.photoUri = photoUri;
 	}
-	
-
-//	public List<AlbumUser> getUsers() {
+//11/28
+//	public Set<User> getUsers() {
 //		return users;
 //	}
 //
-//	public void setUsers(List<AlbumUser> users) {
+//	public void setUsers(Set<User> users) {
 //		this.users = users;
 //	}
-//
-//	public void addUser(User user) {
-//		AlbumUser albumUser = new AlbumUser(this, user);
-//		users.add(albumUser);
-//		user.getAlbum().add(albumUser);
-//	}
-
-	public Set<User> getUsers() {
-		return users;
-	}
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
-	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (this == o)
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-
-		if (o == null || getClass() != o.getClass())
+		if (obj == null)
 			return false;
-
-		Album album = (Album) o;
-		return Objects.equals(name, album.name);
+		if (getClass() != obj.getClass())
+			return false;
+		Album other = (Album) obj;
+		if (diary == null) {
+			if (other.diary != null)
+				return false;
+		} else if (!diary.equals(other.diary))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (photoUri == null) {
+			if (other.photoUri != null)
+				return false;
+		} else if (!photoUri.equals(other.photoUri))
+			return false;
+		return true;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name);
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((diary == null) ? 0 : diary.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((photoUri == null) ? 0 : photoUri.hashCode());
+		return result;
 	}
-//	public void addDiary(Diary diary) {
-//		addDiary(diary);
-//		diary.setAlbum(this);
-//	}
-//
-//	public void removeDiary(Diary diary) {
-//		removeDiary(diary);
-//		diary.setAlbum(null);
-//	}
+
+	@Override
+	public String toString() {
+		return "Album [id=" + id + ", name=" + name + ", diary=" + diary + ", photoUri=" + photoUri + "]";
+	}
+
+
 
 }
