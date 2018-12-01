@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Album;
+import com.example.entity.AlbumUser;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -29,6 +30,7 @@ import com.example.payload.AlbumResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
+import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
@@ -48,6 +50,8 @@ public class AlbumController {
 	private AlbumService albumService;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	AlbumUserRepository albumUserRepository;
 
 	// 取得所有相簿
 	@GetMapping
@@ -74,13 +78,33 @@ public class AlbumController {
 //		return albumService.getAlbumsCreatedByMe(currentUser);
 	}
 
+	// 取得自己新增過的相簿以及被標記的相簿（全部）**等到標記完albumUser table之後還要改
+	@GetMapping("/allAlbums")
+	public List<AlbumResponse> getAllAlbumsOfMe(@CurrentUser UserPrincipal currentUser,
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+		return albumService.getAlbumsAboutMe(currentUser, page, size);
+	}
+
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
-	public AlbumResponse getAlbumName(@PathVariable Long albumId) {
+	public AlbumResponse getAlbumName(@PathVariable String albumId) {
 		return albumRepository.findById(albumId).map(album -> {
 			AlbumResponse albumResponse = new AlbumResponse(album.getName());
 			return albumResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
+	}
+
+//新增相簿後加進AalbumUser資料表
+	public void insertToAlbumUser(String albumId) {
+		albumRepository.findById(albumId).map(albums -> {
+			Optional<User> userr = userRepository.findById(albums.getCreatedBy());
+			User user = userr.get();
+			AlbumUser albumUser = null;
+			albumUser = new AlbumUser(albums, user);
+			return albumUserRepository.save(albumUser);
+		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
+
 	}
 
 	// 新增相簿
@@ -90,13 +114,21 @@ public class AlbumController {
 		albumRepository.save(album);
 		System.out.println(album.getId());
 		System.out.println(album.getCreatedBy());
-		Optional<User> user = userRepository.findByUsername(album.getCreatedBy());
-// Add user references in the album
-		User users = user.get();
-		album.getUsers().add(users);
-		System.out.println("finish this0");
-		albumRepository.save(album);
-		System.out.println("finish this1");
+//		albumRepository.findById(album.getId()).map(albums -> {
+//			AlbumUser albumUser = null;
+//			albumUser = new AlbumUser(albums, user);
+//			return albumUserRepository.save(albumUser);
+//		}).orElseThrow(() -> new BadRequestException("albumId" + album.getId() + " not found"));
+
+		// Add user references in the album
+//		Optional<User> user = userRepository.findByUsername(album.getCreatedBy());
+//		User users = user.get();
+//		album.getUsers().add(users);
+//		users.getAlbums().add(album);
+//		System.out.println("add this");
+//		albumRepository.save(album);
+//		System.out.println("finish this");
+		insertToAlbumUser(album.getId());
 		AlbumResponse albumResponse = new AlbumResponse();
 		albumResponse.setId(album.getId());
 		albumResponse.setName(album.getName());
@@ -106,7 +138,7 @@ public class AlbumController {
 
 	// 修改相簿
 	@PutMapping("/{albumId}")
-	public Album updateAlbum(@PathVariable Long albumId, @Valid @RequestBody Album albumRequest) {
+	public Album updateAlbum(@PathVariable String albumId, @Valid @RequestBody Album albumRequest) {
 		return albumRepository.findById(albumId).map(album -> {
 			album.setName(albumRequest.getName());
 			return albumRepository.save(album);
@@ -115,7 +147,7 @@ public class AlbumController {
 
 	// 刪除相簿
 	@DeleteMapping("/{albumId}")
-	public ResponseEntity<?> deleteAlbum(@PathVariable Long albumId) {
+	public ResponseEntity<?> deleteAlbum(@PathVariable String albumId) {
 		return albumRepository.findById(albumId).map(album -> {
 			albumRepository.delete(album);
 			return ResponseEntity.ok().build();

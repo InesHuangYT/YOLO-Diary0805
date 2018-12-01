@@ -6,7 +6,7 @@ import com.example.entity.Diary;
 
 public class AlbumResponse {
 
-	private Long id;
+	private String id;
 	private String name;
 	private List<Diary> diaries;
 	private String photoCover;
@@ -15,7 +15,7 @@ public class AlbumResponse {
 	public AlbumResponse() {
 	}
 
-	public AlbumResponse(Long id, String name) {
+	public AlbumResponse(String id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -24,11 +24,11 @@ public class AlbumResponse {
 		this.name = name;
 	}
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

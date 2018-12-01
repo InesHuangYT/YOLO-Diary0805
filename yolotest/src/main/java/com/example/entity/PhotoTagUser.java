@@ -33,7 +33,7 @@ public class PhotoTagUser {
 	@JoinColumn(name = "users_username", referencedColumnName = "username")
 	private User user;
 
-	private Long diaryId;
+	private String diaryId;
 	@Lob
 	private byte[] face_data;
 
@@ -47,7 +47,7 @@ public class PhotoTagUser {
 
 	}
 
-	public PhotoTagUser(Photo photo, User user, Long diaryId, String face_path, byte[] face_data, String face_uri,
+	public PhotoTagUser(Photo photo, User user, String diaryId, String face_path, byte[] face_data, String face_uri,
 			String faceRandom) {
 
 		this.photo = photo;
@@ -75,11 +75,11 @@ public class PhotoTagUser {
 		this.user = user;
 	}
 
-	public Long getDiaryId() {
+	public String getDiaryId() {
 		return diaryId;
 	}
 
-	public void setDiaryId(Long diaryId) {
+	public void setDiaryId(String diaryId) {
 		this.diaryId = diaryId;
 	}
 

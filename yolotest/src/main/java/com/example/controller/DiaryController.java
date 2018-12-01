@@ -80,13 +80,13 @@ public class DiaryController {
 
 //取得某相簿的日記
 	@GetMapping("/{albumId}")
-	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") Long albumId, Pageable pageable) {
+	public Page<Diary> getAllDiariesByAlbumId(@PathVariable(value = "albumId") String albumId, Pageable pageable) {
 		return diaryRepository.findByAlbumId(albumId, pageable);
 	}
 
 //取得某個日記的內容
 	@GetMapping("/diaryId/{diaryId}")
-	public DiaryResponse getDiaryText(@PathVariable Long diaryId) {
+	public DiaryResponse getDiaryText(@PathVariable String diaryId) {
 		return diaryRepository.findById(diaryId).map(diary -> {
 			DiaryResponse diaryResponse = modelMapper.mapDiaryToDiaryResponse(diary);
 			return diaryResponse;
@@ -110,7 +110,7 @@ public class DiaryController {
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
-	public DiaryResponse createDiary(@PathVariable(value = "albumId") Long albumId, @Valid @RequestBody Diary diary) {
+	public DiaryResponse createDiary(@PathVariable(value = "albumId") String albumId, @Valid @RequestBody Diary diary) {
 		String content = diary.getText();
 		String password = "ahfcjuh645465645";
 		System.out.println("加密前: " + content);
@@ -149,8 +149,8 @@ public class DiaryController {
 
 	// 修改日記
 	@PutMapping("/{albumId}/{diaryId}")
-	public Diary updateDiary(@PathVariable(value = "albumId") Long albumId,
-			@PathVariable(value = "diaryId") Long diaryId, @Valid @RequestBody Diary diaryRequest) {
+	public Diary updateDiary(@PathVariable(value = "albumId") String albumId,
+			@PathVariable(value = "diaryId") String diaryId, @Valid @RequestBody Diary diaryRequest) {
 		if (!albumRepository.existsById(albumId)) {
 			throw new BadRequestException("AlbumId " + albumId + " not found");
 		}
@@ -163,8 +163,8 @@ public class DiaryController {
 
 	// 刪除日記
 	@DeleteMapping("/{albumId}/{diaryId}")
-	public ResponseEntity<?> deleteDiary(@PathVariable(value = "albumId") Long albumId,
-			@PathVariable(value = "diaryId") Long diaryId) {
+	public ResponseEntity<?> deleteDiary(@PathVariable(value = "albumId") String albumId,
+			@PathVariable(value = "diaryId") String diaryId) {
 		if (!albumRepository.existsById(albumId)) {
 			throw new BadRequestException("AlbumId " + albumId + " not found");
 		}

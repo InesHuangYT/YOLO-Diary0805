@@ -40,6 +40,7 @@ import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
+import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
@@ -62,6 +63,8 @@ public class EngineAndHandTagUserController {
 	GetResult getResult;
 	@Autowired
 	DiaryRepository diaryRepository;
+	@Autowired
+	AlbumRepository albumRepository;
 
 	public String findPhotoIdByPhotoPath(String imageSourcePath) {
 		return photoRepository.findByPhotoPath(imageSourcePath).map(photo -> {
@@ -103,7 +106,7 @@ public class EngineAndHandTagUserController {
 
 			Photo photo = new Photo(photoid);
 			PhotoTagUser ptu = null;
-			Long diaryId = photodata.getDiary().getId();
+			String diaryId = photodata.getDiary().getId();
 
 			try {
 				ptu = new PhotoTagUser(photo, user, diaryId, path, multi.getBytes(), faceUri, random);
@@ -158,7 +161,7 @@ public class EngineAndHandTagUserController {
 //			 photo.getUser().add(user);
 //			 photo.addUser(user, diaryId, facepath);
 			PhotoTagUser ptu = null;
-			Long diaryId = photo.getDiary().getId();
+			String diaryId = photo.getDiary().getId();
 			System.out.println("diaryId : " + diaryId);
 			try {
 				ptu = new PhotoTagUser(photo, user, diaryId, path, multi.getBytes(), faceUri, random);
@@ -183,6 +186,19 @@ public class EngineAndHandTagUserController {
 
 				String user = username[i];
 				handTag(photoId, user, facepath);
+//				Optional<User> users = userRepository.findByUsername(user);
+//				User userss = users.get();
+//				Optional<Diary> diary = diaryRepository.findByPhotoId(photoId);
+//				Diary diarys = diary.get();
+//				System.out.println("here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
+//				Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
+//				System.out.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
+//				Album albums = album.get();
+//				albums.getUsers().add(userss);
+//				albumRepository.save(albums);
+//				System.out.println("here is finish");
+
+
 			}
 		}
 
@@ -197,8 +213,6 @@ public class EngineAndHandTagUserController {
 //			return photoResponse;
 //		}).orElseThrow(() -> new BadRequestException("FaceRandom " + random + " not found"));
 //	}
-	
-
 
 	// 取亂數字串
 	public static String getRandomString(int length) {
