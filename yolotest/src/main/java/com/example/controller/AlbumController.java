@@ -95,7 +95,7 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-//新增相簿後加進AalbumUser資料表
+	//新增相簿後加進AalbumUser資料表
 	public void insertToAlbumUser(String albumId) {
 		albumRepository.findById(albumId).map(albums -> {
 			Optional<User> userr = userRepository.findById(albums.getCreatedBy());
@@ -114,12 +114,6 @@ public class AlbumController {
 		albumRepository.save(album);
 		System.out.println(album.getId());
 		System.out.println(album.getCreatedBy());
-//		albumRepository.findById(album.getId()).map(albums -> {
-//			AlbumUser albumUser = null;
-//			albumUser = new AlbumUser(albums, user);
-//			return albumUserRepository.save(albumUser);
-//		}).orElseThrow(() -> new BadRequestException("albumId" + album.getId() + " not found"));
-
 		// Add user references in the album
 //		Optional<User> user = userRepository.findByUsername(album.getCreatedBy());
 //		User users = user.get();

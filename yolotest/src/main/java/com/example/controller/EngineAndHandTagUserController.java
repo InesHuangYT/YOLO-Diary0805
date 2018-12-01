@@ -31,6 +31,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.engine.controller.GetResult;
 import com.example.entity.Album;
+import com.example.entity.AlbumUser;
 import com.example.entity.Diary;
 import com.example.entity.Photo;
 import com.example.entity.PhotoTagUser;
@@ -41,6 +42,7 @@ import com.example.exception.ResourceNotFoundException;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
 import com.example.repository.AlbumRepository;
+import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
@@ -65,6 +67,8 @@ public class EngineAndHandTagUserController {
 	DiaryRepository diaryRepository;
 	@Autowired
 	AlbumRepository albumRepository;
+	@Autowired
+	AlbumUserRepository albumUserRepository;
 
 	public String findPhotoIdByPhotoPath(String imageSourcePath) {
 		return photoRepository.findByPhotoPath(imageSourcePath).map(photo -> {
@@ -186,14 +190,17 @@ public class EngineAndHandTagUserController {
 
 				String user = username[i];
 				handTag(photoId, user, facepath);
-//				Optional<User> users = userRepository.findByUsername(user);
-//				User userss = users.get();
-//				Optional<Diary> diary = diaryRepository.findByPhotoId(photoId);
-//				Diary diarys = diary.get();
-//				System.out.println("here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
-//				Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
-//				System.out.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
-//				Album albums = album.get();
+				AlbumUser albumUser = null;
+				Optional<User> users = userRepository.findByUsername(user);
+				User userss = users.get();
+				Optional<Diary> diary = diaryRepository.findByPhotoId(photoId);
+				Diary diarys = diary.get();
+				System.out.println("here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
+				Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
+				System.out.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
+				Album albums = album.get();
+				albumUser = new AlbumUser(albums,userss);
+				albumUserRepository.save(albumUser);
 //				albums.getUsers().add(userss);
 //				albumRepository.save(albums);
 //				System.out.println("here is finish");
