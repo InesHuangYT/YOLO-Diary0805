@@ -23,9 +23,9 @@ import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.AlbumResponse;
-import com.example.payload.AlbumUserResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
+import com.example.payload.UserSummary;
 import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
@@ -75,10 +75,24 @@ public class AlbumService {
 		Page<AlbumUser> albumUser = albumUserRepository.findByUser(user, pageable);
 
 		List<AlbumResponse> albumResponse = albumUser.map(albumUsers -> {
-			return ModelMapper.mapAlbumUserToAlbumUserResponse(albumUsers);
+			return ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUsers);
 		}).getContent();
 
 		return albumResponse;
+	}
+	public List<UserSummary> getUsersAboutAlbum(String albumId, int page, int size) {
+		validatePageNumberAndSize(page, size);
+		Album album = albumRepository.findById(albumId)
+				.orElseThrow(() -> new ResourceNotFoundException("Album", "Id", albumId));
+
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+		Page<AlbumUser> albumUser = albumUserRepository.findByAlbum(album, pageable);
+
+		List<UserSummary> userSummary = albumUser.map(albumUsers -> {
+			return ModelMapper.mapAlbumUserToAlbumUserResponseByAlbumId(albumUsers);
+		}).getContent();
+
+		return userSummary;
 	}
 
 	/* 以下為上方有使用到的方法，validatePageNumberAndSize、getDiaryCreatorMap */

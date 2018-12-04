@@ -1,10 +1,13 @@
 package com.example.payload;
 
 public class UserSummary {
-	/*沒有使用UserProfile*/
+	/* 沒有使用UserProfile */
 
 	private String username;
 	private String email;
+
+	public UserSummary() {
+	}
 
 	public UserSummary(String username) {
 		this.username = username;
@@ -14,7 +17,6 @@ public class UserSummary {
 		this.username = username;
 		this.email = email;
 	}
-
 
 	public String getUsername() {
 		return username;

@@ -27,12 +27,9 @@ import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.AlbumResponse;
-import com.example.payload.AlbumUserResponse;
-import com.example.payload.DiaryResponse;
-import com.example.payload.PagedResponse;
+import com.example.payload.UserSummary;
 import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
-import com.example.repository.DiaryRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
@@ -85,6 +82,15 @@ public class AlbumController {
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsAboutMe(currentUser, page, size);
+	}
+	// 找相同albumId出現的username（相簿中包含的使用者名稱）
+	@GetMapping("/allUsers/{albumId}")
+	public List<UserSummary> getAllUsersOfAlbum(@PathVariable String albumId,
+	@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+	@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size){
+		return albumRepository.findById(albumId).map(album -> {
+			return albumService.getUsersAboutAlbum(albumId, page, size);
+		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
 	// 取得某個相簿的相簿名稱

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.example.entity.Album;
 import com.example.entity.Role;
 import com.example.entity.User;
 import com.example.security.UserPrincipal;

@@ -17,7 +17,6 @@ import com.example.entity.AlbumUser;
 import com.example.entity.Diary;
 import com.example.entity.User;
 import com.example.payload.AlbumResponse;
-import com.example.payload.AlbumUserResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.UserSummary;
 
@@ -65,7 +64,7 @@ public class ModelMapper {
 
 	}
 
-	public static AlbumResponse mapAlbumUserToAlbumUserResponse(AlbumUser albumUser) {
+	public static AlbumResponse mapAlbumUserToAlbumUserResponseByUsername(AlbumUser albumUser) {
 		AlbumResponse albumResponse = new AlbumResponse();
 		albumResponse.setId(albumUser.getAlbum().getId());
 		albumResponse.setPhotoCover(albumUser.getAlbum().getPhotoUri());
@@ -73,6 +72,14 @@ public class ModelMapper {
 		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
 		albumResponse.setDiaries(diary);
 		return albumResponse;
+
+	}
+
+	public static UserSummary mapAlbumUserToAlbumUserResponseByAlbumId(AlbumUser albumUser) {
+		UserSummary userSummary = new UserSummary();
+		userSummary.setUsername(albumUser.getUser().getUsername());
+		userSummary.setEmail(albumUser.getUser().getEmail());
+		return userSummary;
 
 	}
 
@@ -136,5 +143,7 @@ public class ModelMapper {
 		}
 		return result;
 	}
+
+	
 
 }
