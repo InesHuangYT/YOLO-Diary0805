@@ -5,6 +5,7 @@ public class UserSummary {
 
 	private String username;
 	private String email;
+	private byte[] photodata;
 
 	public UserSummary() {
 	}
@@ -16,6 +17,13 @@ public class UserSummary {
 	public UserSummary(String username, String email) {
 		this.username = username;
 		this.email = email;
+	}
+	
+
+	public UserSummary(String username, String email, byte[] photodata) {
+		this.username = username;
+		this.email = email;
+		this.photodata = photodata;
 	}
 
 	public String getUsername() {
@@ -33,5 +41,14 @@ public class UserSummary {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public byte[] getPhotodata() {
+		return photodata;
+	}
+
+	public void setPhotodata(byte[] photodata) {
+		this.photodata = photodata;
+	}
+	
 
 }
