@@ -57,6 +57,7 @@ public class UploadSelfieController {
 	private static final Logger logger = LoggerFactory.getLogger(UploadSelfieController.class);
 
 	static String SelfieFILEPATH = "C:\\engine\\selfie\\";
+	static String FILEPATH = "C:\\engine\\list.txt";
 	// /Users/ines/Desktop/photo --> ines mac's path
 	// C:\Users\Administrator\Desktop\Engine0818\selfie\ --> rrou's path
 	// C:\engine\selfie\ --> laboratory's path
@@ -151,6 +152,8 @@ public class UploadSelfieController {
 				File selfiefile = new File(SelfieFILEPATH + username + ".jpg");
 				selfiefile.delete();
 				System.out.println("DELETE SELFIE!");
+				txt.deleteTxt(FILEPATH);
+				System.out.println("DELRTE TXT");
 
 			} catch (Exception e) {
 				e.printStackTrace();
