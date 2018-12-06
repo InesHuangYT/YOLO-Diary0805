@@ -118,10 +118,24 @@ public class EngineAndHandTagUserController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			photoTagUserRepository.save(ptu);
+			AlbumUser albumUser = null;
+			Optional<User> users = userRepository.findByUsername(ptu.getUser().getUsername());
+			User userss = users.get();
+			Optional<Diary> diary = diaryRepository.findById(diaryId);
+			Diary diarys = diary.get();
+			System.out.println("here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
+			Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
+			System.out.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
+			Album albums = album.get();
+			albumUser = new AlbumUser(albums, userss);
+			albumUserRepository.save(albumUser);
 
 			return photoTagUserRepository.save(ptu);
 
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
+
+		
 
 	}
 
@@ -195,16 +209,17 @@ public class EngineAndHandTagUserController {
 				User userss = users.get();
 				Optional<Diary> diary = diaryRepository.findByPhotoId(photoId);
 				Diary diarys = diary.get();
-				System.out.println("here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
+				System.out.println(
+						"here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
 				Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
-				System.out.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
+				System.out.println(
+						"here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
 				Album albums = album.get();
-				albumUser = new AlbumUser(albums,userss);
+				albumUser = new AlbumUser(albums, userss);
 				albumUserRepository.save(albumUser);
 //				albums.getUsers().add(userss);
 //				albumRepository.save(albums);
 //				System.out.println("here is finish");
-
 
 			}
 		}

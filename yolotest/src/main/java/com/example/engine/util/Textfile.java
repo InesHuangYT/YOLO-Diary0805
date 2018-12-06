@@ -29,12 +29,11 @@ import com.example.security.CurrentUser;
 //https://blog.csdn.net/u010834071/article/details/46894751
 
 public class Textfile {
-    
+
 	static String FILEPATH = "C:\\engine\\";
 	// --> C:\Users\Administrator\Desktop\Engine0818\ --> rrou's path
 	// --> C:\engine\ --> laboratory's path
 	// --> /Users/ines/Desktop/engine/ --> ines's mac path
-	
 
 	/** 我新增getphotopath，把原本的getphotopath改成getselfiepath了 **/
 
@@ -43,7 +42,6 @@ public class Textfile {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
 		FileWriter fw = new FileWriter(FILEPATH + "list.txt");
-		
 
 		for (int i = 0; i < filearray.length; i++) {
 			fw.write(filearray[i] + "\t" + current + "[No]" + i + "\r\n");
@@ -62,12 +60,11 @@ public class Textfile {
 		File file = new File(diretorypath);
 		File[] filearray = file.listFiles();
 		FileWriter fw = new FileWriter(FILEPATH + "photolist.egroupList");
-		
 
 		for (int i = 0; i < filearray.length; i++) {
 			fw.write(filearray[i] + "\r\n");// C:\eGroupAI_FaceRecognitionEngine_V3.0\photo\1.jpg
 			fw.flush();
-			System.out.println("HERE!"+filearray[i]);
+			System.out.println("HERE!" + filearray[i]);
 
 		}
 		// close filewriter
@@ -75,14 +72,23 @@ public class Textfile {
 		fw.close();
 
 	}
-	
+
 	public void deleteAllFile(String filepath) throws IOException {
-		
+
 		File file = new File(filepath);
-		
+
 		FileUtils.cleanDirectory(file);
-		
-		
+
+	}
+
+	public void deleteTxt(String filePath) throws IOException {
+
+		String filePaths = filePath;
+		filePaths = filePaths.toString();
+		java.io.File myDelFile = new java.io.File(filePath);
+		myDelFile.delete();
+		 
+
 	}
 
 }
