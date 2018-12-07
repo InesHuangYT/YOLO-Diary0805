@@ -1,10 +1,13 @@
 package com.example.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class UserSummary {
 	/* 沒有使用UserProfile */
 
 	private String username;
 	private String email;
+	//@JsonIgnore
 	private byte[] selfieData;
 	private String diaryId;
 
