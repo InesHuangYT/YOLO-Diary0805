@@ -83,7 +83,7 @@ public class AlbumController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsAboutMe(currentUser, page, size);
 	}
-	// 找相同albumId出現的username（同個相簿中包含的使用者名稱）
+	// 找相同albumId出現的username（同個相簿中包含的使用者-->顯示名稱、頭貼、信箱、日記ID）
 	@GetMapping("/allUsers/{albumId}")
 	public List<UserSummary> getAllUsersOfAlbum(@PathVariable String albumId,
 	@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,

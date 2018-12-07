@@ -20,6 +20,7 @@ public class Selfie {
 	private String selfieType;
 
 	@Lob
+	//@JsonIgnore
 	private byte[] selfiedata;
 	
 	private String selfieUri;
