@@ -10,20 +10,30 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Album;
 import com.example.entity.AlbumUser;
 import com.example.entity.Diary;
 import com.example.entity.User;
+import com.example.exception.ResourceNotFoundException;
 import com.example.payload.AlbumResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.UserSummary;
+import com.example.repository.AlbumRepository;
+import com.example.repository.DiaryRepository;
 
 @Service
 //mapping the Diary entity to a DiaryResponse payload
 //AES日記加密解密https://blog.csdn.net/hbcui1984/article/details/5201247
 public class ModelMapper {
+	
+
 	public static DiaryResponse mapDiaryToDiaryResponse(Diary diary, User creator) {
 		DiaryResponse diaryResponse = new DiaryResponse();
 		diaryResponse.setId(diary.getId());
@@ -79,7 +89,9 @@ public class ModelMapper {
 		UserSummary userSummary = new UserSummary();
 		userSummary.setUsername(albumUser.getUser().getUsername());
 		userSummary.setEmail(albumUser.getUser().getEmail());
-		userSummary.setPhotodata(albumUser.getUser().getSelfie().getSelfiedata());
+		userSummary.setSelfieData(albumUser.getUser().getSelfie().getSelfiedata());
+		userSummary.setDiaryId(albumUser.getDiaryId());
+
 		return userSummary;
 
 	}
@@ -144,7 +156,5 @@ public class ModelMapper {
 		}
 		return result;
 	}
-
-	
 
 }

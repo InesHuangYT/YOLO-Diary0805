@@ -42,6 +42,8 @@ public class AlbumService {
 	private UserRepository userRepository;
 	@Autowired
 	private AlbumUserRepository albumUserRepository;
+	@Autowired
+	private DiaryRepository diaryRepository;
 
 	private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
 
@@ -80,6 +82,7 @@ public class AlbumService {
 
 		return albumResponse;
 	}
+
 	public List<UserSummary> getUsersAboutAlbum(String albumId, int page, int size) {
 		validatePageNumberAndSize(page, size);
 		Album album = albumRepository.findById(albumId)

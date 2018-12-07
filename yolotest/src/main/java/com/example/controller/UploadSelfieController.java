@@ -40,6 +40,7 @@ import com.example.engine.util.TxtUtil;
 import com.example.entity.Selfie;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
+import com.example.payload.PhotoResponse;
 import com.example.payload.UploadSelfieResponse;
 import com.example.repository.SelfieRepository;
 import com.example.repository.UserRepository;
@@ -163,17 +164,6 @@ public class UploadSelfieController {
 		return null;
 	}
 
-//透過uri讀取頭貼
-	@GetMapping("/downloadSelfie/{selfieId}")
-	public ResponseEntity<Resource> downloadSelfie(@PathVariable String selfieId) {
-
-		Selfie selfie = selfieStorageService.getSelfie(selfieId);
-		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.getSelfieType()))
-				// .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" +
-				// selfie.getSelfieName() + "\"")
-				.body(new ByteArrayResource(selfie.getSelfiedata()));
-	}
-
 //透過使用者讀取頭貼
 	@RequestMapping(value = "/myDownloadSelfie", method = RequestMethod.GET)
 	public ResponseEntity<Resource> downloadSelfieByUsername(@CurrentUser UserPrincipal currentUser, Selfie selfie) {
@@ -185,6 +175,15 @@ public class UploadSelfieController {
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(selfie.getSelfieType()))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; selfiename = \"" + selfie.getSelfieName() + "\"")
 				.body(new ByteArrayResource(selfie.getSelfiedata()));
+	}
+
+	// 讀取頭貼photoData
+	@GetMapping("/downloadMySelfie")
+	public PhotoResponse getSelfie(@CurrentUser UserPrincipal currentUser, Selfie selfie) {
+		Optional<User> user = userRepository.findByUsername(currentUser.getUsername());
+		selfie = user.get().getSelfie();
+		PhotoResponse photoResponse = new PhotoResponse(selfie.getId(), selfie.getSelfiedata());
+		return photoResponse;
 	}
 
 }

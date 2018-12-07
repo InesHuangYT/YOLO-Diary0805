@@ -5,7 +5,8 @@ public class UserSummary {
 
 	private String username;
 	private String email;
-	private byte[] photodata;
+	private byte[] selfieData;
+	private String diaryId;
 
 	public UserSummary() {
 	}
@@ -18,12 +19,18 @@ public class UserSummary {
 		this.username = username;
 		this.email = email;
 	}
-	
 
-	public UserSummary(String username, String email, byte[] photodata) {
+	public UserSummary(String username, String email, byte[] selfieData) {
 		this.username = username;
 		this.email = email;
-		this.photodata = photodata;
+		this.selfieData = selfieData;
+	}
+
+	public UserSummary(String username, String email, byte[] selfieData, String diaryId) {
+		this.username = username;
+		this.email = email;
+		this.selfieData = selfieData;
+		this.diaryId = diaryId;
 	}
 
 	public String getUsername() {
@@ -42,13 +49,20 @@ public class UserSummary {
 		this.email = email;
 	}
 
-	public byte[] getPhotodata() {
-		return photodata;
+	public byte[] getSelfieData() {
+		return selfieData;
 	}
 
-	public void setPhotodata(byte[] photodata) {
-		this.photodata = photodata;
+	public void setSelfieData(byte[] selfieData) {
+		this.selfieData = selfieData;
 	}
-	
+
+	public String getDiaryId() {
+		return diaryId;
+	}
+
+	public void setDiaryId(String diaryId) {
+		this.diaryId = diaryId;
+	}
 
 }

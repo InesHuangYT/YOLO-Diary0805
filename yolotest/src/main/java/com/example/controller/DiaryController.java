@@ -33,6 +33,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.entity.Album;
+import com.example.entity.AlbumUser;
+import com.example.entity.AlbumUserId;
 import com.example.entity.Diary;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
@@ -42,6 +44,7 @@ import com.example.payload.ApiResponse;
 import com.example.payload.DiaryResponse;
 import com.example.payload.PagedResponse;
 import com.example.repository.AlbumRepository;
+import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
@@ -64,6 +67,8 @@ public class DiaryController {
 
 	@Autowired
 	private AlbumRepository albumRepository;
+	@Autowired
+	private AlbumUserRepository albumUserRepository;
 
 	@Autowired
 	private DiaryService diaryService;
@@ -110,7 +115,7 @@ public class DiaryController {
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
-	public DiaryResponse createDiary(@PathVariable(value = "albumId") String albumId, @Valid @RequestBody Diary diary) {
+	public DiaryResponse createDiary(@PathVariable(value = "albumId") String albumId, @Valid @RequestBody Diary diary,@CurrentUser UserPrincipal currentUser) {
 		String content = diary.getText();
 		String password = "ahfcjuh645465645";
 		System.out.println("加密前: " + content);
@@ -131,6 +136,18 @@ public class DiaryController {
 			diaryResponse.setCreationDateTime(diary.getCreatedAt());
 			diaryResponse.setText(diary.getText());
 			diaryResponse.setAlbumId(albumId);
+			
+			User user = userRepository.findByUsername(currentUser.getUsername())
+					.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
+			AlbumUserId albumUserId = new AlbumUserId(album,user);
+			Optional<AlbumUser> albumUser = albumUserRepository.findById(albumUserId);
+			System.out.println("here1 " + albumUserId.getAlbum().getName());
+			System.out.println("here2 " + albumUserId.getUser().getUsername());
+			AlbumUser albumUsers = albumUser.get();
+			albumUsers.setDiaryId(diary.getId());
+			albumUserRepository.save(albumUsers);
+			System.out.println("save in AlbumUser!");
+			
 			return diaryResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}

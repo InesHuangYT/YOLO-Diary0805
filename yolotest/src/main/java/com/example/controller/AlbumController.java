@@ -83,7 +83,7 @@ public class AlbumController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsAboutMe(currentUser, page, size);
 	}
-	// 找相同albumId出現的username（相簿中包含的使用者名稱）
+	// 找相同albumId出現的username（同個相簿中包含的使用者名稱）
 	@GetMapping("/allUsers/{albumId}")
 	public List<UserSummary> getAllUsersOfAlbum(@PathVariable String albumId,
 	@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
@@ -121,14 +121,7 @@ public class AlbumController {
 		albumRepository.save(album);
 		System.out.println(album.getId());
 		System.out.println(album.getCreatedBy());
-		// Add user references in the album
-//		Optional<User> user = userRepository.findByUsername(album.getCreatedBy());
-//		User users = user.get();
-//		album.getUsers().add(users);
-//		users.getAlbums().add(album);
-//		System.out.println("add this");
-//		albumRepository.save(album);
-//		System.out.println("finish this");
+
 		insertToAlbumUser(album.getId());
 		AlbumResponse albumResponse = new AlbumResponse();
 		albumResponse.setId(album.getId());
