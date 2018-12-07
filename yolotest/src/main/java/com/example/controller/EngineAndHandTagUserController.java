@@ -70,6 +70,10 @@ public class EngineAndHandTagUserController {
 	@Autowired
 	AlbumUserRepository albumUserRepository;
 
+	static String PhotoFILEPATH = "C:/engine/";
+	// C:/engine/
+	// /Users/ines/Desktop/photo/ --> ines mac's path
+
 	public String findPhotoIdByPhotoPath(String imageSourcePath) {
 		return photoRepository.findByPhotoPath(imageSourcePath).map(photo -> {
 			String photoId = photo.getId();
@@ -87,7 +91,7 @@ public class EngineAndHandTagUserController {
 	public void engineTag(String personId, String imageSourcePath, String facepath) throws IOException {
 		String photoid = findPhotoIdByPhotoPath(imageSourcePath);
 		User user = new User(personId);
-		String path = "C:/engine/" + facepath;
+		String path = PhotoFILEPATH + facepath;
 
 		// 將File convert to MultipartFile
 		File face = new File(path);
@@ -124,9 +128,11 @@ public class EngineAndHandTagUserController {
 			User userss = users.get();
 			Optional<Diary> diary = diaryRepository.findById(diaryId);
 			Diary diarys = diary.get();
-			System.out.println("here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
+			System.out.println(
+					"here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
 			Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
-			System.out.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
+			System.out
+					.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
 			Album albums = album.get();
 			albumUser = new AlbumUser(albums, userss);
 			albumUserRepository.save(albumUser);
@@ -134,8 +140,6 @@ public class EngineAndHandTagUserController {
 			return photoTagUserRepository.save(ptu);
 
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
-
-		
 
 	}
 
@@ -164,7 +168,7 @@ public class EngineAndHandTagUserController {
 	public void handTag(String photoId, String personId, String facepath) throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
-		String path = "/Users/ines/Desktop/photo/" + facepath;
+		String path = PhotoFILEPATH + facepath;
 		// C:/engine/
 		// /Users/ines/Desktop/photo/ --> ines mac's path
 		File face = new File(path);

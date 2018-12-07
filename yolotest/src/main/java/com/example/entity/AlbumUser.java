@@ -27,6 +27,8 @@ public class AlbumUser extends UserDateAudit {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "users_username", referencedColumnName = "username")
 	private User user;
+	
+	private String diaryId;
 
 	public AlbumUser() {
 
@@ -35,6 +37,13 @@ public class AlbumUser extends UserDateAudit {
 	public AlbumUser(Album album, User user) {
 		this.album = album;
 		this.user = user;
+	}
+	
+
+	public AlbumUser(Album album, User user, String diaryId) {
+		this.album = album;
+		this.user = user;
+		this.diaryId = diaryId;
 	}
 
 	public Album getAlbum() {
@@ -51,6 +60,15 @@ public class AlbumUser extends UserDateAudit {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+
+	public String getDiaryId() {
+		return diaryId;
+	}
+
+	public void setDiaryId(String diaryId) {
+		this.diaryId = diaryId;
 	}
 
 	@Override
