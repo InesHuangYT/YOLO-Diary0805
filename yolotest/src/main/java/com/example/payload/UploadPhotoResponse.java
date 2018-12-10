@@ -1,43 +1,41 @@
 package com.example.payload;
 
 public class UploadPhotoResponse {
-	private String photoName;
-	private String photoType;
-	private String photoDownloadUri;
+	private String facePersonId;
+	private String faceData;
+	private String photoCover;
 	private long size;
-
-	public UploadPhotoResponse(String photoName, String photoType, String photoDownloadUri, long size) {
+	
+	public UploadPhotoResponse(String facePersonId, String faceData, String photoCover, long size) {
 		super();
-		this.photoName = photoName;
-		this.photoType = photoType;
-		this.photoDownloadUri = photoDownloadUri;
+		this.facePersonId = facePersonId;
+		this.faceData = faceData;
+		this.photoCover = photoCover;
 		this.size = size;
 	}
 
-	public UploadPhotoResponse(String photoDownloadUri) {
-		super();
-		this.photoDownloadUri = photoDownloadUri;
+	public String getFacePersonId() {
+		return facePersonId;
 	}
 
-	
-	public void setPhotoName(String photoName) {
-		this.photoName = photoName;
+	public void setFacePersonId(String facePersonId) {
+		this.facePersonId = facePersonId;
 	}
 
-	public String getPhotoType() {
-		return photoType;
+	public String getFaceData() {
+		return faceData;
 	}
 
-	public void setPhotoType(String photoType) {
-		this.photoType = photoType;
+	public void setFaceData(String faceData) {
+		this.faceData = faceData;
 	}
 
-	public String getPhotoDownloadUri() {
-		return photoDownloadUri;
+	public String getPhotoCover() {
+		return photoCover;
 	}
 
-	public void setPhotoDownloadUri(String photoDownloadUri) {
-		this.photoDownloadUri = photoDownloadUri;
+	public void setPhotoCover(String photoCover) {
+		this.photoCover = photoCover;
 	}
 
 	public long getSize() {
@@ -47,5 +45,9 @@ public class UploadPhotoResponse {
 	public void setSize(long size) {
 		this.size = size;
 	}
+	
+	
+
+	
 
 }

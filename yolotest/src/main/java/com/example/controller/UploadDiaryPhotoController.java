@@ -200,14 +200,6 @@ public class UploadDiaryPhotoController {
 		        }
 				
 				System.out.println("tag finish!");
-					
-					
-				
-
-				
-				
-				
-					
 				
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
