@@ -184,7 +184,7 @@ public class UploadDiaryPhotoController {
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 						
-						// tag user2
+						//標記存入資料表
 						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
 								faceList.get(i).getImageSourcePath(),
 								faceList.get(i).getFrameFace().getFrameFacePath());
