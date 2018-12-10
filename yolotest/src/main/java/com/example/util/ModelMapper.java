@@ -90,7 +90,7 @@ public class ModelMapper {
 		userSummary.setUsername(albumUser.getUser().getUsername());
 		userSummary.setEmail(albumUser.getUser().getEmail());
 		userSummary.setSelfieData(albumUser.getUser().getSelfie().getSelfiedata());
-		userSummary.setDiaryId(albumUser.getDiaryId());
+		
 
 		return userSummary;
 

@@ -9,7 +9,7 @@ public class UserSummary {
 	private String email;
 	//@JsonIgnore
 	private byte[] selfieData;
-	private String diaryId;
+	
 
 	public UserSummary() {
 	}
@@ -27,13 +27,6 @@ public class UserSummary {
 		this.username = username;
 		this.email = email;
 		this.selfieData = selfieData;
-	}
-
-	public UserSummary(String username, String email, byte[] selfieData, String diaryId) {
-		this.username = username;
-		this.email = email;
-		this.selfieData = selfieData;
-		this.diaryId = diaryId;
 	}
 
 	public String getUsername() {
@@ -60,12 +53,6 @@ public class UserSummary {
 		this.selfieData = selfieData;
 	}
 
-	public String getDiaryId() {
-		return diaryId;
-	}
-
-	public void setDiaryId(String diaryId) {
-		this.diaryId = diaryId;
-	}
+	
 
 }

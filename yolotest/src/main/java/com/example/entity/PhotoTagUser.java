@@ -49,7 +49,7 @@ public class PhotoTagUser {
 
 	public PhotoTagUser(Photo photo, User user, String diaryId, String face_path, byte[] face_data, String face_uri,
 			String faceRandom) {
-
+		
 		this.photo = photo;
 		this.user = user;
 		this.diaryId = diaryId;

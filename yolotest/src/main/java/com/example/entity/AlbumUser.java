@@ -28,8 +28,7 @@ public class AlbumUser extends UserDateAudit {
 	@JoinColumn(name = "users_username", referencedColumnName = "username")
 	private User user;
 	
-	private String diaryId;
-
+	
 	public AlbumUser() {
 
 	}
@@ -39,12 +38,6 @@ public class AlbumUser extends UserDateAudit {
 		this.user = user;
 	}
 	
-
-	public AlbumUser(Album album, User user, String diaryId) {
-		this.album = album;
-		this.user = user;
-		this.diaryId = diaryId;
-	}
 
 	public Album getAlbum() {
 		return album;
@@ -62,14 +55,6 @@ public class AlbumUser extends UserDateAudit {
 		this.user = user;
 	}
 	
-
-	public String getDiaryId() {
-		return diaryId;
-	}
-
-	public void setDiaryId(String diaryId) {
-		this.diaryId = diaryId;
-	}
 
 	@Override
 	public boolean equals(Object o) {
