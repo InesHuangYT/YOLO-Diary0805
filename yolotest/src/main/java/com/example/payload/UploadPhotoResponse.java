@@ -4,7 +4,15 @@ public class UploadPhotoResponse {
 	private String facePersonId;
 	private String faceData;
 	private String photoCoverUri;
+	//private long size;
 	
+//	public UploadPhotoResponse(String facePersonId, String faceData, String photoCoverUri, long size) {
+//		super();
+//		this.facePersonId = facePersonId;
+//		this.faceData = faceData;
+//		this.photoCoverUri = photoCoverUri;
+//		this.size = size;
+//	}
 	
 	public UploadPhotoResponse(String facePersonId, String faceData, String photoCoverUri) {
 		super();
@@ -13,6 +21,7 @@ public class UploadPhotoResponse {
 		this.photoCoverUri = photoCoverUri;
 		
 	}
+	
 
 	public String getFacePersonId() {
 		return facePersonId;
@@ -38,9 +47,15 @@ public class UploadPhotoResponse {
 		this.photoCoverUri = photoCoverUri;
 	}
 
-
-	
-	
+//	public long getSize() {
+//		return size;
+//	}
+//
+//	public void setSize(long size) {
+//		this.size = size;
+//	}
+//	
+//	
 
 	
 
