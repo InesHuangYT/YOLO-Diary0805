@@ -89,6 +89,7 @@ public class EngineAndHandTagUserController {
 
 	// 引擎自動標記
 	public void engineTag(String personId, String imageSourcePath, String facepath) throws IOException {
+		System.out.println("tag debug1");
 		String photoid = findPhotoIdByPhotoPath(imageSourcePath);
 		User user = new User(personId);
 		String path = PhotoFILEPATH + facepath;
@@ -103,7 +104,6 @@ public class EngineAndHandTagUserController {
 		System.out.println("--------");
 		System.out.println("multidata: " + multi.getBytes());
 		System.out.println("uri: " + faceUri);
-		System.out.println("user: " + user.getEmail());
 		System.out.println("facepath: " + facepath);
 		System.out.println("photoid: " + photoid);
 		System.out.println("--------");

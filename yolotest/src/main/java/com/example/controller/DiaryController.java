@@ -133,7 +133,7 @@ public class DiaryController {
 			diaryRepository.save(diary);
 			User user = userRepository.findByUsername(currentUser.getUsername())
 					.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
-			AlbumUserId albumUserId = new AlbumUserId(album,user);
+			AlbumUserId albumUserId = new AlbumUserId(album);
 			Optional<AlbumUser> albumUser = albumUserRepository.findById(albumUserId);
 			System.out.println("here1 " + albumUserId.getAlbum().getName());
 			System.out.println("here2 " + albumUserId.getUser().getUsername());

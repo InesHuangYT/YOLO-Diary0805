@@ -15,6 +15,11 @@ public class AlbumUserId implements Serializable {
 	public AlbumUserId() {
 
 	}
+	
+	public AlbumUserId(Album album) {
+		this.album = album;
+	}
+
 
 	public AlbumUserId(Album album, User user) {
 		this.album = album;
