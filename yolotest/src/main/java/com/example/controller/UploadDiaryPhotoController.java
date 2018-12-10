@@ -148,7 +148,7 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public List<SaveFaceResponse> uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
+	public List<UploadPhotoResponse> uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") String diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
