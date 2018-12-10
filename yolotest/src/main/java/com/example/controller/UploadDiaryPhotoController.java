@@ -172,37 +172,30 @@ public class UploadDiaryPhotoController {
 				faceList = result.getResult();
 
 				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
-				HashMap<String, String> hashmap = new HashMap();
+				HashMap<String, Integer> hashmap = new HashMap();
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+					hashmap.put(faceList.get(i).getPersonId(), Integer.valueOf(faceList.get(i).getHasFound()));
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 					
 					//當辨識結果人臉有註冊
-					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
-						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
-						// tag user2
-						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-								faceList.get(i).getImageSourcePath(),
-								faceList.get(i).getFrameFace().getFrameFacePath());
-						System.out.println("tag finish!");
-
-						// send notice to user
-						// 之後要放在別的地方
-						// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
-//						Iterator collection = hashmap.keySet().iterator();
-//						while(collection.hasNext()) {
-//							String key = (String)collection.next();
-//							Notice notice = new Notice(new User(key));
-//							notice.setMessage("");
-//							System.out.println("******");
-//							System.out.println("key: "+key);
-//							System.out.println("******");
-//						}
+//					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
+//						
+//						// tag user2
+//						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
+//								faceList.get(i).getImageSourcePath(),
+//								faceList.get(i).getFrameFace().getFrameFacePath());
+//						System.out.println("tag finish!");
 //
-					}
+//					
+//					}
 				}
+			
+					System.out.println("get hashmap:"+ hashmap.keySet());
+				
+				
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
 				// for(hashmap)
