@@ -177,22 +177,28 @@ public class UploadDiaryPhotoController {
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-					//同一個被標記的使用者只標記一次
+					//辨識出的使用者不是本人就開始標記
+					if(hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())){
+						//同一個被標記的使用者只標記一次
+						hashmap.put(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(),faceList.get(i).getImageSourcePath(),faceList.get(i).getFrameFace().getFrameFacePath()));
+						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
+						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+						
+						// tag user2
+						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
+								faceList.get(i).getImageSourcePath(),
+								faceList.get(i).getFrameFace().getFrameFacePath());
+						System.out.println("tag finish!");
+
+						
+						
+					}
 					
-					hashmap.put(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(),faceList.get(i).getImageSourcePath(),faceList.get(i).getFrameFace().getFrameFacePath()));
-					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
-					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 					
-//					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
-//						
-//						// tag user2
-//						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-//								faceList.get(i).getImageSourcePath(),
-//								faceList.get(i).getFrameFace().getFrameFacePath());
-//						System.out.println("tag finish!");
-//
-//					
-//					}
+					
+					
+					
+					
 				}
 					
 					
