@@ -187,7 +187,9 @@ public class UploadDiaryPhotoController {
 				}
 				
 				for (Object key : hashmap.keySet()) {
-		            System.out.println(key + " : " + hashmap.get(key));
+		            System.out.println(key + " : " + hashmap.get(key).getPersonId());
+		            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
+		            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
 		        }
 				//標記存入資料表
 //				engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
