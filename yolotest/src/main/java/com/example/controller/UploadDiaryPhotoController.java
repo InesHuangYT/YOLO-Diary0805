@@ -148,11 +148,11 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public List<UploadPhotoResponse> uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
+	public UploadPhotoResponse uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") String diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
-		List<UploadPhotoResponse> Lupr = new ArrayList<>();
+//		List<UploadPhotoResponse> Lupr = new ArrayList<>();
 		List<SaveFaceResponse > Lsfr = new ArrayList<>();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
@@ -203,7 +203,8 @@ public class UploadDiaryPhotoController {
 		            Lsfr.add(sfr);
 		            
 				}
-				Lupr.add(new UploadPhotoResponse(Lsfr, catchCoverUri));
+				
+				
 				
 				System.out.println("tag finish!");
 				
@@ -218,7 +219,7 @@ public class UploadDiaryPhotoController {
 			}
 
 		}
-		return Lupr;
+		return new UploadPhotoResponse(Lsfr, catchCoverUri);
 		
 	}
 
