@@ -3,14 +3,14 @@ package com.example.payload;
 public class UploadPhotoResponse {
 	private String facePersonId;
 	private String faceData;
-	private String photoCover;
+	private String photoCoverUri;
 	private long size;
 	
-	public UploadPhotoResponse(String facePersonId, String faceData, String photoCover, long size) {
+	public UploadPhotoResponse(String facePersonId, String faceData, String photoCoverUri, long size) {
 		super();
 		this.facePersonId = facePersonId;
 		this.faceData = faceData;
-		this.photoCover = photoCover;
+		this.photoCoverUri = photoCoverUri;
 		this.size = size;
 	}
 
@@ -30,12 +30,12 @@ public class UploadPhotoResponse {
 		this.faceData = faceData;
 	}
 
-	public String getPhotoCover() {
-		return photoCover;
+	public String getPhotoCoverUri() {
+		return photoCoverUri;
 	}
 
-	public void setPhotoCover(String photoCover) {
-		this.photoCover = photoCover;
+	public void setPhotoCover(String photoCoverUri) {
+		this.photoCoverUri = photoCoverUri;
 	}
 
 	public long getSize() {
