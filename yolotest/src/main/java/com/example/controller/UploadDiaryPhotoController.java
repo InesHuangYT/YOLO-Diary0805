@@ -192,8 +192,15 @@ public class UploadDiaryPhotoController {
 //					
 //					}
 				}
-			
+				   
+			       
+					System.out.println("get hashmap:"+ hashmap.size());
+					System.out.println("get hashmap:"+ hashmap.get("rrr"));
+					System.out.println("get hashmap:"+ hashmap.hashCode());
 					System.out.println("get hashmap:"+ hashmap.keySet());
+					System.out.println("get hashmap:"+ hashmap.values());
+					System.out.println("get hashmap:"+ hashmap.entrySet());
+					
 				
 				
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
