@@ -131,12 +131,6 @@ public class DiaryController {
 //			diary.setText(encryptResult.toString());
 			diary.setText(encryptResultStr);
 			diaryRepository.save(diary);
-			diaryResponse.setId(diary.getId());
-			diaryResponse.setCreatedBy(diary.getCreatedBy());
-			diaryResponse.setCreationDateTime(diary.getCreatedAt());
-			diaryResponse.setText(diary.getText());
-			diaryResponse.setAlbumId(albumId);
-			
 			User user = userRepository.findByUsername(currentUser.getUsername())
 					.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
 			AlbumUserId albumUserId = new AlbumUserId(album,user);
@@ -145,8 +139,23 @@ public class DiaryController {
 			System.out.println("here2 " + albumUserId.getUser().getUsername());
 			AlbumUser albumUsers = albumUser.get();
 			albumUsers.setDiaryId(diary.getId());
+			System.out.println("here is ID " + diary.getId());
 			albumUserRepository.save(albumUsers);
+			System.out.println("here is IDDDD " + albumUsers.getDiaryId());
+			System.out.println("here is AlbumIdddd " + albumUsers.getAlbum().getId());
+			System.out.println("here is Usernameee " + albumUsers.getUser().getUsername());
+
+
+
+			
 			System.out.println("save in AlbumUser!");
+			diaryResponse.setId(diary.getId());
+			diaryResponse.setCreatedBy(diary.getCreatedBy());
+			diaryResponse.setCreationDateTime(diary.getCreatedAt());
+			diaryResponse.setText(diary.getText());
+			diaryResponse.setAlbumId(albumId);
+			
+			
 			
 			return diaryResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));

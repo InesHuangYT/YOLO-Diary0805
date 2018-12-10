@@ -52,6 +52,8 @@ import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.NoticeRepository;
 import com.example.repository.PhotoRepository;
+import com.example.security.CurrentUser;
+import com.example.security.UserPrincipal;
 import com.example.service.AlbumService;
 import com.example.service.PhotoStorageService;
 
@@ -59,7 +61,7 @@ import com.example.service.PhotoStorageService;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 
-	static String PhotoFILEPATH = "/Users/ines/Desktop/engine/photo/";
+	static String PhotoFILEPATH = "C:/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
@@ -144,7 +146,7 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public String uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
+	public String uploadPhotos(@CurrentUser UserPrincipal currentUser, @RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") String diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
@@ -176,7 +178,7 @@ public class UploadDiaryPhotoController {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-					if (hasFound == 1) {
+					if (hasFound == 1 && currentUser.getUsername() != faceList.get(i).getPersonId()) {
 						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
 						// tag user2
 						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
