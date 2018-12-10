@@ -199,7 +199,7 @@ public class UploadDiaryPhotoController {
 		            SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
 		            		hashmap.get(key).getImageSourcePath(),
 		            		hashmap.get(key).getFrameFacePath());
-		            Lupr.add(new UploadPhotoResponse(sfr.getUserTaged(), sfr.getFaceData(), catchCoverUri));
+		            Lupr.add(new UploadPhotoResponse(sfr, catchCoverUri));
 		            
 				}
 				
