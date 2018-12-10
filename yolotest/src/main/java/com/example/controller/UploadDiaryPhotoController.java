@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,6 +43,7 @@ import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
 import com.example.entity.Album;
 import com.example.entity.Diary;
+import com.example.entity.RecUser;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
@@ -52,6 +54,7 @@ import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.NoticeRepository;
 import com.example.repository.PhotoRepository;
+import com.example.security.CurrentUser;
 import com.example.service.AlbumService;
 import com.example.service.PhotoStorageService;
 
@@ -59,7 +62,7 @@ import com.example.service.PhotoStorageService;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 
-	static String PhotoFILEPATH = "/Users/ines/Desktop/engine/photo/";
+	static String PhotoFILEPATH = "C:/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
@@ -144,7 +147,7 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public String uploadPhotos(@RequestParam(value = "file", required = true) MultipartFile[] file,
+	public String uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") String diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
@@ -170,35 +173,42 @@ public class UploadDiaryPhotoController {
 				faceList = result.getResult();
 
 				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
-				HashMap<String, String> hashmap = new HashMap();
+				HashMap<String, RecUser> hashmap = new HashMap();
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
-					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-					if (hasFound == 1) {
-						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
-						// tag user2
-						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-								faceList.get(i).getImageSourcePath(),
-								faceList.get(i).getFrameFace().getFrameFacePath());
-						System.out.println("tag finish!");
-
-						// send notice to user
-						// 之後要放在別的地方
-						// Iterator: https://openhome.cc/Gossip/DesignPattern/IteratorPattern.htm
-//						Iterator collection = hashmap.keySet().iterator();
-//						while(collection.hasNext()) {
-//							String key = (String)collection.next();
-//							Notice notice = new Notice(new User(key));
-//							notice.setMessage("");
-//							System.out.println("******");
-//							System.out.println("key: "+key);
-//							System.out.println("******");
-//						}
-//
-					}
+					//辨識出的使用者不是本人就開始標記
+					if(hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())){
+						//同一個被標記的使用者只標記一次
+						hashmap.put(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(),faceList.get(i).getImageSourcePath(),faceList.get(i).getFrameFace().getFrameFacePath()));
+						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
+						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+					}	
 				}
+				
+				//標記存入資料表
+				for (Object key : hashmap.keySet()) {
+					System.out.println("---------------------");
+		            System.out.println(key + " : " + hashmap.get(key).getPersonId());
+		            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
+		            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
+		            System.out.println("---------------------");
+		            engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
+		            		hashmap.get(key).getImageSourcePath(),
+		            		hashmap.get(key).getFrameFacePath());
+		            
+		        }
+				
+				System.out.println("tag finish!");
+					
+					
+				
+
+				
+				
+				
+					
+				
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
 				// for(hashmap)

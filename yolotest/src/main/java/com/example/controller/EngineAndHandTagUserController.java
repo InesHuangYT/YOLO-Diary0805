@@ -70,7 +70,7 @@ public class EngineAndHandTagUserController {
 	@Autowired
 	AlbumUserRepository albumUserRepository;
 
-	static String PhotoFILEPATH = "/Users/ines/Desktop/photo/";
+	static String PhotoFILEPATH = "C:/engine/";
 	// C:/engine/
 	// /Users/ines/Desktop/photo/ --> ines mac's path
 
