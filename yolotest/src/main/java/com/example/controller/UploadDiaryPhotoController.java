@@ -178,6 +178,8 @@ public class UploadDiaryPhotoController {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+					
+					//當辨識結果人臉有註冊
 					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
 						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
 						// tag user2

@@ -30,5 +30,9 @@ public class NotificationService {
 		
 		javaMailSender.send(mail);
 	}
+	
+	public void sendTagNotification() {
+		
+	}
 
 }
