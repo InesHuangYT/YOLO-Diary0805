@@ -1,12 +1,12 @@
 package com.example.payload;
 
-public class UploadFaceResponse {
+public class SaveFaceResponse {
 		
 		private String UserTaged;
 		private byte[] faceData;
 		
 		
-		public UploadFaceResponse(String userTaged, byte[] faceData) {
+		public SaveFaceResponse(String userTaged, byte[] faceData) {
 			super();
 			UserTaged = userTaged;
 			this.faceData = faceData;
