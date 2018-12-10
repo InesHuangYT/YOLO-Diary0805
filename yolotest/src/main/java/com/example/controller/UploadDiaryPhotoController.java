@@ -49,6 +49,7 @@ import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
 import com.example.payload.PagedResponse;
 import com.example.payload.PhotoResponse;
+import com.example.payload.SaveFaceResponse;
 import com.example.payload.UploadPhotoResponse;
 import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
@@ -147,10 +148,11 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public String uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
+	public List<SaveFaceResponse> uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") String diaryId) {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
+		List<SaveFaceResponse> lsfr = new ArrayList<>();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
 		String catchCoverUri = null;
@@ -188,16 +190,18 @@ public class UploadDiaryPhotoController {
 				
 				//標記存入資料表
 				for (Object key : hashmap.keySet()) {
+					
 					System.out.println("---------------------");
 		            System.out.println(key + " : " + hashmap.get(key).getPersonId());
 		            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
 		            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
 		            System.out.println("---------------------");
-		            engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
+		            SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
 		            		hashmap.get(key).getImageSourcePath(),
 		            		hashmap.get(key).getFrameFacePath());
+		            lsfr.add(sfr);
 		            
-		        }
+				}
 				
 				System.out.println("tag finish!");
 				
@@ -212,7 +216,8 @@ public class UploadDiaryPhotoController {
 			}
 
 		}
-		return catchCoverUri;
+		return lsfr;
+		
 	}
 
 //取得同日記的所有相片
