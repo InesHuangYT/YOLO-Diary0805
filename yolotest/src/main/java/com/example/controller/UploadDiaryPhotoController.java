@@ -186,17 +186,21 @@ public class UploadDiaryPhotoController {
 					}	
 				}
 				
+				//標記存入資料表
 				for (Object key : hashmap.keySet()) {
+					System.out.println("---------------------");
 		            System.out.println(key + " : " + hashmap.get(key).getPersonId());
 		            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
 		            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
+		            System.out.println("---------------------");
+		            engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
+		            		hashmap.get(key).getImageSourcePath(),
+		            		hashmap.get(key).getFrameFacePath());
+		            
 		        }
-				//標記存入資料表
-//				engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-//						faceList.get(i).getImageSourcePath(),
-//						faceList.get(i).getFrameFace().getFrameFacePath());
-//				System.out.println("tag finish!");
-//					
+				
+				System.out.println("tag finish!");
+					
 					
 				
 
