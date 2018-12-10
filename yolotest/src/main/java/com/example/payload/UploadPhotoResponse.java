@@ -2,7 +2,7 @@ package com.example.payload;
 
 public class UploadPhotoResponse {
 	private String facePersonId;
-	private String faceData;
+	private byte[] faceData;
 	private String photoCoverUri;
 	//private long size;
 	
@@ -14,7 +14,7 @@ public class UploadPhotoResponse {
 //		this.size = size;
 //	}
 	
-	public UploadPhotoResponse(String facePersonId, String faceData, String photoCoverUri) {
+	public UploadPhotoResponse(String facePersonId,  byte[] faceData, String photoCoverUri) {
 		super();
 		this.facePersonId = facePersonId;
 		this.faceData = faceData;
@@ -31,11 +31,11 @@ public class UploadPhotoResponse {
 		this.facePersonId = facePersonId;
 	}
 
-	public String getFaceData() {
+	public byte[] getFaceData() {
 		return faceData;
 	}
 
-	public void setFaceData(String faceData) {
+	public void setFaceData(byte[] faceData) {
 		this.faceData = faceData;
 	}
 
