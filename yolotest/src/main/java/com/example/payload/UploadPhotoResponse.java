@@ -1,51 +1,84 @@
 package com.example.payload;
 
+import java.util.List;
+
 public class UploadPhotoResponse {
-	private String photoName;
-	private String photoType;
-	private String photoDownloadUri;
-	private long size;
-
-	public UploadPhotoResponse(String photoName, String photoType, String photoDownloadUri, long size) {
+	private List<SaveFaceResponse> sfr;
+//	private String facePersonId;
+//	private byte[] faceData;
+	private String photoCoverUri;
+	//private long size;
+	
+	
+	
+	public UploadPhotoResponse(List<SaveFaceResponse> sfr, String photoCoverUri) {
 		super();
-		this.photoName = photoName;
-		this.photoType = photoType;
-		this.photoDownloadUri = photoDownloadUri;
-		this.size = size;
+		this.sfr = sfr;
+		this.photoCoverUri = photoCoverUri;
 	}
+	
+//	public UploadPhotoResponse(String facePersonId, String faceData, String photoCoverUri, long size) {
+//		super();
+//		this.facePersonId = facePersonId;
+//		this.faceData = faceData;
+//		this.photoCoverUri = photoCoverUri;
+//		this.size = size;
+//	}
+	
+//	public UploadPhotoResponse(String facePersonId,  byte[] faceData, String photoCoverUri) {
+//		super();
+//		this.facePersonId = facePersonId;
+//		this.faceData = faceData;
+//		this.photoCoverUri = photoCoverUri;
+//		
+//	}
+	
 
-	public UploadPhotoResponse(String photoDownloadUri) {
-		super();
-		this.photoDownloadUri = photoDownloadUri;
-	}
+//	public String getFacePersonId() {
+//		return facePersonId;
+//	}
+//
+//	public void setFacePersonId(String facePersonId) {
+//		this.facePersonId = facePersonId;
+//	}
+//
+//	public byte[] getFaceData() {
+//		return faceData;
+//	}
+//
+//	public void setFaceData(byte[] faceData) {
+//		this.faceData = faceData;
+//	}
 
 	
-	public void setPhotoName(String photoName) {
-		this.photoName = photoName;
+
+	public String getPhotoCoverUri() {
+		return photoCoverUri;
 	}
 
-	public String getPhotoType() {
-		return photoType;
+
+	public List<SaveFaceResponse> getSfr() {
+		return sfr;
 	}
 
-	public void setPhotoType(String photoType) {
-		this.photoType = photoType;
+	public void setSfr(List<SaveFaceResponse> sfr) {
+		this.sfr = sfr;
 	}
 
-	public String getPhotoDownloadUri() {
-		return photoDownloadUri;
+	public void setPhotoCover(String photoCoverUri) {
+		this.photoCoverUri = photoCoverUri;
 	}
 
-	public void setPhotoDownloadUri(String photoDownloadUri) {
-		this.photoDownloadUri = photoDownloadUri;
-	}
+//	public long getSize() {
+//		return size;
+//	}
+//
+//	public void setSize(long size) {
+//		this.size = size;
+//	}
+//	
+//	
 
-	public long getSize() {
-		return size;
-	}
-
-	public void setSize(long size) {
-		this.size = size;
-	}
+	
 
 }

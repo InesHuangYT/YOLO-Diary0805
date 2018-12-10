@@ -41,6 +41,7 @@ import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
+import com.example.payload.SaveFaceResponse;
 import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
@@ -88,7 +89,7 @@ public class EngineAndHandTagUserController {
 	}
 
 	// 引擎自動標記
-	public void engineTag(String personId, String imageSourcePath, String facepath) throws IOException {
+	public SaveFaceResponse engineTag(String personId, String imageSourcePath, String facepath) throws IOException {
 		String photoid = findPhotoIdByPhotoPath(imageSourcePath);
 		User user = new User(personId);
 		String path = PhotoFILEPATH + facepath;
@@ -103,7 +104,7 @@ public class EngineAndHandTagUserController {
 		System.out.println("--------");
 		System.out.println("multidata: " + multi.getBytes());
 		System.out.println("uri: " + faceUri);
-		System.out.println("user: " + user.getEmail());
+		System.out.println("user: " + user.getUsername());
 		System.out.println("facepath: " + facepath);
 		System.out.println("photoid: " + photoid);
 		System.out.println("--------");
@@ -136,11 +137,11 @@ public class EngineAndHandTagUserController {
 			Album albums = album.get();
 			albumUser = new AlbumUser(albums, userss);
 			albumUserRepository.save(albumUser);
-
+			
 			return photoTagUserRepository.save(ptu);
 
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
-
+		return new SaveFaceResponse(personId, multi.getBytes());
 	}
 
 	// 修改photoTagUser標記人名
