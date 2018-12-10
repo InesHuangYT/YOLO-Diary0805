@@ -176,9 +176,9 @@ public class UploadDiaryPhotoController {
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
-					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-					System.out.println("here is after getResult mathod : " + currentUser.getUsername());
+					System.out.println("here is after getResult mathod(personId) : " + faceList.get(i).getPersonId());
+					System.out.println("here is after getResult mathod(inagePath) : " + faceList.get(i).getImageSourcePath());
+					System.out.println("here is after getResult mathod(CurrentUser): " + currentUser.getUsername());
 					if (hasFound == 1 && !currentUser.getUsername().equals(faceList.get(i).getPersonId())) {
 						hashmap.put(faceList.get(i).getPersonId(), faceList.get(i).getPersonId());
 						// tag user2
