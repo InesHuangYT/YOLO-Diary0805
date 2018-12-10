@@ -183,30 +183,24 @@ public class UploadDiaryPhotoController {
 						hashmap.put(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(),faceList.get(i).getImageSourcePath(),faceList.get(i).getFrameFace().getFrameFacePath()));
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-						
-						//標記存入資料表
-						engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
-								faceList.get(i).getImageSourcePath(),
-								faceList.get(i).getFrameFace().getFrameFacePath());
-						System.out.println("tag finish!");
-
-						
-						
-					}
-					
-					
-					
-					
-					
-					
+					}	
 				}
-					
+				
+				for (Object key : hashmap.keySet()) {
+		            System.out.println(key + " : " + hashmap.get(key));
+		        }
+				//標記存入資料表
+//				engineAndHandTagUserController.engineTag(faceList.get(i).getPersonId(),
+//						faceList.get(i).getImageSourcePath(),
+//						faceList.get(i).getFrameFace().getFrameFacePath());
+//				System.out.println("tag finish!");
+//					
 					
 				
 
 				
 				
-				System.out.println("hashmap : "+ hashmap);
+				
 					
 				
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
