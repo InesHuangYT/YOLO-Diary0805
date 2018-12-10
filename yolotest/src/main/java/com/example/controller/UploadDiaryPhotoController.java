@@ -43,6 +43,7 @@ import com.example.engine.entity.Face;
 import com.example.engine.util.Textfile;
 import com.example.entity.Album;
 import com.example.entity.Diary;
+import com.example.entity.RecUser;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
@@ -172,15 +173,16 @@ public class UploadDiaryPhotoController {
 				faceList = result.getResult();
 
 				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
-				HashMap<String, Integer> hashmap = new HashMap();
+				HashMap<String, RecUser> hashmap = new HashMap();
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-					hashmap.put(faceList.get(i).getPersonId(), Integer.valueOf(faceList.get(i).getHasFound()));
+					//同一個被標記的使用者只標記一次
+					
+					hashmap.put(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(),faceList.get(i).getImageSourcePath(),faceList.get(i).getFrameFace().getFrameFacePath()));
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 					System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 					
-					//當辨識結果人臉有註冊
 //					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
 //						
 //						// tag user2
@@ -192,16 +194,14 @@ public class UploadDiaryPhotoController {
 //					
 //					}
 				}
-				   
-			       
-					System.out.println("get hashmap:"+ hashmap.size());
-					System.out.println("get hashmap:"+ hashmap.get("rrr"));
-					System.out.println("get hashmap:"+ hashmap.hashCode());
-					System.out.println("get hashmap:"+ hashmap.keySet());
-					System.out.println("get hashmap:"+ hashmap.values());
-					System.out.println("get hashmap:"+ hashmap.entrySet());
+					
 					
 				
+
+				
+				
+				System.out.println("hashmap : "+ hashmap);
+					
 				
 				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
