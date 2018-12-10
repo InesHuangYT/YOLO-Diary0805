@@ -153,6 +153,7 @@ public class UploadDiaryPhotoController {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
 		List<UploadPhotoResponse> Lupr = new ArrayList<>();
+		List<SaveFaceResponse > Lsfr = new ArrayList<>();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
 		String catchCoverUri = null;
@@ -199,9 +200,10 @@ public class UploadDiaryPhotoController {
 		            SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
 		            		hashmap.get(key).getImageSourcePath(),
 		            		hashmap.get(key).getFrameFacePath());
-		            Lupr.add(new UploadPhotoResponse(sfr, catchCoverUri));
+		            Lsfr.add(sfr);
 		            
 				}
+				Lupr.add(new UploadPhotoResponse(Lsfr, catchCoverUri));
 				
 				System.out.println("tag finish!");
 				

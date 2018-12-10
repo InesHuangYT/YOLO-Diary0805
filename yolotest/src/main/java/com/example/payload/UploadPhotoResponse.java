@@ -1,7 +1,9 @@
 package com.example.payload;
 
+import java.util.List;
+
 public class UploadPhotoResponse {
-	private SaveFaceResponse sfr;
+	private List<SaveFaceResponse> sfr;
 //	private String facePersonId;
 //	private byte[] faceData;
 	private String photoCoverUri;
@@ -9,7 +11,7 @@ public class UploadPhotoResponse {
 	
 	
 	
-	public UploadPhotoResponse(SaveFaceResponse sfr, String photoCoverUri) {
+	public UploadPhotoResponse(List<SaveFaceResponse> sfr, String photoCoverUri) {
 		super();
 		this.sfr = sfr;
 		this.photoCoverUri = photoCoverUri;
@@ -48,17 +50,18 @@ public class UploadPhotoResponse {
 //		this.faceData = faceData;
 //	}
 
+	
+
 	public String getPhotoCoverUri() {
 		return photoCoverUri;
 	}
 
-	
 
-	public SaveFaceResponse getSfr() {
+	public List<SaveFaceResponse> getSfr() {
 		return sfr;
 	}
 
-	public void setSfr(SaveFaceResponse sfr) {
+	public void setSfr(List<SaveFaceResponse> sfr) {
 		this.sfr = sfr;
 	}
 
