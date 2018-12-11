@@ -186,32 +186,38 @@ public class UploadDiaryPhotoController {
 						hashmap.put(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(),faceList.get(i).getImageSourcePath(),faceList.get(i).getFrameFace().getFrameFacePath()));
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
-					}	
+						
+						//標記存入資料表
+						for (Object key : hashmap.keySet()) {
+							
+							System.out.println("---------------------");
+				            System.out.println(key + " : " + hashmap.get(key).getPersonId());
+				            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
+				            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
+				            System.out.println("---------------------");
+				            SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
+				            		hashmap.get(key).getImageSourcePath(),
+				            		hashmap.get(key).getFrameFacePath());
+				            Lsfr.add(sfr);
+				            
+						}		
+					}else if(hasFound == 0) {
+						
+						   
+						
+						
+					}
 				}
 				
-				//標記存入資料表
-				for (Object key : hashmap.keySet()) {
-					
-					System.out.println("---------------------");
-		            System.out.println(key + " : " + hashmap.get(key).getPersonId());
-		            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
-		            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
-		            System.out.println("---------------------");
-		            SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
-		            		hashmap.get(key).getImageSourcePath(),
-		            		hashmap.get(key).getFrameFacePath());
-		            Lsfr.add(sfr);
-		            
-				}
+				
 				
 				
 				
 				System.out.println("tag finish!");
 				
-				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
+			
 
-				// for(hashmap)
-				// 做完標記再刪除
+				
 				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {

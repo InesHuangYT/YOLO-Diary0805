@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -143,6 +144,26 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
 		return new SaveFaceResponse(personId, multi.getBytes());
 	}
+	
+	//hasFound = 0 時，回傳未辨識出的人臉圖
+	public byte[] FaceNotFound(String facepath) throws IOException {
+		
+		String path = PhotoFILEPATH + facepath;
+
+		// 將File convert to MultipartFile
+		File face = new File(path);
+		FileInputStream readfile = new FileInputStream(face);
+		MultipartFile multi = new MockMultipartFile(path, readfile);
+		byte[] notfoundfaceData = multi.getBytes();
+		
+		return notfoundfaceData;
+			
+	}
+	
+	
+	
+	
+	
 
 	// 修改photoTagUser標記人名
 	@PutMapping("/{photoId}/{username}")
@@ -164,8 +185,9 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new ResourceNotFoundException("Username not found", null, photoTagUserRequest));
 	}
 
-	// 刪除photoTagUser那張人臉圖
-
+    
+	
+	
 	public void handTag(String photoId, String personId, String facepath) throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);
