@@ -136,12 +136,11 @@ public class UploadDiaryPhotoController {
 				albumRepository.save(album);
 			}
 			System.out.println("SetphotoUri : " + album.getPhotoUri());
-			 uri = album.getPhotoUri();
-			 photoRepository.save(set);
+			uri = album.getPhotoUri();
+			photoRepository.save(set);
 			return uri;
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoId + "not found"));
-		
-		
+
 		return catchuri;
 
 	}
@@ -149,8 +148,10 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
+
 	public UploadPhotoResponse uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") String diaryId) throws IOException {
+
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
 //		List<UploadPhotoResponse> Lupr = new ArrayList<>();
@@ -168,7 +169,7 @@ public class UploadDiaryPhotoController {
 				MultipartFile savefile = file[i];
 				catchCoverUri = uploadPhoto(savefile, diaryId, batchid);
 				System.out.println("--------");
-				System.out.println("Cover Uri:"+ catchCoverUri);
+				System.out.println("Cover Uri:" + catchCoverUri);
 				System.out.println("--------");
 			}
 
@@ -182,12 +183,15 @@ public class UploadDiaryPhotoController {
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
-					//辨識出的使用者不是本人就開始標記
-					if(hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())){
-						//同一個被標記的使用者只標記一次
-						hashmap.put(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(),faceList.get(i).getImageSourcePath(),faceList.get(i).getFrameFace().getFrameFacePath()));
+					// 辨識出的使用者不是本人就開始標記
+					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
+						// 同一個被標記的使用者只標記一次
+						hashmap.put(faceList.get(i).getPersonId(),
+								new RecUser(faceList.get(i).getPersonId(), faceList.get(i).getImageSourcePath(),
+										faceList.get(i).getFrameFace().getFrameFacePath()));
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+
 						
 						//標記存入資料表
 						for (Object key : hashmap.keySet()) {
@@ -220,6 +224,7 @@ public class UploadDiaryPhotoController {
 				
 			
 
+
 				
 				txt.deleteAllFile(PhotoFILEPATH);
 
@@ -229,8 +234,10 @@ public class UploadDiaryPhotoController {
 			}
 
 		}
+
 		return new UploadPhotoResponse(Lsfr, Lnffr, catchCoverUri);
 		
+
 	}
 
 //取得同日記的所有相片
@@ -238,19 +245,16 @@ public class UploadDiaryPhotoController {
 	public List<PhotoResponse> getDiaryPhoto(@PathVariable(value = "diaryId") String diaryId, Pageable pageable) {
 		Diary diary = new Diary(diaryId);
 		Page<Photo> photos = photoRepository.findByDiary(diary, pageable);
-		List <PhotoResponse> photoResponse = photos.map(photo -> {
+		List<PhotoResponse> photoResponse = photos.map(photo -> {
 			PhotoResponse photoResponses = new PhotoResponse();
 			photoResponses.setId(photo.getId());
 			photoResponses.setPhotodata(photo.getPhotodata());
 			return photoResponses;
 		}).getContent();
 
-		System.out.println("text"+diary.getId());
+		System.out.println("text" + diary.getId());
 		return photoResponse;
 	}
-	
-
-	
 
 //下載照片
 	@GetMapping("/downloadPhoto/{photoId}")

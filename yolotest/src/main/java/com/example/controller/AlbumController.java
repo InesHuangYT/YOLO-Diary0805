@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,15 +84,18 @@ public class AlbumController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsAboutMe(currentUser, page, size);
 	}
+
 	// 找相同albumId出現的username（同個相簿中包含的使用者-->顯示名稱、頭貼、信箱、日記ID）
 	@GetMapping("/allUsers/{albumId}")
 	public List<UserSummary> getAllUsersOfAlbum(@PathVariable String albumId,
-	@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
-	@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size){
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumRepository.findById(albumId).map(album -> {
 			return albumService.getUsersAboutAlbum(albumId, page, size);
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
+
+	
 
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
@@ -102,7 +106,7 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-	//新增相簿後加進AalbumUser資料表
+	// 新增相簿後加進AalbumUser資料表
 	public void insertToAlbumUser(String albumId) {
 		albumRepository.findById(albumId).map(albums -> {
 			Optional<User> userr = userRepository.findById(albums.getCreatedBy());
