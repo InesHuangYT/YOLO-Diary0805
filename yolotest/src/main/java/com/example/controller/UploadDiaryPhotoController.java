@@ -47,6 +47,7 @@ import com.example.entity.RecUser;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
+import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PagedResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.SaveFaceResponse;
@@ -153,7 +154,8 @@ public class UploadDiaryPhotoController {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
 //		List<UploadPhotoResponse> Lupr = new ArrayList<>();
-		List<SaveFaceResponse > Lsfr = new ArrayList<>();
+		List<SaveFaceResponse> Lsfr = new ArrayList<>();
+		List<NotFoundFaceResponse> Lnffr = new ArrayList<>();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
 		String catchCoverUri = null;
@@ -203,8 +205,8 @@ public class UploadDiaryPhotoController {
 						}		
 					}else if(hasFound == 0) {
 						
-						   
-						
+						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController.FaceNotFound(faceList.get(i).getFrameFace().getFrameFacePath());
+						Lnffr.add(notfoundFaceRes);
 						
 					}
 				}
