@@ -227,7 +227,7 @@ public class UploadDiaryPhotoController {
 			}
 
 		}
-		return new UploadPhotoResponse(Lsfr, catchCoverUri);
+		return new UploadPhotoResponse(Lsfr, Lnffr, catchCoverUri);
 		
 	}
 
