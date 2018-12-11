@@ -150,7 +150,7 @@ public class UploadDiaryPhotoController {
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
 	public UploadPhotoResponse uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
-			@PathVariable(value = "diaryId") String diaryId) {
+			@PathVariable(value = "diaryId") String diaryId) throws IOException {
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
 //		List<UploadPhotoResponse> Lupr = new ArrayList<>();
@@ -224,6 +224,7 @@ public class UploadDiaryPhotoController {
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				txt.deleteAllFile(PhotoFILEPATH);
 			}
 
 		}
