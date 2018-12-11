@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +40,7 @@ import com.example.entity.PhotoTagUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
 import com.example.payload.SaveFaceResponse;
@@ -143,6 +145,27 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
 		return new SaveFaceResponse(personId, multi.getBytes());
 	}
+	
+	//hasFound = 0 時，回傳未辨識出的人臉圖
+	public NotFoundFaceResponse FaceNotFound(String facepath) throws IOException {
+		
+		String path = PhotoFILEPATH + facepath;
+
+		// 將File convert to MultipartFile
+		File face = new File(path);
+		FileInputStream readfile = new FileInputStream(face);
+		MultipartFile multi = new MockMultipartFile(path, readfile);
+		NotFoundFaceResponse notfoundRes = new NotFoundFaceResponse(multi.getBytes());
+		
+		
+		return notfoundRes;
+			
+	}
+	
+	
+	
+	
+	
 
 	// 修改photoTagUser標記人名
 	@PutMapping("/{photoId}/{username}")
@@ -164,8 +187,9 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new ResourceNotFoundException("Username not found", null, photoTagUserRequest));
 	}
 
-	// 刪除photoTagUser那張人臉圖
-
+    
+	
+	
 	public void handTag(String photoId, String personId, String facepath) throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);

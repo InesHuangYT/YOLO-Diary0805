@@ -47,6 +47,7 @@ import com.example.entity.RecUser;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
+import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PagedResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.SaveFaceResponse;
@@ -147,13 +148,15 @@ public class UploadDiaryPhotoController {
 //上傳照片
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public UploadPhotoResponse uploadPhotos(@CurrentUser Principal currentUer,
-			@RequestParam(value = "file", required = true) MultipartFile[] file,
-			@PathVariable(value = "diaryId") String diaryId) {
+
+	public UploadPhotoResponse uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
+			@PathVariable(value = "diaryId") String diaryId) throws IOException {
+
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
 //		List<UploadPhotoResponse> Lupr = new ArrayList<>();
 		List<SaveFaceResponse> Lsfr = new ArrayList<>();
+		List<NotFoundFaceResponse> Lnffr = new ArrayList<>();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
 		String catchCoverUri = null;
@@ -188,37 +191,52 @@ public class UploadDiaryPhotoController {
 										faceList.get(i).getFrameFace().getFrameFacePath()));
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+
+						
+						//標記存入資料表
+						for (Object key : hashmap.keySet()) {
+							
+							System.out.println("---------------------");
+				            System.out.println(key + " : " + hashmap.get(key).getPersonId());
+				            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
+				            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
+				            System.out.println("---------------------");
+				            SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
+				            		hashmap.get(key).getImageSourcePath(),
+				            		hashmap.get(key).getFrameFacePath());
+				            Lsfr.add(sfr);
+				            hashmap.clear();
+				            
+						}		
+					}else if(hasFound == 0) {
+						System.out.println("|||||Face Not Found Here||||"+ faceList.get(i).getFrameFace().getFrameFacePath());
+						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController.FaceNotFound(faceList.get(i).getFrameFace().getFrameFacePath());
+						Lnffr.add(notfoundFaceRes);
+						
 					}
 				}
-
-				// 標記存入資料表
-				for (Object key : hashmap.keySet()) {
-
-					System.out.println("---------------------");
-					System.out.println(key + " : " + hashmap.get(key).getPersonId());
-					System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
-					System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
-					System.out.println("---------------------");
-					SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
-							hashmap.get(key).getImageSourcePath(), hashmap.get(key).getFrameFacePath());
-					Lsfr.add(sfr);
-
-				}
-
+				
+				
+				
+				
+				
 				System.out.println("tag finish!");
+				
+			
 
-				/** 這邊為上傳完照片之後，hasfound=1，自動標記並存進資料庫 **/
 
-				// for(hashmap)
-				// 做完標記再刪除
+				
 				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {
 				e.printStackTrace();
+				txt.deleteAllFile(PhotoFILEPATH);
 			}
 
 		}
-		return new UploadPhotoResponse(Lsfr, catchCoverUri);
+
+		return new UploadPhotoResponse(Lsfr, Lnffr, catchCoverUri);
+		
 
 	}
 
