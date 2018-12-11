@@ -3,20 +3,36 @@ package com.example.payload;
 import java.util.List;
 
 public class UploadPhotoResponse {
+
 	private List<SaveFaceResponse> sfr;
+	private String photoCoverUri;
+
 //	private String facePersonId;
 //	private byte[] faceData;
-	private String photoCoverUri;
-	//private long size;
-	
-	
-	
+//  private long size;
+
 	public UploadPhotoResponse(List<SaveFaceResponse> sfr, String photoCoverUri) {
 		super();
 		this.sfr = sfr;
 		this.photoCoverUri = photoCoverUri;
 	}
-	
+
+	public String getPhotoCoverUri() {
+		return photoCoverUri;
+	}
+
+	public List<SaveFaceResponse> getSfr() {
+		return sfr;
+	}
+
+	public void setSfr(List<SaveFaceResponse> sfr) {
+		this.sfr = sfr;
+	}
+
+	public void setPhotoCover(String photoCoverUri) {
+		this.photoCoverUri = photoCoverUri;
+	}
+//
 //	public UploadPhotoResponse(String facePersonId, String faceData, String photoCoverUri, long size) {
 //		super();
 //		this.facePersonId = facePersonId;
@@ -24,15 +40,14 @@ public class UploadPhotoResponse {
 //		this.photoCoverUri = photoCoverUri;
 //		this.size = size;
 //	}
-	
-//	public UploadPhotoResponse(String facePersonId,  byte[] faceData, String photoCoverUri) {
+
+//	public UploadPhotoResponse(String facePersonId, byte[] faceData, String photoCoverUri) {
 //		super();
 //		this.facePersonId = facePersonId;
 //		this.faceData = faceData;
 //		this.photoCoverUri = photoCoverUri;
-//		
+//
 //	}
-	
 
 //	public String getFacePersonId() {
 //		return facePersonId;
@@ -50,25 +65,6 @@ public class UploadPhotoResponse {
 //		this.faceData = faceData;
 //	}
 
-	
-
-	public String getPhotoCoverUri() {
-		return photoCoverUri;
-	}
-
-
-	public List<SaveFaceResponse> getSfr() {
-		return sfr;
-	}
-
-	public void setSfr(List<SaveFaceResponse> sfr) {
-		this.sfr = sfr;
-	}
-
-	public void setPhotoCover(String photoCoverUri) {
-		this.photoCoverUri = photoCoverUri;
-	}
-
 //	public long getSize() {
 //		return size;
 //	}
@@ -78,7 +74,5 @@ public class UploadPhotoResponse {
 //	}
 //	
 //	
-
-	
 
 }

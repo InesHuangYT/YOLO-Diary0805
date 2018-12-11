@@ -79,6 +79,7 @@ public class ModelMapper {
 		albumResponse.setId(albumUser.getAlbum().getId());
 		albumResponse.setPhotoCover(albumUser.getAlbum().getPhotoUri());
 		albumResponse.setName(albumUser.getAlbum().getName());
+		albumResponse.setCreatedAt(albumUser.getAlbum().getCreatedAt());
 		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
 		albumResponse.setDiaries(diary);
 		return albumResponse;
