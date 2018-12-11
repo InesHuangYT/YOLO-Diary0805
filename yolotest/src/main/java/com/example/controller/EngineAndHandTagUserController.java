@@ -40,6 +40,7 @@ import com.example.entity.PhotoTagUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
 import com.example.payload.SaveFaceResponse;
@@ -146,7 +147,7 @@ public class EngineAndHandTagUserController {
 	}
 	
 	//hasFound = 0 時，回傳未辨識出的人臉圖
-	public byte[] FaceNotFound(String facepath) throws IOException {
+	public NotFoundFaceResponse FaceNotFound(String facepath) throws IOException {
 		
 		String path = PhotoFILEPATH + facepath;
 
@@ -154,9 +155,10 @@ public class EngineAndHandTagUserController {
 		File face = new File(path);
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
-		byte[] notfoundfaceData = multi.getBytes();
+		NotFoundFaceResponse notfoundRes = new NotFoundFaceResponse(multi.getBytes());
 		
-		return notfoundfaceData;
+		
+		return notfoundRes;
 			
 	}
 	
