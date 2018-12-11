@@ -71,6 +71,14 @@ public class UploadPhotoResponse {
 		this.photoCoverUri = photoCoverUri;
 	}
 
+	public List<NotFoundFaceResponse> getNffr() {
+		return nffr;
+	}
+
+	public void setNffr(List<NotFoundFaceResponse> nffr) {
+		this.nffr = nffr;
+	}
+
 //	public long getSize() {
 //		return size;
 //	}

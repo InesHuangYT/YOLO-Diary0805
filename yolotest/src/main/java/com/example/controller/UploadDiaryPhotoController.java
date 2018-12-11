@@ -204,7 +204,7 @@ public class UploadDiaryPhotoController {
 				            
 						}		
 					}else if(hasFound == 0) {
-						
+						System.out.println("Face Not Found Here");
 						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController.FaceNotFound(faceList.get(i).getFrameFace().getFrameFacePath());
 						Lnffr.add(notfoundFaceRes);
 						
