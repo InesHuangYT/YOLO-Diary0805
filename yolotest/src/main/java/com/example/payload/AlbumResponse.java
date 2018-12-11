@@ -1,5 +1,6 @@
 package com.example.payload;
 
+import java.time.Instant;
 import java.util.List;
 
 import com.example.entity.Diary;
@@ -8,6 +9,7 @@ public class AlbumResponse {
 
 	private String id;
 	private String name;
+	private Instant createdAt;
 	private List<Diary> diaries;
 	private String photoCover;
 //	private List<DiaryResponse> diaries;
@@ -18,6 +20,14 @@ public class AlbumResponse {
 	public AlbumResponse(String id, String name) {
 		this.id = id;
 		this.name = name;
+	}
+	
+
+	public AlbumResponse(String id, String name, Instant createdAt) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.createdAt = createdAt;
 	}
 
 	public AlbumResponse(String name) {
@@ -55,6 +65,15 @@ public class AlbumResponse {
 	public void setPhotoCover(String photoCover) {
 		this.photoCover = photoCover;
 	}
+
+	public Instant getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Instant createdAt) {
+		this.createdAt = createdAt;
+	}
+	
 
 	
 }

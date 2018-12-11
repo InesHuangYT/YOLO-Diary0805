@@ -163,6 +163,7 @@ public class UploadSelfieController {
 		}
 		return null;
 	}
+//修改頭貼
 
 //透過使用者讀取頭貼
 	@RequestMapping(value = "/myDownloadSelfie", method = RequestMethod.GET)
