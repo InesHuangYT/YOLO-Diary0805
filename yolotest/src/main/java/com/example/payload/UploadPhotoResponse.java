@@ -4,6 +4,7 @@ import java.util.List;
 
 public class UploadPhotoResponse {
 	private List<SaveFaceResponse> sfr;
+	private List<NotFoundFaceResponse> nffr;
 //	private String facePersonId;
 //	private byte[] faceData;
 	private String photoCoverUri;
@@ -11,9 +12,10 @@ public class UploadPhotoResponse {
 	
 	
 	
-	public UploadPhotoResponse(List<SaveFaceResponse> sfr, String photoCoverUri) {
+	public UploadPhotoResponse(List<SaveFaceResponse> sfr, List<NotFoundFaceResponse> nffr, String photoCoverUri) {
 		super();
 		this.sfr = sfr;
+		this.nffr = nffr;
 		this.photoCoverUri = photoCoverUri;
 	}
 	
