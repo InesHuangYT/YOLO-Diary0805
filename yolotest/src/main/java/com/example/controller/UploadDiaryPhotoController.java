@@ -201,10 +201,11 @@ public class UploadDiaryPhotoController {
 				            		hashmap.get(key).getImageSourcePath(),
 				            		hashmap.get(key).getFrameFacePath());
 				            Lsfr.add(sfr);
+				            hashmap.clear();
 				            
 						}		
 					}else if(hasFound == 0) {
-						System.out.println("Face Not Found Here");
+						System.out.println("|||||Face Not Found Here||||"+ faceList.get(i).getFrameFace().getFrameFacePath());
 						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController.FaceNotFound(faceList.get(i).getFrameFace().getFrameFacePath());
 						Lnffr.add(notfoundFaceRes);
 						
