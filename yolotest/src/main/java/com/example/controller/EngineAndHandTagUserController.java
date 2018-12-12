@@ -50,6 +50,9 @@ import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
 import com.example.repository.PhotoTagUserRepository;
 import com.example.repository.UserRepository;
+import com.example.security.CurrentUser;
+import com.example.security.UserPrincipal;
+import com.example.service.NotificationService;
 import com.example.service.PhotoStorageService;
 
 @RestController
@@ -72,6 +75,8 @@ public class EngineAndHandTagUserController {
 	AlbumRepository albumRepository;
 	@Autowired
 	AlbumUserRepository albumUserRepository;
+	@Autowired
+	NotificationService notificationService;
 
 	static String PhotoFILEPATH = "C:/engine/";
 	// C:/engine/
@@ -88,6 +93,13 @@ public class EngineAndHandTagUserController {
 		return userRepository.findByUsername(username).map(user -> {
 			return username;
 		}).orElseThrow(() -> new BadRequestException("Username " + username + " not found"));
+	}
+
+	@PostMapping("/sendEmail")
+	public String sendEmail(@RequestParam(value = "email") String email, @CurrentUser UserPrincipal currentUser) {
+
+		notificationService.sendTagNotification(email, currentUser.getUsername());
+		return "受邀人 ： "+email+", 發信人 ： "+ currentUser.getUsername();
 	}
 
 	// 引擎自動標記
@@ -139,16 +151,16 @@ public class EngineAndHandTagUserController {
 			Album albums = album.get();
 			albumUser = new AlbumUser(albums, userss);
 			albumUserRepository.save(albumUser);
-			
+
 			return photoTagUserRepository.save(ptu);
 
 		}).orElseThrow(() -> new BadRequestException("PhotoId" + photoid + "not found"));
 		return new SaveFaceResponse(personId, multi.getBytes());
 	}
-	
-	//hasFound = 0 時，回傳未辨識出的人臉圖
+
+	// hasFound = 0 時，回傳未辨識出的人臉圖
 	public NotFoundFaceResponse FaceNotFound(String facepath) throws IOException {
-		
+
 		String path = PhotoFILEPATH + facepath;
 
 		// 將File convert to MultipartFile
@@ -156,16 +168,10 @@ public class EngineAndHandTagUserController {
 		FileInputStream readfile = new FileInputStream(face);
 		MultipartFile multi = new MockMultipartFile(path, readfile);
 		NotFoundFaceResponse notfoundRes = new NotFoundFaceResponse(multi.getBytes());
-		
-		
+
 		return notfoundRes;
-			
+
 	}
-	
-	
-	
-	
-	
 
 	// 修改photoTagUser標記人名
 	@PutMapping("/{photoId}/{username}")
@@ -187,9 +193,6 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new ResourceNotFoundException("Username not found", null, photoTagUserRequest));
 	}
 
-    
-	
-	
 	public void handTag(String photoId, String personId, String facepath) throws IOException {
 		String username = findUsernameByPersonId(personId);
 		User user = new User(username);

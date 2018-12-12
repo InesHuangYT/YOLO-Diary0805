@@ -139,7 +139,8 @@ public class AuthController {
 
 		URI location = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/user/{username}")
 				.buildAndExpand(result.getUsername()).toUri();
-		System.out.println(location);// http://localhost:8080/api/user/testin221111
+		System.out.println(location);
+		// http://localhost:8080/api/user/testin221111
 
 		// 信箱寄送
 //		try {
