@@ -19,6 +19,7 @@ public interface DiaryRepository extends JpaRepository<Diary, String> {
 
 	Optional<Diary> findByPhotoId(String photoId);
 
+
 	Page<Diary> findByCreatedBy(String userId, Pageable pageable);
 
 	Page<Diary> findByAlbumId(String albumId, Pageable pageable);

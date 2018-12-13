@@ -99,8 +99,9 @@ public class EngineAndHandTagUserController {
 	public String sendEmail(@RequestParam(value = "email") String email, @CurrentUser UserPrincipal currentUser) {
 
 		notificationService.sendTagNotification(email, currentUser.getUsername());
-		return "受邀人 ： "+email+", 發信人 ： "+ currentUser.getUsername();
+		return "受邀人 ： " + email + ", 發信人 ： " + currentUser.getUsername();
 	}
+	
 
 	// 引擎自動標記
 	public SaveFaceResponse engineTag(String personId, String imageSourcePath, String facepath) throws IOException {

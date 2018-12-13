@@ -95,8 +95,6 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-	
-
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
 	public AlbumResponse getAlbumName(@PathVariable String albumId) {
@@ -132,6 +130,14 @@ public class AlbumController {
 		albumResponse.setName(album.getName());
 		albumResponse.setPhotoCover(album.getPhotoUri());
 		return albumResponse;
+	}
+	//搜尋相簿名稱找相簿
+	@PostMapping("/findAlbum")
+	public AlbumResponse findAlbum(@RequestParam(value = "albumName") String albumName) {
+		Optional<Album> album = albumRepository.findByName(albumName);
+		Album albums = album.get();
+		return ModelMapper.mapAlbumToAlbumResponse(albums);
+		
 	}
 
 	// 修改相簿
