@@ -19,7 +19,11 @@ public interface PhotoRepository extends JpaRepository<Photo, String> {
 
 	Optional<Photo> findById(String photoid);
 
+	Page<Photo> findByAlbumId(String albumId, Pageable pageable);
+
 	Optional<Photo> findByDiary(Diary diary);
+
+	Page<Photo> findByDiaryId(String diaryId, Pageable pageable);
 
 	Page<Photo> findByDiary(Diary diary, Pageable pageable);
 

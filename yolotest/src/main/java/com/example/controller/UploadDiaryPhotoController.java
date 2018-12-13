@@ -47,6 +47,7 @@ import com.example.entity.RecUser;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
+import com.example.payload.AlbumResponse;
 import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PagedResponse;
 import com.example.payload.PhotoResponse;
@@ -59,6 +60,7 @@ import com.example.repository.PhotoRepository;
 import com.example.security.CurrentUser;
 import com.example.service.AlbumService;
 import com.example.service.PhotoStorageService;
+import com.example.util.ModelMapper;
 
 @RestController
 @RequestMapping("/api/photo")
@@ -129,12 +131,17 @@ public class UploadDiaryPhotoController {
 			Album album = diary.get().getAlbum();
 			String uri;
 			System.out.println("albumId : " + album.getId());
+			System.out.println("Here photoUri : " + album.getPhotoUri());
+			boolean f = album.getPhotoUri() == null;
+			System.out.println("Here " + f);
+
 			if (album.getPhotoUri() == null) {
 				System.out.println("photoUri : " + album.getPhotoUri());
 				Optional<Photo> photos = photoRepository.findByDiary(diary.get());
 				album.setPhotoUri(photos.get().getPhotoUri());
 				albumRepository.save(album);
 			}
+
 			System.out.println("SetphotoUri : " + album.getPhotoUri());
 			uri = album.getPhotoUri();
 			photoRepository.save(set);
@@ -149,7 +156,8 @@ public class UploadDiaryPhotoController {
 
 	@RequestMapping(value = "/{diaryId}", headers = "content-type=multipart/*", method = RequestMethod.POST)
 
-	public UploadPhotoResponse uploadPhotos(@CurrentUser Principal currentUer, @RequestParam(value = "file", required = true) MultipartFile[] file,
+	public UploadPhotoResponse uploadPhotos(@CurrentUser Principal currentUer,
+			@RequestParam(value = "file", required = true) MultipartFile[] file,
 			@PathVariable(value = "diaryId") String diaryId) throws IOException {
 
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
@@ -192,40 +200,33 @@ public class UploadDiaryPhotoController {
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 
-						
-						//標記存入資料表
+						// 標記存入資料表
 						for (Object key : hashmap.keySet()) {
-							
+
 							System.out.println("---------------------");
-				            System.out.println(key + " : " + hashmap.get(key).getPersonId());
-				            System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
-				            System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
-				            System.out.println("---------------------");
-				            SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
-				            		hashmap.get(key).getImageSourcePath(),
-				            		hashmap.get(key).getFrameFacePath());
-				            Lsfr.add(sfr);
-				            hashmap.clear();
-				            
-						}		
-					}else if(hasFound == 0) {
-						System.out.println("|||||Face Not Found Here||||"+ faceList.get(i).getFrameFace().getFrameFacePath());
-						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController.FaceNotFound(faceList.get(i).getFrameFace().getFrameFacePath());
+							System.out.println(key + " : " + hashmap.get(key).getPersonId());
+							System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
+							System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
+							System.out.println("---------------------");
+							SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(
+									hashmap.get(key).getPersonId(), hashmap.get(key).getImageSourcePath(),
+									hashmap.get(key).getFrameFacePath());
+							Lsfr.add(sfr);
+							hashmap.clear();
+
+						}
+					} else if (hasFound == 0) {
+						System.out.println(
+								"|||||Face Not Found Here||||" + faceList.get(i).getFrameFace().getFrameFacePath());
+						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController
+								.FaceNotFound(faceList.get(i).getFrameFace().getFrameFacePath());
 						Lnffr.add(notfoundFaceRes);
-						
+
 					}
 				}
-				
-				
-				
-				
-				
+
 				System.out.println("tag finish!");
-				
-			
 
-
-				
 				txt.deleteAllFile(PhotoFILEPATH);
 
 			} catch (Exception e) {
@@ -236,7 +237,6 @@ public class UploadDiaryPhotoController {
 		}
 
 		return new UploadPhotoResponse(Lsfr, Lnffr, catchCoverUri);
-		
 
 	}
 
@@ -256,6 +256,18 @@ public class UploadDiaryPhotoController {
 		return photoResponse;
 	}
 
+// 取得同個相簿的所有照片 相簿id-日記id-照片id
+	@GetMapping("/downloadAlbumPhoto/{albumId}")
+	public List<PhotoResponse> getAlbumPhoto(@PathVariable(value = "albumId") String albumId, Pageable pageable) {
+
+		Page<Photo> photo = photoRepository.findByAlbumId(albumId, pageable);
+		List<PhotoResponse> photoResponse = photo.map(photos -> {
+			return ModelMapper.mapPhotoToPhotoResponse(photos);
+		}).getContent();
+		return photoResponse;
+
+	}
+
 //下載照片
 	@GetMapping("/downloadPhoto/{photoId}")
 	public PhotoResponse getPhoto(@PathVariable String photoId) {
@@ -265,7 +277,7 @@ public class UploadDiaryPhotoController {
 		}).orElseThrow(() -> new BadRequestException("PhotoId " + photoId + " not found"));
 	}
 
-//刪除照片
+//刪除照片（如果照片只有一張 那麼相簿封面要直接刪掉！）
 	@DeleteMapping("/{diaryId}/{photoId}")
 	public ResponseEntity<?> deletePhoto(@PathVariable(value = "diaryId") String diaryId,
 			@PathVariable(value = "photoId") String photoId) {

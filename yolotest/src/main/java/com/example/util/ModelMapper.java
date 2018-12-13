@@ -20,10 +20,12 @@ import org.springframework.stereotype.Service;
 import com.example.entity.Album;
 import com.example.entity.AlbumUser;
 import com.example.entity.Diary;
+import com.example.entity.Photo;
 import com.example.entity.User;
 import com.example.exception.ResourceNotFoundException;
 import com.example.payload.AlbumResponse;
 import com.example.payload.DiaryResponse;
+import com.example.payload.PhotoResponse;
 import com.example.payload.UserSummary;
 import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
@@ -110,6 +112,13 @@ public class ModelMapper {
 		diaryResponse.setText(new String(decrypt));
 
 		return diaryResponse;
+
+	}
+	public static PhotoResponse mapPhotoToPhotoResponse(Photo photo) {
+		PhotoResponse photoResponse = new PhotoResponse();
+		photoResponse.setId(photo.getId());
+		photoResponse.setPhotodata(photo.getPhotodata());
+		return photoResponse;
 
 	}
 
