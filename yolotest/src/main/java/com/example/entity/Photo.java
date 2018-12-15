@@ -43,7 +43,7 @@ public class Photo extends UserDateAudit {
 	private String photoType;
 
 	@Lob
-	//@JsonIgnore
+//	@JsonIgnore
 	private byte[] photodata;
 	private String photoUri;
 	private String photoPath;
@@ -59,6 +59,7 @@ public class Photo extends UserDateAudit {
 	@JoinColumn(name = "diary_id", nullable = true)
 	@JsonIgnore
 	private Diary diary;
+	private String albumId;
 	
 	/* 一個照片可以標記多個使用者 ， 一個使用者可以被多張照片標記 */
 //	@OneToMany(mappedBy = "photo", orphanRemoval = true)
@@ -100,6 +101,15 @@ public class Photo extends UserDateAudit {
 		this.photoType = photoType;
 		this.photodata = photodata;
 		this.diary = diary;
+	}
+	
+
+	public Photo(String photoName, String photoType, byte[] photodata, Diary diary, String albumId) {
+		this.photoName = photoName;
+		this.photoType = photoType;
+		this.photodata = photodata;
+		this.diary = diary;
+		this.albumId = albumId;
 	}
 
 	public Photo(String photoName, String photoType, byte[] photodata, String photoUri, Diary diary)  {
@@ -183,6 +193,7 @@ public class Photo extends UserDateAudit {
 	public void setPhotoPath(String photoPath) {
 		this.photoPath = photoPath;
 	}
+	
 
 //	public List<PhotoTagUser> getUsers() {
 //		return users;
@@ -216,6 +227,14 @@ public class Photo extends UserDateAudit {
 //			}
 //		}
 //	}
+
+	public String getAlbumId() {
+		return albumId;
+	}
+
+	public void setAlbumId(String albumId) {
+		this.albumId = albumId;
+	}
 
 	@Override
 	public boolean equals(Object o) {

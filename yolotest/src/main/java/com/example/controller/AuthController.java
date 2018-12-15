@@ -161,6 +161,8 @@ public class AuthController {
 		}).orElseThrow(() -> new ResourceNotFoundException("Username" + username + "not found", null, user));
 
 	}
+	
+	
 
 	// 刪除
 	@RequestMapping(value = "user/{username}", method = RequestMethod.DELETE)

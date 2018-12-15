@@ -95,8 +95,6 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-	
-
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
 	public AlbumResponse getAlbumName(@PathVariable String albumId) {
@@ -134,6 +132,36 @@ public class AlbumController {
 		return albumResponse;
 	}
 
+	// 搜尋相簿名稱找相簿
+	@PostMapping("/findAlbum")
+	public AlbumResponse findAlbumByName(@RequestParam(value = "albumName") String albumName) {
+		Optional<Album> album = albumRepository.findByName(albumName);
+		Album albums = album.get();
+		return ModelMapper.mapAlbumToAlbumResponse(albums);
+
+	}
+	// 依時間分類（一年內）
+	@GetMapping("/findAlbumByYear")
+	public List<AlbumResponse> findAlbumByYear(@CurrentUser UserPrincipal currentUser,
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+		return albumService.getAlbumsAboutMeByYear(currentUser, page, size);
+	}
+	// 依時間分類（一月內）
+	@GetMapping("/findAlbumByMonth")
+	public List<AlbumResponse> findAlbumByMonth(@CurrentUser UserPrincipal currentUser,
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+		return albumService.getAlbumsAboutMeByMonth(currentUser, page, size);
+	}
+	
+	// 依時間分類（一週內）
+	@GetMapping("/findAlbumByWeek")
+	public List<AlbumResponse> findAlbumByWeek(@CurrentUser UserPrincipal currentUser,
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
+		return albumService.getAlbumsAboutMeByWeek(currentUser, page, size);
+	}
 	// 修改相簿
 	@PutMapping("/{albumId}")
 	public Album updateAlbum(@PathVariable String albumId, @Valid @RequestBody Album albumRequest) {

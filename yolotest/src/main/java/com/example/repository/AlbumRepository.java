@@ -1,5 +1,6 @@
 package com.example.repository;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -18,6 +19,8 @@ public interface AlbumRepository extends JpaRepository<Album, String> {
 
     
 	Optional<Album> findByName(String albumName);
+	Optional<Album> findByCreatedAt(Instant time);
+
 
 	Page<Album> findByCreatedBy(String userId, Pageable pageable);
 }

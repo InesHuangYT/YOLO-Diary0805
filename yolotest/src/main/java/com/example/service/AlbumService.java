@@ -1,5 +1,9 @@
 package com.example.service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +83,97 @@ public class AlbumService {
 		List<AlbumResponse> albumResponse = albumUser.map(albumUsers -> {
 			return ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUsers);
 		}).getContent();
+
+		return albumResponse;
+	}
+
+	public List<AlbumResponse> getAlbumsAboutMeByYear(UserPrincipal currentUser, int page, int size) {
+		validatePageNumberAndSize(page, size);
+		User user = userRepository.findByUsername(currentUser.getUsername())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
+
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+		Page<AlbumUser> albumUser = albumUserRepository.findByUser(user, pageable);
+
+		Instant nowTime = Instant.now();
+		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
+		System.out.println("size : " + albumUser.getContent().size());
+		List<AlbumResponse> albumResponse = new ArrayList<>();
+		AlbumResponse albumResponses = new AlbumResponse();
+		for (int i = 0; i < albumUser.getContent().size(); i++) {
+			LocalDateTime createdTime = LocalDateTime.ofInstant(albumUser.getContent().get(i).getAlbum().getCreatedAt(),
+					ZoneId.systemDefault());
+			System.out.println("createdTime.minusYears(1) : " + createdTime.minusYears(1));
+
+			if (createdTime.isAfter(nowTimes.minusYears(1))) {
+				System.out.println(createdTime.getDayOfYear() - nowTimes.getYear() - 1);
+				albumResponses = ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUser.getContent().get(i));
+				System.out.println("name: " + albumResponses.getName());
+				albumResponse.add(albumResponses);
+			}
+		}
+
+		return albumResponse;
+	}
+
+	public List<AlbumResponse> getAlbumsAboutMeByMonth(UserPrincipal currentUser, int page, int size) {
+		validatePageNumberAndSize(page, size);
+		User user = userRepository.findByUsername(currentUser.getUsername())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
+
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+		Page<AlbumUser> albumUser = albumUserRepository.findByUser(user, pageable);
+
+		Instant nowTime = Instant.now();
+		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
+		System.out.println("size : " + albumUser.getContent().size());
+		List<AlbumResponse> albumResponse = new ArrayList<>();
+		AlbumResponse albumResponses = new AlbumResponse();
+		for (int i = 0; i < albumUser.getContent().size(); i++) {
+			LocalDateTime createdTime = LocalDateTime.ofInstant(albumUser.getContent().get(i).getAlbum().getCreatedAt(),
+					ZoneId.systemDefault());
+			System.out.println(createdTime.getDayOfMonth());
+			System.out.println(createdTime.getDayOfYear());
+			System.out.println("nowTimes.minusMonths(1).minusDays(1) : " + nowTimes.minusMonths(1).minusDays(1));
+			if (createdTime.isAfter(nowTimes.minusMonths(1).minusDays(1))) {
+				// nowTimes.getDayOfYear() -createdTime.getDayOfYear() <= 30
+				albumResponses = ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUser.getContent().get(i));
+				albumResponse.add(albumResponses);
+			}
+		}
+
+		return albumResponse;
+	}
+
+	public List<AlbumResponse> getAlbumsAboutMeByWeek(UserPrincipal currentUser, int page, int size) {
+		validatePageNumberAndSize(page, size);
+		User user = userRepository.findByUsername(currentUser.getUsername())
+				.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
+
+		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
+		Page<AlbumUser> albumUser = albumUserRepository.findByUser(user, pageable);
+
+		Instant nowTime = Instant.now();
+		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
+		System.out.println("size : " + albumUser.getContent().size());
+		List<AlbumResponse> albumResponse = new ArrayList<>();
+		AlbumResponse albumResponses = new AlbumResponse();
+		for (int i = 0; i < albumUser.getContent().size(); i++) {
+			LocalDateTime createdTime = LocalDateTime.ofInstant(albumUser.getContent().get(i).getAlbum().getCreatedAt(),
+					ZoneId.systemDefault());
+			System.out.println("createdTime.getDayOfMonth()" + createdTime.getDayOfMonth());
+			System.out.println("createdTime.getDayOfYear()" + createdTime.getDayOfYear());
+			System.out.println("nowTimes.minusWeeks(1).minusDays(1)" + nowTimes.minusWeeks(1).minusDays(1));
+			if (createdTime.isAfter(nowTimes.minusWeeks(1).minusDays(1))) {
+				// nowTimes.getDayOfYear() -createdTime.getDayOfYear() <= 7
+				System.out.println("nowTimes.getDayOfYear() : " + nowTimes.getDayOfYear());
+				System.out.println("nowTimes.getDayOfYear() : " + nowTimes.getDayOfYear());
+				System.out.println("createdTime.getDayOfYear() : " + createdTime.getDayOfYear());
+
+				albumResponses = ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUser.getContent().get(i));
+				albumResponse.add(albumResponses);
+			}
+		}
 
 		return albumResponse;
 	}
