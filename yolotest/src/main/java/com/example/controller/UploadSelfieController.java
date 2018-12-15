@@ -40,6 +40,7 @@ import com.example.engine.util.TxtUtil;
 import com.example.entity.Selfie;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
+import com.example.payload.AlbumResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.UploadSelfieResponse;
 import com.example.repository.SelfieRepository;
@@ -60,8 +61,9 @@ public class UploadSelfieController {
 	static String SelfieFILEPATH = "C:\\engine\\selfie\\";
 	static String FILEPATH = "C:\\engine\\list.txt";
 	// /Users/ines/Desktop/photo --> ines mac's path
-	// C:\Users\Administrator\Desktop\Engine0818\selfie\ --> rrou's path
-	// C:\engine\selfie\ --> laboratory's path
+	// /Users/ines/Desktop/engine/selfie/ --> ines mac's path
+	// C:\\engine\\selfie\\ --> laboratory's path
+	// C:\\engine\\list.txt --> laboratory's path
 
 	@Autowired
 	SelfieStorageService selfieStorageService;
@@ -135,12 +137,9 @@ public class UploadSelfieController {
 			for (int i = 0; i < file.length; i++) {
 				System.out.println(i + ":" + "第" + i + "張照片");
 				System.out.println("共" + (i + 1) + "張照片");
-
 				MultipartFile savefile = file[i];
 				uploadSelfie(savefile, username);
-
 			}
-
 			try {
 				System.out.println("START　Write!");
 				txt.getSelfiepath(SelfieFILEPATH, currentUser.getUsername());
@@ -154,7 +153,7 @@ public class UploadSelfieController {
 				selfiefile.delete();
 				System.out.println("DELETE SELFIE!");
 				txt.deleteTxt(FILEPATH);
-				System.out.println("DELRTE TXT");
+				System.out.println("DELeTE TXT");
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -163,6 +162,38 @@ public class UploadSelfieController {
 		}
 		return null;
 	}
+
+	// 訓練人臉圖
+	@RequestMapping(value = "/trainFacePhoto", headers = "content-type=multipart/*", method = RequestMethod.POST)
+	public UploadSelfieResponse trainFacePhoto(@RequestParam(value = "file", required = true) MultipartFile file,
+			@RequestParam(value = "username") String username) {
+		System.out.println("!!!!!!!!!!!!!!");
+		userRepository.findByUsername(username).map(user -> {
+			return username;
+		}).orElseThrow(() -> new BadRequestException("Username " + username + " not found"));
+
+		if (file != null) {
+			try {
+				System.out.println("START　Write!");
+				txt.getFacepath(SelfieFILEPATH, username);
+				System.out.println("TRAIN!");
+				engine.trainEngine();
+				System.out.println("OVER!!!!!!!");
+
+				File selfiefile = new File(SelfieFILEPATH + username + ".jpg");
+				selfiefile.delete();
+				System.out.println("DELETE SELFIE!");
+				txt.deleteTxt(FILEPATH);
+				System.out.println("DELETE TXT");
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+		return null;
+	}
+
 //修改頭貼
 
 //透過使用者讀取頭貼

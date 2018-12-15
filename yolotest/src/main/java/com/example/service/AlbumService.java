@@ -38,6 +38,8 @@ import com.example.security.UserPrincipal;
 import com.example.util.AppConstants;
 import com.example.util.ModelMapper;
 
+//https://docs.oracle.com/javase/tutorial/datetime/iso/instant.html(時間參照網址）
+//https://lw900925.github.io/java/java8-newtime-api.html（時間參照網址）
 @Service
 public class AlbumService {
 	@Autowired
