@@ -3,8 +3,15 @@ package com.example.util;
 import java.awt.List;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.TimeZone;
 
+import javax.annotation.PostConstruct;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -34,7 +41,6 @@ import com.example.repository.DiaryRepository;
 //mapping the Diary entity to a DiaryResponse payload
 //AES日記加密解密https://blog.csdn.net/hbcui1984/article/details/5201247
 public class ModelMapper {
-	
 
 	public static DiaryResponse mapDiaryToDiaryResponse(Diary diary, User creator) {
 		DiaryResponse diaryResponse = new DiaryResponse();
@@ -78,14 +84,25 @@ public class ModelMapper {
 
 	public static AlbumResponse mapAlbumUserToAlbumUserResponseByUsername(AlbumUser albumUser) {
 		AlbumResponse albumResponse = new AlbumResponse();
+		Instant time = albumUser.getAlbum().getCreatedAt();
+		Instant nowTime = Instant.now();
+		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
+		System.out.println("nowTimes : " + nowTimes);
+		System.out.println("time : " + time);
+		LocalDateTime ldt = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
+		Instant instant = ldt.toInstant(ZoneOffset.UTC);
+
+		System.out.println("albumCreatedTime : " + ldt);
 		albumResponse.setId(albumUser.getAlbum().getId());
 		albumResponse.setPhotoCover(albumUser.getAlbum().getPhotoUri());
 		albumResponse.setName(albumUser.getAlbum().getName());
-		albumResponse.setCreatedAt(albumUser.getAlbum().getCreatedAt());
+		albumResponse.setCreatedAt(instant);
 		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
 		albumResponse.setDiaries(diary);
-		return albumResponse;
 
+		return albumResponse;
+//		System.out.printf("%s %d %d at %d:%d%n", ldt.getMonth(), ldt.getDayOfMonth(), ldt.getYear(), ldt.getHour(),
+//				ldt.getMinute());
 	}
 
 	public static UserSummary mapAlbumUserToAlbumUserResponseByAlbumId(AlbumUser albumUser) {
@@ -114,6 +131,7 @@ public class ModelMapper {
 		return diaryResponse;
 
 	}
+
 	public static PhotoResponse mapPhotoToPhotoResponse(Photo photo) {
 		PhotoResponse photoResponse = new PhotoResponse();
 		photoResponse.setId(photo.getId());
