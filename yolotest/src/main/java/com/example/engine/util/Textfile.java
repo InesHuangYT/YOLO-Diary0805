@@ -44,11 +44,28 @@ public class Textfile {
 		FileWriter fw = new FileWriter(FILEPATH + "list.txt");
 
 		for (int i = 0; i < filearray.length; i++) {
+			System.out.println("filearray[i] :" + filearray[i]);
+
 			fw.write(filearray[i] + "\t" + current + "[No]" + i + "\r\n");
 			fw.flush();
+		}
+		// close filewriter
+		// https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
+		fw.close();
 
-			// System.out.println(filearray[i]);
+	}
 
+	public void getFacepath(String diretoryPath, String username) throws IOException {
+		System.out.println("START METHOD");
+		File file = new File(diretoryPath);
+		File[] filearray = file.listFiles();
+		FileWriter fw = new FileWriter(FILEPATH + "list.txt");
+
+		for (int i = 0; i < filearray.length; i++) {
+			System.out.println("filearray[i] :" + filearray[i]);
+
+			fw.write(filearray[i] + "\t" + username + "[No]" + i + "\r\n");
+			fw.flush();
 		}
 		// close filewriter
 		// https://stackoverflow.com/questions/22900477/java-io-exception-stream-closed
@@ -87,7 +104,6 @@ public class Textfile {
 		filePaths = filePaths.toString();
 		java.io.File myDelFile = new java.io.File(filePath);
 		myDelFile.delete();
-		 
 
 	}
 
