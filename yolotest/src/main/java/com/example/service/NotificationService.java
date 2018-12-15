@@ -1,5 +1,7 @@
 package com.example.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
@@ -7,6 +9,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.User;
+import com.example.security.CurrentUser;
+import com.example.security.UserPrincipal;
 
 @Service
 public class NotificationService {
@@ -28,7 +32,7 @@ public class NotificationService {
 		javaMailSender.send(mail);
 	}
 
-	public void sendTagNotification(String email, String username) throws MailException {
+	public void sendInviteNotification(String email, String username) throws MailException {
 		SimpleMailMessage mail = new SimpleMailMessage();
 		mail.setTo(email);
 		mail.setFrom("Yolo8Diary@gmail.com");
@@ -39,6 +43,18 @@ public class NotificationService {
 
 		javaMailSender.send(mail);
 
+	}
+	
+	public void sendTageNotification(Optional<User> user, @CurrentUser UserPrincipal currentuser) {
+		
+		SimpleMailMessage mail = new SimpleMailMessage(); 
+		mail.setTo(user.get().getEmail());
+		mail.setFrom("Yolo8Diary@gmail.com");
+		mail.setSubject("YOLO Diary 標記通知 ");
+		mail.setText("親愛的用戶你/妳好：\n"+
+				"你/妳已被 " + currentuser.getUsername() + " 用戶標記在 泡泡日記。"+"\n"+
+						"來一起與親朋好友們創造屬於你們獨特的共享回憶吧！\n\n\n\n"+ "\t\t\t\tYOLO Diary憂樂日記");
+		System.out.println("|Check User|"+user.get().getEmail());
 	}
 
 }
