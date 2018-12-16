@@ -31,7 +31,6 @@ import com.example.security.CurrentUser;
 public class Textfile {
 
 	static String FILEPATH = "C:\\engine\\";
-	// --> C:\Users\Administrator\Desktop\Engine0818\ --> rrou's path
 	// --> C:\engine\ --> laboratory's path
 	// --> /Users/ines/Desktop/engine/ --> ines's mac path
 
