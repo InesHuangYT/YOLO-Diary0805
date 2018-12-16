@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
+import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +25,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,6 +43,7 @@ import com.example.entity.Selfie;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.payload.AlbumResponse;
+import com.example.payload.DataRequest;
 import com.example.payload.PhotoResponse;
 import com.example.payload.UploadSelfieResponse;
 import com.example.repository.SelfieRepository;
@@ -164,15 +167,16 @@ public class UploadSelfieController {
 	}
 
 	// 訓練人臉圖
-	@RequestMapping(value = "/trainFacePhoto", headers = "content-type=multipart/*", method = RequestMethod.POST)
-	public UploadSelfieResponse trainFacePhoto(@RequestParam(value = "file", required = true) MultipartFile file,
-			@RequestParam(value = "username") String username) {
+	@RequestMapping(value = "/trainFacePhoto", method = RequestMethod.POST)
+	public UploadSelfieResponse trainFacePhoto(@RequestParam(value = "username") String username,@Valid @RequestBody DataRequest dataRequest) {
 		System.out.println("!!!!!!!!!!!!!!");
 		userRepository.findByUsername(username).map(user -> {
 			return username;
 		}).orElseThrow(() -> new BadRequestException("Username " + username + " not found"));
 
-		if (file != null) {
+		if (dataRequest.getData() != null) {
+			blob(dataRequest.getData(), username);
+
 			try {
 				System.out.println("START　Write!");
 				txt.getFacepath(SelfieFILEPATH, username);
