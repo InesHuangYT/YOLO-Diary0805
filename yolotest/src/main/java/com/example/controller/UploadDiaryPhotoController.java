@@ -194,9 +194,9 @@ public class UploadDiaryPhotoController {
 					// 辨識出的使用者不是本人就開始標記
 					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
 						// 同一個被標記的使用者只標記一次
-						hashmap.put(faceList.get(i).getPersonId(),
-								new RecUser(faceList.get(i).getPersonId(), faceList.get(i).getImageSourcePath(),
-										faceList.get(i).getFrameFace().getFrameFacePath()));
+						hashmap.putIfAbsent(faceList.get(i).getPersonId(), new RecUser(faceList.get(i).getPersonId(), faceList.get(i).getImageSourcePath(),
+								faceList.get(i).getFrameFace().getFrameFacePath()));
+								
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 
@@ -211,20 +211,22 @@ public class UploadDiaryPhotoController {
 					}
 					
 					// 標記存入資料表
-					for (Object key : hashmap.keySet()) {
+					
+				}
+				
+				for (Object key : hashmap.keySet()) {
 
-						System.out.println("---------------------");
-						System.out.println(key + " : " + hashmap.get(key).getPersonId());
-						System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
-						System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
-						System.out.println("---------------------");
-						SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(
-								hashmap.get(key).getPersonId(), hashmap.get(key).getImageSourcePath(),
-								hashmap.get(key).getFrameFacePath());
-						Lsfr.add(sfr);
-						hashmap.clear();
+					System.out.println("---------------------");
+					System.out.println(key + " : " + hashmap.get(key).getPersonId());
+					System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
+					System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
+					System.out.println("---------------------");
+					SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(
+							hashmap.get(key).getPersonId(), hashmap.get(key).getImageSourcePath(),
+							hashmap.get(key).getFrameFacePath());
+					Lsfr.add(sfr);
+					hashmap.clear();
 
-					}
 				}
 
 				System.out.println("tag finish!");

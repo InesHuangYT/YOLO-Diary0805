@@ -35,6 +35,8 @@ public class RecUser {
 	public void setFrameFacePath(String frameFacePath) {
 		FrameFacePath = frameFacePath;
 	}
+	
+	
 
 	
 	
