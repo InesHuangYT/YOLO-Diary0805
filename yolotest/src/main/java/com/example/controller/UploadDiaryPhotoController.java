@@ -200,27 +200,29 @@ public class UploadDiaryPhotoController {
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
 
-						// 標記存入資料表
-						for (Object key : hashmap.keySet()) {
 
-							System.out.println("---------------------");
-							System.out.println(key + " : " + hashmap.get(key).getPersonId());
-							System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
-							System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
-							System.out.println("---------------------");
-							SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(
-									hashmap.get(key).getPersonId(), hashmap.get(key).getImageSourcePath(),
-									hashmap.get(key).getFrameFacePath());
-							Lsfr.add(sfr);
-							hashmap.clear();
-
-						}
 					} else if (hasFound == 0) {
 						System.out.println(
 								"|||||Face Not Found Here||||" + faceList.get(i).getFrameFace().getFrameFacePath());
 						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController
 								.FaceNotFound(faceList.get(i).getFrameFace().getFrameFacePath());
 						Lnffr.add(notfoundFaceRes);
+
+					}
+					
+					// 標記存入資料表
+					for (Object key : hashmap.keySet()) {
+
+						System.out.println("---------------------");
+						System.out.println(key + " : " + hashmap.get(key).getPersonId());
+						System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
+						System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
+						System.out.println("---------------------");
+						SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(
+								hashmap.get(key).getPersonId(), hashmap.get(key).getImageSourcePath(),
+								hashmap.get(key).getFrameFacePath());
+						Lsfr.add(sfr);
+						hashmap.clear();
 
 					}
 				}
