@@ -79,7 +79,8 @@ public class UserController {
 	@GetMapping("/checkEmailAvailability") // 確認有無此email
 	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
 		Boolean isAvailable = userRepository.existsByEmail(email);
-		return new UserIdentityAvailability(isAvailable);
+		User user = userRepository.findByEmail(email).get();
+		return new UserIdentityAvailability(isAvailable, user.getUsername());
 	}
 
 	@GetMapping("/{username}") // "username": "tiday0805","joinedAt": "2018-08-05T03:11:15Z"
