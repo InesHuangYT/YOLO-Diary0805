@@ -70,16 +70,22 @@ public class UserController {
 		return userSummary;
 	}
 
-	@GetMapping("/checkUsernameAvailability") // 確認帳號有無重複
+	@GetMapping("/checkUsernameAvailability") // 確認有無此帳號
 	public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
-		Boolean isAvailable = !userRepository.existsByUsername(username);
+		Boolean isAvailable = userRepository.existsByUsername(username);
 		return new UserIdentityAvailability(isAvailable);
 	}
 
-	@GetMapping("/checkEmailAvailability") // 確認email有無重複
+	@GetMapping("/checkEmailAvailability") // 確認有無此email
 	public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
-		Boolean isAvailable = !userRepository.existsByEmail(email);
-		return new UserIdentityAvailability(isAvailable);
+		Boolean isAvailable = userRepository.existsByEmail(email);
+		String getName = null;
+		if(isAvailable == true) {
+			User user = userRepository.findByEmail(email).get();
+			getName = user.getUsername();
+		}
+		
+		return new UserIdentityAvailability(isAvailable, getName);
 	}
 
 	@GetMapping("/{username}") // "username": "tiday0805","joinedAt": "2018-08-05T03:11:15Z"
