@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.TimeZone;
@@ -89,14 +90,15 @@ public class ModelMapper {
 		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
 		System.out.println("nowTimes : " + nowTimes);
 		System.out.println("time : " + time);
-		LocalDateTime ldt = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
-		Instant instant = ldt.toInstant(ZoneOffset.UTC);
+		LocalDateTime localDateTime = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
+		String times = localDateTime.format(DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm"));
+//		Instant instant = ldt.toInstant(ZoneOffset.UTC);
 
-		System.out.println("albumCreatedTime : " + ldt);
+		System.out.println("albumCreatedTime : " + localDateTime);
 		albumResponse.setId(albumUser.getAlbum().getId());
 		albumResponse.setPhotoCover(albumUser.getAlbum().getPhotoUri());
 		albumResponse.setName(albumUser.getAlbum().getName());
-		albumResponse.setCreatedAt(instant);
+		albumResponse.setCreatedAt(times);
 		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
 		albumResponse.setDiaries(diary);
 

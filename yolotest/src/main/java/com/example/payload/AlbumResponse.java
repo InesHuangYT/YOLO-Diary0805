@@ -9,7 +9,7 @@ public class AlbumResponse {
 
 	private String id;
 	private String name;
-	private Instant createdAt;
+	private String createdAt;
 	private List<Diary> diaries;
 	private String photoCover;
 //	private List<DiaryResponse> diaries;
@@ -23,7 +23,7 @@ public class AlbumResponse {
 	}
 	
 
-	public AlbumResponse(String id, String name, Instant createdAt) {
+	public AlbumResponse(String id, String name, String createdAt) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -66,11 +66,11 @@ public class AlbumResponse {
 		this.photoCover = photoCover;
 	}
 
-	public Instant getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Instant createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 	
