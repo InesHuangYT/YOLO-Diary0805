@@ -55,6 +55,8 @@ public class NotificationService {
 				"你/妳已被 " + currentuser.getUsername() + " 用戶標記在 泡泡日記。"+"\n"+
 						"來一起與親朋好友們創造屬於你們獨特的共享回憶吧！\n\n\n\n"+ "\t\t\t\tYOLO Diary憂樂日記");
 		System.out.println("|Check User|"+user.get().getEmail());
+		
+		javaMailSender.send(mail);
 	}
 
 }
