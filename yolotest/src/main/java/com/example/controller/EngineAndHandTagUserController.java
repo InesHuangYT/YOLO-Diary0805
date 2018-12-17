@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ import com.example.entity.PhotoTagUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.DeleteTagRequest;
 import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
@@ -305,6 +307,40 @@ public class EngineAndHandTagUserController {
 			return photoTagUserRepository.save(faceuser);
 		}).orElseThrow(() -> new ResourceNotFoundException("face username=" + username + "Not Found", null, null));
 
+	}
+	
+	//刪除人臉圖
+	//前端傳diaryId和username和albumId
+	@DeleteMapping("/DeleteTagFace")
+	public ResponseEntity<Object> DeleteFace(@Valid @RequestBody DeleteTagRequest deleteTagRequest) {
+		
+		User user = userRepository.findByUsername(deleteTagRequest.getUsername()).get();
+		Album album = albumRepository.findById(deleteTagRequest.getAlbumId()).get();
+		photoTagUserRepository.findByUserAndDiaryId(user, deleteTagRequest.getDiaryId()).map(theOne ->{
+			System.out.println("---DELETE PhotoTagUser---");
+			System.out.println("faceRandom:" + theOne.getFaceRandom());
+			System.out.println("diaryId:" + theOne.getDiaryId());
+			System.out.println("username:" + theOne.getUser().getUsername());
+			System.out.println("------");
+			
+			 photoTagUserRepository.delete(theOne);
+			 
+			 return ResponseEntity.ok().build();
+			 
+		}).orElseThrow(()-> new BadRequestException(" Username:  " + deleteTagRequest.getUsername() + " not found In PhotoTagUser"));
+		
+		albumUserRepository.findByUserAndAlbum(user, album).map(thePerson -> {
+			System.out.println("---DELETE AlbumUser---");
+			System.out.println("albumId:" + thePerson.getAlbum().getId());
+			System.out.println("username:" + thePerson.getUser().getUsername());
+			System.out.println("------");
+			 albumUserRepository.delete(thePerson);
+			return  ResponseEntity.ok().build();
+		}).orElseThrow(()-> new BadRequestException(" Username:  " + deleteTagRequest.getUsername() + " not found In AlbumUser"));
+		
+		
+		return ResponseEntity.ok().build();
+		
 	}
 
 }

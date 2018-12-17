@@ -14,6 +14,7 @@ public interface PhotoTagUserRepository extends JpaRepository<PhotoTagUser, Phot
 
 	Optional<PhotoTagUser> findByFaceRandom(String faceRandom);
 	Optional<PhotoTagUser> findByUser(User user);
+	Optional<PhotoTagUser> findByUserAndDiaryId(User user, String diaryId);
 
 	
 }
