@@ -19,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -305,6 +306,13 @@ public class EngineAndHandTagUserController {
 			return photoTagUserRepository.save(faceuser);
 		}).orElseThrow(() -> new ResourceNotFoundException("face username=" + username + "Not Found", null, null));
 
+	}
+	
+	//刪除人臉圖
+	//前端傳diaryId和username
+	@DeleteMapping("DeleteFace/")
+	public void DeleteFace() {
+		
 	}
 
 }
