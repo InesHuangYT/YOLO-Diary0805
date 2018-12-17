@@ -41,6 +41,7 @@ import com.example.entity.PhotoTagUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
+import com.example.payload.DeleteTagRequest;
 import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
@@ -310,8 +311,27 @@ public class EngineAndHandTagUserController {
 	
 	//刪除人臉圖
 	//前端傳diaryId和username和albumId
-	@DeleteMapping("DeleteFace/")
-	public void DeleteFace() {
+	@DeleteMapping("/DeleteTagFace")
+	public ResponseEntity<Object> DeleteFace(@Valid @RequestBody DeleteTagRequest deleteTagRequest) {
+		
+		User user = userRepository.findByUsername(deleteTagRequest.getUsername()).get();
+		photoTagUserRepository.findByUserAndDiaryId(user, deleteTagRequest.getDiaryId()).map(theOne ->{
+			System.out.println("------");
+			System.out.println("faceRandom:" + theOne.getFaceRandom());
+			System.out.println("diaryId:" + theOne.getDiaryId());
+			System.out.println("username:" + theOne.getUser().getUsername());
+			System.out.println("------");
+			
+			 photoTagUserRepository.delete(theOne);
+			 
+			 return ResponseEntity.ok().build();
+			 
+		}).orElseThrow(()-> new BadRequestException("Username:  " + deleteTagRequest.getUsername() + " not found"));
+		
+		
+		
+		
+		return null;
 		
 	}
 
