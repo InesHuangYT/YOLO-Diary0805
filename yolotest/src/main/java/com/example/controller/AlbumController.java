@@ -2,6 +2,9 @@ package com.example.controller;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,6 +143,7 @@ public class AlbumController {
 		return ModelMapper.mapAlbumToAlbumResponse(albums);
 
 	}
+
 	// 依時間分類（一年內）
 	@GetMapping("/findAlbumByYear")
 	public List<AlbumResponse> findAlbumByYear(@CurrentUser UserPrincipal currentUser,
@@ -147,6 +151,7 @@ public class AlbumController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsAboutMeByYear(currentUser, page, size);
 	}
+
 	// 依時間分類（一月內）
 	@GetMapping("/findAlbumByMonth")
 	public List<AlbumResponse> findAlbumByMonth(@CurrentUser UserPrincipal currentUser,
@@ -154,7 +159,7 @@ public class AlbumController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsAboutMeByMonth(currentUser, page, size);
 	}
-	
+
 	// 依時間分類（一週內）
 	@GetMapping("/findAlbumByWeek")
 	public List<AlbumResponse> findAlbumByWeek(@CurrentUser UserPrincipal currentUser,
@@ -162,6 +167,7 @@ public class AlbumController {
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 		return albumService.getAlbumsAboutMeByWeek(currentUser, page, size);
 	}
+
 	// 修改相簿
 	@PutMapping("/{albumId}")
 	public Album updateAlbum(@PathVariable String albumId, @Valid @RequestBody Album albumRequest) {
