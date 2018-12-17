@@ -315,8 +315,9 @@ public class EngineAndHandTagUserController {
 	public ResponseEntity<Object> DeleteFace(@Valid @RequestBody DeleteTagRequest deleteTagRequest) {
 		
 		User user = userRepository.findByUsername(deleteTagRequest.getUsername()).get();
+		Album album = albumRepository.findById(deleteTagRequest.getAlbumId()).get();
 		photoTagUserRepository.findByUserAndDiaryId(user, deleteTagRequest.getDiaryId()).map(theOne ->{
-			System.out.println("------");
+			System.out.println("---DELETE PhotoTagUser---");
 			System.out.println("faceRandom:" + theOne.getFaceRandom());
 			System.out.println("diaryId:" + theOne.getDiaryId());
 			System.out.println("username:" + theOne.getUser().getUsername());
@@ -326,12 +327,19 @@ public class EngineAndHandTagUserController {
 			 
 			 return ResponseEntity.ok().build();
 			 
-		}).orElseThrow(()-> new BadRequestException("Username:  " + deleteTagRequest.getUsername() + " not found"));
+		}).orElseThrow(()-> new BadRequestException(" Username:  " + deleteTagRequest.getUsername() + " not found In PhotoTagUser"));
+		
+		albumUserRepository.findByUserAndAlbum(user, album).map(thePerson -> {
+			System.out.println("---DELETE AlbumUser---");
+			System.out.println("albumId:" + thePerson.getAlbum().getId());
+			System.out.println("username:" + thePerson.getUser().getUsername());
+			System.out.println("------");
+			 albumUserRepository.delete(thePerson);
+			return  ResponseEntity.ok().build();
+		}).orElseThrow(()-> new BadRequestException(" Username:  " + deleteTagRequest.getUsername() + " not found In AlbumUser"));
 		
 		
-		
-		
-		return null;
+		return ResponseEntity.ok().build();
 		
 	}
 
