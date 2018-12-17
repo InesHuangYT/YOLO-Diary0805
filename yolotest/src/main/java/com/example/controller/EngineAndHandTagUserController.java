@@ -309,7 +309,7 @@ public class EngineAndHandTagUserController {
 	}
 	
 	//刪除人臉圖
-	//前端傳diaryId和username
+	//前端傳diaryId和username和albumId
 	@DeleteMapping("DeleteFace/")
 	public void DeleteFace() {
 		
