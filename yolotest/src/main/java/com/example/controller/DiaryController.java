@@ -115,7 +115,8 @@ public class DiaryController {
 	// @RequestParam用於訪問查詢參數的值，@PathVariable用於訪問URI模板中的值。
 //	 新增日記
 	@PostMapping("/{albumId}")
-	public DiaryResponse createDiary(@PathVariable(value = "albumId") String albumId, @Valid @RequestBody Diary diary,@CurrentUser UserPrincipal currentUser) {
+	public DiaryResponse createDiary(@PathVariable(value = "albumId") String albumId, @Valid @RequestBody Diary diary,
+			@CurrentUser UserPrincipal currentUser) {
 		String content = diary.getText();
 		String password = "ahfcjuh645465645";
 		System.out.println("加密前: " + content);
@@ -136,10 +137,10 @@ public class DiaryController {
 			diaryResponse.setCreationDateTime(diary.getCreatedAt());
 			diaryResponse.setText(diary.getText());
 			diaryResponse.setAlbumId(albumId);
-			
+
 			User user = userRepository.findByUsername(currentUser.getUsername())
 					.orElseThrow(() -> new ResourceNotFoundException("User", "username", currentUser.getUsername()));
-			AlbumUserId albumUserId = new AlbumUserId(album,user);
+			AlbumUserId albumUserId = new AlbumUserId(album, user);
 			Optional<AlbumUser> albumUser = albumUserRepository.findById(albumUserId);
 			System.out.println("here1 " + albumUserId.getAlbum().getName());
 			System.out.println("here2 " + albumUserId.getUser().getUsername());
@@ -147,9 +148,25 @@ public class DiaryController {
 			albumUsers.setDiaryId(diary.getId());
 			albumUserRepository.save(albumUsers);
 			System.out.println("save in AlbumUser!");
-			
+
 			return diaryResponse;
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
+	}
+//暫緩
+	@PostMapping("/{albumId}/{diaryId}")
+	public void putInAlbumUser(@PathVariable(value = "albumId") String albumId,
+			@PathVariable(value = "diaryId") String diaryId, @CurrentUser UserPrincipal currentUser) {
+		Optional<User> user = userRepository.findByUsername(currentUser.getUsername());
+		User users = user.get();
+		Optional<Album> album = albumRepository.findById(albumId);
+		Album albums = album.get();
+		AlbumUserId albumUserId	= new AlbumUserId(albums,users);
+		Optional<AlbumUser> albumUser = albumUserRepository.findById(albumUserId);
+		AlbumUser albumUsers = albumUser.get();
+		albumUsers.setDiaryId(diaryId);
+		albumUserRepository.save(albumUsers);
+		System.out.println("save in AlbumUser!!!");
+
 	}
 
 //	@PostMapping("/diaries") //新增日記

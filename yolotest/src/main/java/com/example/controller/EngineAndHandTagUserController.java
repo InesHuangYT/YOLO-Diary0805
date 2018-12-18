@@ -101,24 +101,24 @@ public class EngineAndHandTagUserController {
 	public String sendEmail(@RequestParam(value = "email") String email, @CurrentUser UserPrincipal currentUser) {
 
 		notificationService.sendInviteNotification(email, currentUser.getUsername());
-		return "受邀人 ： "+email+", 發信人 ： "+ currentUser.getUsername();
+		return "受邀人 ： " + email + ", 發信人 ： " + currentUser.getUsername();
 	}
 
 	@PostMapping("/sendTagEmail")
-	public List<String> sendTagEmail(@RequestParam(value = "nameTaged") List<String> nameTaged, @CurrentUser UserPrincipal currentuser) {
-		for(int i = 0; i < nameTaged.size(); i++) {
-			
-			Optional<User> user	 = userRepository.findByUsername(nameTaged.get(i));
+	public List<String> sendTagEmail(@RequestParam(value = "nameTaged") List<String> nameTaged,
+			@CurrentUser UserPrincipal currentuser) {
+		for (int i = 0; i < nameTaged.size(); i++) {
+
+			Optional<User> user = userRepository.findByUsername(nameTaged.get(i));
 //			User finduser = user.get();
-			notificationService.sendTageNotification(user,  currentuser);
-			
-			
+			notificationService.sendTageNotification(user, currentuser);
+
 		}
-		
-		
+
 		return nameTaged;
-		
+
 	}
+
 	// 引擎自動標記
 	public SaveFaceResponse engineTag(String personId, String imageSourcePath, String facepath) throws IOException {
 		String photoid = findPhotoIdByPhotoPath(imageSourcePath);
@@ -308,39 +308,40 @@ public class EngineAndHandTagUserController {
 		}).orElseThrow(() -> new ResourceNotFoundException("face username=" + username + "Not Found", null, null));
 
 	}
-	
-	//刪除人臉圖
-	//前端傳diaryId和username和albumId
+
+	// 刪除人臉圖
+	// 前端傳diaryId和username和albumId
 	@DeleteMapping("/DeleteTagFace")
 	public ResponseEntity<Object> DeleteFace(@Valid @RequestBody DeleteTagRequest deleteTagRequest) {
-		
+
 		User user = userRepository.findByUsername(deleteTagRequest.getUsername()).get();
 		Album album = albumRepository.findById(deleteTagRequest.getAlbumId()).get();
-		photoTagUserRepository.findByUserAndDiaryId(user, deleteTagRequest.getDiaryId()).map(theOne ->{
+		photoTagUserRepository.findByUserAndDiaryId(user, deleteTagRequest.getDiaryId()).map(theOne -> {
 			System.out.println("---DELETE PhotoTagUser---");
 			System.out.println("faceRandom:" + theOne.getFaceRandom());
 			System.out.println("diaryId:" + theOne.getDiaryId());
 			System.out.println("username:" + theOne.getUser().getUsername());
 			System.out.println("------");
-			
-			 photoTagUserRepository.delete(theOne);
-			 
-			 return ResponseEntity.ok().build();
-			 
-		}).orElseThrow(()-> new BadRequestException(" Username:  " + deleteTagRequest.getUsername() + " not found In PhotoTagUser"));
-		
+
+			photoTagUserRepository.delete(theOne);
+
+			return ResponseEntity.ok().build();
+
+		}).orElseThrow(() -> new BadRequestException(
+				" Username:  " + deleteTagRequest.getUsername() + " not found In PhotoTagUser"));
+
 		albumUserRepository.findByUserAndAlbum(user, album).map(thePerson -> {
 			System.out.println("---DELETE AlbumUser---");
 			System.out.println("albumId:" + thePerson.getAlbum().getId());
 			System.out.println("username:" + thePerson.getUser().getUsername());
 			System.out.println("------");
-			 albumUserRepository.delete(thePerson);
-			return  ResponseEntity.ok().build();
-		}).orElseThrow(()-> new BadRequestException(" Username:  " + deleteTagRequest.getUsername() + " not found In AlbumUser"));
-		
-		
+			albumUserRepository.delete(thePerson);
+			return ResponseEntity.ok().build();
+		}).orElseThrow(() -> new BadRequestException(
+				" Username:  " + deleteTagRequest.getUsername() + " not found In AlbumUser"));
+
 		return ResponseEntity.ok().build();
-		
+
 	}
 
 }
