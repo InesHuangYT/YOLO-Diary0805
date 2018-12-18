@@ -18,12 +18,13 @@ import com.example.entity.User;
 @Repository
 public interface AlbumUserRepository extends JpaRepository<AlbumUser, AlbumUserId> {
 
-	Optional<AlbumUser> findByUser(User user);
+//	Optional<AlbumUser> findByUser(User user);
 
 	Page<AlbumUser> findByUser(User user, Pageable pageable);
 
 	Page<AlbumUser> findByAlbum(Album album, Pageable pageable);
 	
+
 	Optional<AlbumUser> findByUserAndAlbum(User user, Album album);
 	
 

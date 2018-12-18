@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,9 +86,9 @@ public class AlbumController {
 	public List<AlbumResponse> getAllAlbumsOfMe(@CurrentUser UserPrincipal currentUser,
 			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
 			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
-		
+
 		System.out.println("< User is >" + currentUser.getUsername());
-		
+
 		return albumService.getAlbumsAboutMe(currentUser, page, size);
 	}
 
@@ -140,11 +141,34 @@ public class AlbumController {
 
 	// 搜尋相簿名稱找相簿
 	@PostMapping("/findAlbum")
-	public AlbumResponse findAlbumByName(@RequestParam(value = "albumName") String albumName) {
-		Optional<Album> album = albumRepository.findByName(albumName);
-		Album albums = album.get();
-		return ModelMapper.mapAlbumToAlbumResponse(albums);
+	public List<AlbumResponse> findAlbumByName(@CurrentUser UserPrincipal currentUser,
+			@RequestParam(value = "albumName") String albumName,
+			@RequestParam(value = "page", defaultValue = AppConstants.DEFAULT_PAGE_NUMBER) int page,
+			@RequestParam(value = "size", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) int size) {
 
+		List<Album> albumss = albumRepository.findByNameIn(albumName);
+		for (int i = 0; i < albumss.size(); i++) {
+			albumss.get(i);
+			System.out.println("albumss " + albumss.get(i).getName());
+		}
+		List<AlbumResponse> albumResponse = albumService.getAlbumsAboutMe(currentUser, page, size);
+		List<AlbumResponse> getSearchResult = new ArrayList<AlbumResponse>();
+		for (int i = 0; i < albumResponse.size(); i++) {
+			albumResponse.get(i);
+			boolean ornot = albumResponse.get(i).getName().contains(albumName);
+			System.out.println("orNot !! " + ornot);
+			if (albumResponse.get(i).getName().contains(albumName)) {
+				System.out.println("albumResponse here ture find");
+				getSearchResult.add(albumResponse.get(i));
+				System.out.println("add in getSearchResult list");
+
+			} else {
+				System.out.println("albumResponse here no find");
+			}
+			System.out.println("albumResponse " + albumResponse.get(i).getName());
+
+		}
+		return getSearchResult;
 	}
 
 	// 依時間分類（一年內）
