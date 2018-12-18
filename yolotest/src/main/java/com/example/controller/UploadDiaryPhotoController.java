@@ -187,7 +187,7 @@ public class UploadDiaryPhotoController {
 				faceList = result.getResult();
 
 				// 利用hashmap知道整篇日記有在照片中出現過的人(一次)
-				HashMap<String, RecUser> hashmap = new HashMap();
+				HashMap<String, RecUser> hashmap = new HashMap<>();
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
@@ -199,6 +199,9 @@ public class UploadDiaryPhotoController {
 										faceList.get(i).getFrameFace().getFrameFacePath()));
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getPersonId());
 						System.out.println("here is after getResult mathod : " + faceList.get(i).getImageSourcePath());
+						
+						
+						
 					} else if (hasFound == 0) {
 						System.out.println(
 								"|||||Face Not Found Here||||" + faceList.get(i).getFrameFace().getFrameFacePath());
@@ -213,6 +216,7 @@ public class UploadDiaryPhotoController {
 				for (Object key : hashmap.keySet()) {
 
 					System.out.println("---------------------");
+					
 					System.out.println(key + " : " + hashmap.get(key).getPersonId());
 					System.out.println(key + " : " + hashmap.get(key).getImageSourcePath());
 					System.out.println(key + " : " + hashmap.get(key).getFrameFacePath());
@@ -220,8 +224,10 @@ public class UploadDiaryPhotoController {
 					SaveFaceResponse sfr = engineAndHandTagUserController.engineTag(hashmap.get(key).getPersonId(),
 							hashmap.get(key).getImageSourcePath(), hashmap.get(key).getFrameFacePath());
 					Lsfr.add(sfr);
-					hashmap.clear();
+					
 				}
+				
+				hashmap.clear();
 				System.out.println("tag finish!");
 				txt.deleteAllFile(PhotoFILEPATH);
 
