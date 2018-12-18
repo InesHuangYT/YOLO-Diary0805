@@ -46,6 +46,7 @@ import com.example.payload.NotFoundFaceResponse;
 import com.example.payload.PhotoResponse;
 import com.example.payload.PhotoTagUserResponse;
 import com.example.payload.SaveFaceResponse;
+import com.example.payload.SendTagEmailRequest;
 import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
@@ -104,19 +105,36 @@ public class EngineAndHandTagUserController {
 		return "受邀人 ： " + email + ", 發信人 ： " + currentUser.getUsername();
 	}
 
-		@PostMapping("/sendTagEmail")
-	public List<String> sendTagEmail(List<String> nameTaged, @CurrentUser UserPrincipal currentuser) {
-		for(int i = 0; i < nameTaged.size(); i++) {
+	@PostMapping("/sendTagEmail")
+	public SendTagEmailRequest sendTagEmail(@Valid@RequestBody SendTagEmailRequest sendtagemailRequest, @CurrentUser UserPrincipal currentuser) {
 			
-			Optional<User> user	 = userRepository.findByUsername(nameTaged.get(i));
-
+			
+//		for(int i = 0; i < nameTaged.size(); i++) {
+//			
+//			Optional<User> user	 = userRepository.findByUsername(nameTaged.get(i));
+//
+//			notificationService.sendTageNotification(user,  currentuser);
+//			
+//			
+//		}
+		
+		
+		for(int i = 0; i < sendtagemailRequest.getName().length; i++) {
+			
+			Optional<User> user	 = userRepository.findByUsername(sendtagemailRequest.getName()[i]);
 			notificationService.sendTageNotification(user,  currentuser);
-			
+			System.out.println("SendTagEmailTo: "+sendtagemailRequest.getName()[i]);
 			
 		}
 		
+			System.out.println(">>>>>>>>>>>>>>>>>");
+			System.out.println(sendtagemailRequest.getName().length);
+//			System.out.println(nameTaged.size());
+			System.out.println("<<<<<<<<<<<<<<<<<");
+			
 		
-		return nameTaged;
+		
+		return sendtagemailRequest;
 		
 	}
 
