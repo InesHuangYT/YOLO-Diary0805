@@ -104,19 +104,20 @@ public class EngineAndHandTagUserController {
 		return "受邀人 ： " + email + ", 發信人 ： " + currentUser.getUsername();
 	}
 
-	@PostMapping("/sendTagEmail")
-	public List<String> sendTagEmail(@RequestParam(value = "nameTaged") List<String> nameTaged,
-			@CurrentUser UserPrincipal currentuser) {
-		for (int i = 0; i < nameTaged.size(); i++) {
+		@PostMapping("/sendTagEmail")
+	public List<String> sendTagEmail(List<String> nameTaged, @CurrentUser UserPrincipal currentuser) {
+		for(int i = 0; i < nameTaged.size(); i++) {
+			
+			Optional<User> user	 = userRepository.findByUsername(nameTaged.get(i));
 
-			Optional<User> user = userRepository.findByUsername(nameTaged.get(i));
-//			User finduser = user.get();
-			notificationService.sendTageNotification(user, currentuser);
-
+			notificationService.sendTageNotification(user,  currentuser);
+			
+			
 		}
-
+		
+		
 		return nameTaged;
-
+		
 	}
 
 	// 引擎自動標記
