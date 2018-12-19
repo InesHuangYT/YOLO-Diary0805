@@ -1,8 +1,10 @@
 package com.example.service;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -105,10 +107,15 @@ public class AlbumService {
 		for (int i = 0; i < albumUser.getContent().size(); i++) {
 			LocalDateTime createdTime = LocalDateTime.ofInstant(albumUser.getContent().get(i).getAlbum().getCreatedAt(),
 					ZoneId.systemDefault());
-			System.out.println("createdTime.minusYears(1) : " + createdTime.minusYears(1));
+			String times = createdTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+			LocalDate createdDate = LocalDate.parse(times, fmt);
+			System.out.println("createdDate : " + createdDate);
+			LocalDate nowDate = LocalDate.now();
+			System.out.println("nowDate : " + nowDate);
+			System.out.println("nowDate.minusYears(1) : " + nowDate.minusYears(1));
 
-			if (createdTime.isAfter(nowTimes.minusYears(1))) {
-				System.out.println(createdTime.getDayOfYear() - nowTimes.getYear() - 1);
+			if (createdDate.isAfter(nowDate.minusYears(1).minusDays(1))) {
 				albumResponses = ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUser.getContent().get(i));
 				System.out.println("name: " + albumResponses.getName());
 				albumResponse.add(albumResponses);
@@ -126,23 +133,29 @@ public class AlbumService {
 		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 		Page<AlbumUser> albumUser = albumUserRepository.findByUser(user, pageable);
 
-		Instant nowTime = Instant.now();
-		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
+//		Instant nowTime = Instant.now();
+//		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
 		System.out.println("size : " + albumUser.getContent().size());
 		List<AlbumResponse> albumResponse = new ArrayList<>();
 		AlbumResponse albumResponses = new AlbumResponse();
 		for (int i = 0; i < albumUser.getContent().size(); i++) {
 			LocalDateTime createdTime = LocalDateTime.ofInstant(albumUser.getContent().get(i).getAlbum().getCreatedAt(),
 					ZoneId.systemDefault());
-			System.out.println(createdTime.getDayOfMonth());
-			System.out.println(createdTime.getDayOfYear());
-			System.out.println("nowTimes.minusMonths(1) : " + nowTimes.minusMonths(1));
-			System.out.println("createdTime : " + createdTime);
+			String times = createdTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+			LocalDate createdDate = LocalDate.parse(times, fmt);
+			System.out.println("createdDate : " + createdDate);
 
-			boolean orNot =createdTime.isAfter(nowTimes.minusWeeks(1))==false;
-			System.out.println("must be ture or false : "+ orNot);
-			if (createdTime.isAfter(nowTimes.minusMonths(1))&& orNot) {
-				// nowTimes.getDayOfYear() -createdTime.getDayOfYear() <= 30
+			LocalDate nowDate = LocalDate.now();
+			System.out.println("nowDate : " + nowDate);
+			System.out.println("createdDate.isAfter(nowDate.minusMonths(1)) : "
+					+ createdDate.isAfter(nowDate.minusMonths(1).minusDays(1)));
+			System.out.println("nowDate.minusMonths(1) : " + nowDate.minusMonths(1));
+			System.out.println("nowDate.minusWeeks(1) : " + nowDate.minusWeeks(1));
+			boolean orNot = createdDate.isAfter(nowDate.minusWeeks(1).minusDays(1)) == false;
+			System.out.println("ORNOT : " + orNot);
+
+			if (createdDate.isAfter(nowDate.minusMonths(1).minusDays(1)) && orNot) {
 				albumResponses = ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUser.getContent().get(i));
 				albumResponse.add(albumResponses);
 			}
@@ -159,23 +172,22 @@ public class AlbumService {
 		Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createdAt");
 		Page<AlbumUser> albumUser = albumUserRepository.findByUser(user, pageable);
 
-		Instant nowTime = Instant.now();
-		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
+//		Instant nowTime = Instant.now();
+//		LocalDateTime nowTimes = LocalDateTime.ofInstant(nowTime, ZoneId.systemDefault());
 		System.out.println("size : " + albumUser.getContent().size());
 		List<AlbumResponse> albumResponse = new ArrayList<>();
 		AlbumResponse albumResponses = new AlbumResponse();
 		for (int i = 0; i < albumUser.getContent().size(); i++) {
+			LocalDate nowDate = LocalDate.now();
 			LocalDateTime createdTime = LocalDateTime.ofInstant(albumUser.getContent().get(i).getAlbum().getCreatedAt(),
 					ZoneId.systemDefault());
-			System.out.println("createdTime.getDayOfMonth()" + createdTime.getDayOfMonth());
-			System.out.println("createdTime.getDayOfYear()" + createdTime.getDayOfYear());
-			System.out.println("nowTimes.minusWeeks(1)" + nowTimes.minusWeeks(1));
-			if (createdTime.isAfter(nowTimes.minusWeeks(1))) {
-				// nowTimes.getDayOfYear() -createdTime.getDayOfYear() <= 7
-				System.out.println("nowTimes.getDayOfYear() : " + nowTimes.getDayOfYear());
-				System.out.println("nowTimes.getDayOfYear() : " + nowTimes.getDayOfYear());
-				System.out.println("createdTime.getDayOfYear() : " + createdTime.getDayOfYear());
+			String times = createdTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+			DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+			LocalDate createdDate = LocalDate.parse(times, fmt);
+			System.out.println("createdDate : " + createdDate);
+			boolean orNot = createdDate.isAfter(nowDate.minusWeeks(1).minusDays(1));
 
+			if (orNot) {
 				albumResponses = ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUser.getContent().get(i));
 				albumResponse.add(albumResponses);
 			}
