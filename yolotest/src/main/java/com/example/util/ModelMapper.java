@@ -100,6 +100,10 @@ public class ModelMapper {
 		albumResponse.setName(albumUser.getAlbum().getName());
 		albumResponse.setCreatedAt(times);
 		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
+		System.out.println("diary.isEmpty() : " + diary.isEmpty());
+		if (diary.isEmpty()) {
+			albumResponse.setMessage("點進來泡泡新增日記吧！");
+		}
 		albumResponse.setDiaries(diary);
 
 		return albumResponse;
