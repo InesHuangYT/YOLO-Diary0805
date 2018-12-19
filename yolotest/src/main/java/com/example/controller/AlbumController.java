@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Album;
 import com.example.entity.AlbumUser;
+import com.example.entity.Diary;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -35,6 +37,7 @@ import com.example.payload.AlbumResponse;
 import com.example.payload.UserSummary;
 import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
+import com.example.repository.DiaryRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
@@ -55,6 +58,9 @@ public class AlbumController {
 	UserRepository userRepository;
 	@Autowired
 	AlbumUserRepository albumUserRepository;
+	
+	@Autowired
+	DiaryRepository diaryRepository;
 
 	// 取得所有相簿
 	@GetMapping
@@ -103,6 +109,25 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
+	//找某個相簿下的使用者是否有寫日記
+	@GetMapping("/myDiaryExist/{albumId}")
+	public boolean getIfDiaryIdExist(@PathVariable(value = "albumId") String albumId, @CurrentUser Principal currentUser) {
+		
+		Optional<Diary> diary = diaryRepository.findByAlbumIdAndCreatedBy(albumId, currentUser.getName());
+		System.out.println(">>>>>>>>");
+		System.out.println(albumId+" Have "+currentUser.getName());
+		System.out.println(">>>>>>>>");
+		if(diary.isPresent()) {
+			return true;
+		}
+		
+		
+			return false;
+		
+		
+	}
+	
+	
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
 	public AlbumResponse getAlbumName(@PathVariable String albumId) {

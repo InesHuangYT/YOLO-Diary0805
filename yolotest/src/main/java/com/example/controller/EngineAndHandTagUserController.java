@@ -106,9 +106,9 @@ public class EngineAndHandTagUserController {
 	}
 
 	@PostMapping("/sendTagEmail")
-	public SendTagEmailRequest sendTagEmail(@Valid@RequestBody SendTagEmailRequest sendtagemailRequest, @CurrentUser UserPrincipal currentuser) {
-			
-			
+	public SendTagEmailRequest sendTagEmail(@Valid @RequestBody SendTagEmailRequest sendtagemailRequest,
+			@CurrentUser UserPrincipal currentuser) {
+
 //		for(int i = 0; i < nameTaged.size(); i++) {
 //			
 //			Optional<User> user	 = userRepository.findByUsername(nameTaged.get(i));
@@ -117,25 +117,22 @@ public class EngineAndHandTagUserController {
 //			
 //			
 //		}
-		
-		
-		for(int i = 0; i < sendtagemailRequest.getName().length; i++) {
-			
-			Optional<User> user	 = userRepository.findByUsername(sendtagemailRequest.getName()[i]);
-			notificationService.sendTageNotification(user,  currentuser);
-			System.out.println("SendTagEmailTo: "+sendtagemailRequest.getName()[i]);
-			
+
+		for (int i = 0; i < sendtagemailRequest.getName().length; i++) {
+
+			Optional<User> user = userRepository.findByUsername(sendtagemailRequest.getName()[i]);
+			notificationService.sendTageNotification(user, currentuser);
+			System.out.println("SendTagEmailTo: " + sendtagemailRequest.getName()[i]);
+
 		}
-		
-			System.out.println(">>>>>>>>>>>>>>>>>");
-			System.out.println(sendtagemailRequest.getName().length);
+
+		System.out.println(">>>>>>>>>>>>>>>>>");
+		System.out.println(sendtagemailRequest.getName().length);
 //			System.out.println(nameTaged.size());
-			System.out.println("<<<<<<<<<<<<<<<<<");
-			
-		
-		
+		System.out.println("<<<<<<<<<<<<<<<<<");
+
 		return sendtagemailRequest;
-		
+
 	}
 
 	// 引擎自動標記
@@ -174,19 +171,41 @@ public class EngineAndHandTagUserController {
 				e.printStackTrace();
 			}
 			photoTagUserRepository.save(ptu);
-			AlbumUser albumUser = null;
+
 			Optional<User> users = userRepository.findByUsername(ptu.getUser().getUsername());
 			User userss = users.get();
 			Optional<Diary> diary = diaryRepository.findById(diaryId);
 			Diary diarys = diary.get();
 			System.out.println(
 					"here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
+
 			Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
+
 			System.out
 					.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
+
 			Album albums = album.get();
-			albumUser = new AlbumUser(albums, userss);
-			albumUserRepository.save(albumUser);
+			Optional<AlbumUser> a = albumUserRepository.findByUserAndAlbum(userss, albums);
+			System.out.println("A="+ a);
+			if (!a.isPresent()) {
+				AlbumUser albumUser = new AlbumUser(albums, userss);
+				albumUserRepository.save(albumUser);
+				System.out.println("AlbumUser Created");
+			}
+			/*
+			albumUserRepository.findByUserAndAlbum(userss, albums).map(haveDiaryId ->{
+				System.out.println(">>>>>>>>>>");
+				System.out.println("albums:"+ albums.getId());
+				System.out.println("userss:"+ userss.getUsername());
+				AlbumUser albumUser = new AlbumUser(albums, userss, haveDiaryId.getDiaryId());
+				albumUserRepository.save(albumUser);
+				System.out.println("AlbumUser Created");
+				System.out.println("<<<<<<<<<<");				
+				return null;
+			}).orElse()
+			*/
+
+
 
 			return photoTagUserRepository.save(ptu);
 
