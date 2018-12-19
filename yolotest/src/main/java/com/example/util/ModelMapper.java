@@ -91,7 +91,7 @@ public class ModelMapper {
 		System.out.println("nowTimes : " + nowTimes);
 		System.out.println("time : " + time);
 		LocalDateTime localDateTime = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
-		String times = localDateTime.format(DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm"));
+		String times = localDateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm"));
 //		Instant instant = ldt.toInstant(ZoneOffset.UTC);
 
 		System.out.println("albumCreatedTime : " + localDateTime);

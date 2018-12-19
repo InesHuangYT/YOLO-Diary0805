@@ -136,8 +136,12 @@ public class AlbumService {
 					ZoneId.systemDefault());
 			System.out.println(createdTime.getDayOfMonth());
 			System.out.println(createdTime.getDayOfYear());
-			System.out.println("nowTimes.minusMonths(1).minusDays(1) : " + nowTimes.minusMonths(1).minusDays(1));
-			if (createdTime.isAfter(nowTimes.minusMonths(1).minusDays(1))) {
+			System.out.println("nowTimes.minusMonths(1) : " + nowTimes.minusMonths(1));
+			System.out.println("createdTime : " + createdTime);
+
+			boolean orNot =createdTime.isAfter(nowTimes.minusWeeks(1))==false;
+			System.out.println("must be ture or false : "+ orNot);
+			if (createdTime.isAfter(nowTimes.minusMonths(1))&& orNot) {
 				// nowTimes.getDayOfYear() -createdTime.getDayOfYear() <= 30
 				albumResponses = ModelMapper.mapAlbumUserToAlbumUserResponseByUsername(albumUser.getContent().get(i));
 				albumResponse.add(albumResponses);
@@ -165,8 +169,8 @@ public class AlbumService {
 					ZoneId.systemDefault());
 			System.out.println("createdTime.getDayOfMonth()" + createdTime.getDayOfMonth());
 			System.out.println("createdTime.getDayOfYear()" + createdTime.getDayOfYear());
-			System.out.println("nowTimes.minusWeeks(1).minusDays(1)" + nowTimes.minusWeeks(1).minusDays(1));
-			if (createdTime.isAfter(nowTimes.minusWeeks(1).minusDays(1))) {
+			System.out.println("nowTimes.minusWeeks(1)" + nowTimes.minusWeeks(1));
+			if (createdTime.isAfter(nowTimes.minusWeeks(1))) {
 				// nowTimes.getDayOfYear() -createdTime.getDayOfYear() <= 7
 				System.out.println("nowTimes.getDayOfYear() : " + nowTimes.getDayOfYear());
 				System.out.println("nowTimes.getDayOfYear() : " + nowTimes.getDayOfYear());
