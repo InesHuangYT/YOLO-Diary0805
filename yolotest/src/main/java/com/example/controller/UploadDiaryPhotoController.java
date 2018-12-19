@@ -162,9 +162,12 @@ public class UploadDiaryPhotoController {
 
 		System.out.println("upload photo!!!!!!!!!!!!!!(" + file.length + ")");
 		List<Face> faceList = new ArrayList<>();
+		faceList.clear();
 //		List<UploadPhotoResponse> Lupr = new ArrayList<>();
 		List<SaveFaceResponse> Lsfr = new ArrayList<>();
+		Lsfr.clear();
 		List<NotFoundFaceResponse> Lnffr = new ArrayList<>();
+		Lnffr.clear();
 		Random ran = new Random();
 		long batchid = ran.nextInt(10000000);
 		String catchCoverUri = null;
@@ -228,6 +231,7 @@ public class UploadDiaryPhotoController {
 				}
 				
 				hashmap.clear();
+				System.out.println("Check hashmap>>>"+ hashmap.size());
 				System.out.println("tag finish!");
 				txt.deleteAllFile(PhotoFILEPATH);
 
@@ -237,7 +241,6 @@ public class UploadDiaryPhotoController {
 			}
 		}
 		return new UploadPhotoResponse(Lsfr, Lnffr, catchCoverUri);
-
 	}
 
 //取得同日記的所有相片

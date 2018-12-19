@@ -24,6 +24,8 @@ public interface AlbumUserRepository extends JpaRepository<AlbumUser, AlbumUserI
 
 	Page<AlbumUser> findByAlbum(Album album, Pageable pageable);
 	
+	
+	
 
 	Optional<AlbumUser> findByUserAndAlbum(User user, Album album);
 	
