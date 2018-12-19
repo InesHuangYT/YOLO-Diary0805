@@ -91,7 +91,7 @@ public class ModelMapper {
 		System.out.println("nowTimes : " + nowTimes);
 		System.out.println("time : " + time);
 		LocalDateTime localDateTime = LocalDateTime.ofInstant(time, ZoneId.systemDefault());
-		String times = localDateTime.format(DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm"));
+		String times = localDateTime.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
 //		Instant instant = ldt.toInstant(ZoneOffset.UTC);
 
 		System.out.println("albumCreatedTime : " + localDateTime);
@@ -100,6 +100,10 @@ public class ModelMapper {
 		albumResponse.setName(albumUser.getAlbum().getName());
 		albumResponse.setCreatedAt(times);
 		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
+		System.out.println("diary.isEmpty() : " + diary.isEmpty());
+		if (diary.isEmpty()) {
+			albumResponse.setMessage("點進來泡泡新增日記吧！");
+		}
 		albumResponse.setDiaries(diary);
 
 		return albumResponse;

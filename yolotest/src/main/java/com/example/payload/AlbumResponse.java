@@ -12,6 +12,7 @@ public class AlbumResponse {
 	private String createdAt;
 	private List<Diary> diaries;
 	private String photoCover;
+	private String message;
 //	private List<DiaryResponse> diaries;
 
 	public AlbumResponse() {
@@ -28,6 +29,15 @@ public class AlbumResponse {
 		this.id = id;
 		this.name = name;
 		this.createdAt = createdAt;
+	}
+	
+
+	public AlbumResponse(String id, String name, String createdAt, String message) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.createdAt = createdAt;
+		this.message = message;
 	}
 
 	public AlbumResponse(String name) {
@@ -72,6 +82,14 @@ public class AlbumResponse {
 
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 	
 
