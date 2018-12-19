@@ -174,19 +174,40 @@ public class EngineAndHandTagUserController {
 				e.printStackTrace();
 			}
 			photoTagUserRepository.save(ptu);
-			AlbumUser albumUser = null;
+			
+			
+			
+			
+			
 			Optional<User> users = userRepository.findByUsername(ptu.getUser().getUsername());
 			User userss = users.get();
 			Optional<Diary> diary = diaryRepository.findById(diaryId);
 			Diary diarys = diary.get();
 			System.out.println(
 					"here is find the diary comes from which album - print name : " + diarys.getAlbum().getName());
+			
+			
 			Optional<Album> album = albumRepository.findById(diarys.getAlbum().getId());
+			
+			
 			System.out
 					.println("here is find the diary comes from which album - print id : " + diarys.getAlbum().getId());
+			
+			
 			Album albums = album.get();
-			albumUser = new AlbumUser(albums, userss);
-			albumUserRepository.save(albumUser);
+			
+			albumUserRepository.findByUserAndAlbum(userss, albums).map(haveDiaryId ->{
+				if(haveDiaryId.getDiaryId() == null) {
+					AlbumUser albumUser = new AlbumUser(albums, userss);
+					albumUserRepository.save(albumUser);
+				}
+				
+				return null;
+			});
+			
+			
+			
+			
 
 			return photoTagUserRepository.save(ptu);
 

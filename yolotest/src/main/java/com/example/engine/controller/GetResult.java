@@ -241,6 +241,7 @@ public class GetResult {
 				}
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+					
 					if (hasFound == 1) {
 						System.out.println("HasFound : " + faceList.get(i).getHasFound());
 						System.out.println(faceList.get(i).getPersonId());
