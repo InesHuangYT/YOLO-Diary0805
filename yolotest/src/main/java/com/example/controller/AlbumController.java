@@ -81,6 +81,7 @@ public class AlbumController {
 //		return albumService.getAlbumsCreatedByMe(currentUser);
 	}
 
+
 	// 找相同username出現的albumId（自己新增＆被標記的全部相簿）
 	@GetMapping("/allAlbums")
 	public List<AlbumResponse> getAllAlbumsOfMe(@CurrentUser UserPrincipal currentUser,
