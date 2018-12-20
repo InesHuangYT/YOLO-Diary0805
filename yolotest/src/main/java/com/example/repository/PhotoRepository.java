@@ -26,5 +26,6 @@ public interface PhotoRepository extends JpaRepository<Photo, String> {
 	Page<Photo> findByDiaryId(String diaryId, Pageable pageable);
 
 	Page<Photo> findByDiary(Diary diary, Pageable pageable);
+	
 
 }

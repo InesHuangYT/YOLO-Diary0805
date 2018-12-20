@@ -1,7 +1,6 @@
 package com.example.controller;
 
 import java.io.IOException;
-import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.entity.Album;
 import com.example.entity.AlbumUser;
 import com.example.entity.Diary;
+import com.example.entity.AlbumUserId;
+import com.example.entity.Photo;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -38,6 +39,7 @@ import com.example.payload.UserSummary;
 import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
+import com.example.repository.PhotoRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
@@ -57,10 +59,14 @@ public class AlbumController {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
+	DiaryRepository diaryRepository;
+	@Autowired
 	AlbumUserRepository albumUserRepository;
-	
 	@Autowired
 	DiaryRepository diaryRepository;
+
+	@Autowired
+	PhotoRepository photoRepository;
 
 	// 取得所有相簿
 	@GetMapping
@@ -237,5 +243,46 @@ public class AlbumController {
 			albumRepository.delete(album);
 			return ResponseEntity.ok().build();
 		}).orElseThrow(() -> new ResourceNotFoundException("AlbumId " + albumId + " not found", null, albumId));
+	}
+
+	// 刪除albumUser
+	@DeleteMapping("/deleteAlbumUser/{albumId}")
+	public void deleteAlbumUser(@PathVariable String albumId, @CurrentUser UserPrincipal currentUser,
+			Pageable pageable) {
+		String username = currentUser.getUsername();
+		Optional<Diary> diary = diaryRepository.findByAlbumIdAndCreatedBy(albumId, username);
+		String diaryId = diary.get().getId();
+
+		Page<Photo> photo = photoRepository.findByDiaryId(diaryId, pageable);
+		for (int i = 0; i < photo.getContent().size(); i++) {
+			Photo photos = photo.getContent().get(i);
+			photoRepository.delete(photos);
+		}
+
+		Page<Diary> diaryss = diaryRepository.findByAlbumId(albumId, pageable);
+
+		System.out.println("delete in !");
+		for (int j = 0; j < diaryss.getContent().size(); j++) {
+			System.out.println("username " + username);
+			String createdBy = diaryss.getContent().get(j).getCreatedBy();
+			System.out.println("diaryss.getContent().get(j).getCreatedBy() " + createdBy);
+
+			if (diaryss.getContent().get(j).getCreatedBy().equals(username)) {
+				Optional<Diary> diaryyy = diaryRepository.findById(diaryss.getContent().get(j).getId());
+				Diary diaryy = diaryyy.get();
+				diaryRepository.delete(diaryy);
+				System.out.println("delete Success !");
+
+			} else {
+				System.out.println("No Delete~");
+			}
+
+		}
+		Optional<Album> album = albumRepository.findById(albumId);
+		Optional<User> user = userRepository.findById(username);
+		AlbumUserId albumUserId = new AlbumUserId(album.get(), user.get());
+		Optional<AlbumUser> albumUser = albumUserRepository.findById(albumUserId);
+		albumUserRepository.delete(albumUser.get());
+
 	}
 }
