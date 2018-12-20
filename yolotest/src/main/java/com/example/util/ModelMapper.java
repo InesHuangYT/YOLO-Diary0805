@@ -102,7 +102,7 @@ public class ModelMapper {
 		java.util.List<Diary> diary = albumUser.getAlbum().getDiary();
 		System.out.println("diary.isEmpty() : " + diary.isEmpty());
 		if (diary.isEmpty()) {
-			albumResponse.setMessage("點進來泡泡新增日記吧！");
+			albumResponse.setMessage("點進來新增日記吧～");
 		}
 		albumResponse.setDiaries(diary);
 

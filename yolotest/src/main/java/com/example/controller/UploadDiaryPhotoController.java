@@ -66,7 +66,7 @@ import com.example.util.ModelMapper;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 
-	static String PhotoFILEPATH = "C:/engine/photo/";
+	static String PhotoFILEPATH = "/Users/ines/Desktop/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
