@@ -1,6 +1,7 @@
 package com.example.controller;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -63,9 +64,6 @@ public class AlbumController {
 	@Autowired
 	AlbumUserRepository albumUserRepository;
 	@Autowired
-	DiaryRepository diaryRepository;
-
-	@Autowired
 	PhotoRepository photoRepository;
 
 	// 取得所有相簿
@@ -93,7 +91,6 @@ public class AlbumController {
 //		return albumService.getAlbumsCreatedByMe(currentUser);
 	}
 
-
 	// 找相同username出現的albumId（自己新增＆被標記的全部相簿）
 	@GetMapping("/allAlbums")
 	public List<AlbumResponse> getAllAlbumsOfMe(@CurrentUser UserPrincipal currentUser,
@@ -115,25 +112,23 @@ public class AlbumController {
 		}).orElseThrow(() -> new BadRequestException("AlbumId " + albumId + " not found"));
 	}
 
-	//找某個相簿下的使用者是否有寫日記
+	// 找某個相簿下的使用者是否有寫日記
 	@GetMapping("/myDiaryExist/{albumId}")
-	public boolean getIfDiaryIdExist(@PathVariable(value = "albumId") String albumId, @CurrentUser Principal currentUser) {
-		
+	public boolean getIfDiaryIdExist(@PathVariable(value = "albumId") String albumId,
+			@CurrentUser Principal currentUser) {
+
 		Optional<Diary> diary = diaryRepository.findByAlbumIdAndCreatedBy(albumId, currentUser.getName());
 		System.out.println(">>>>>>>>");
-		System.out.println(albumId+" Have "+currentUser.getName());
+		System.out.println(albumId + " Have " + currentUser.getName());
 		System.out.println(">>>>>>>>");
-		if(diary.isPresent()) {
+		if (diary.isPresent()) {
 			return true;
 		}
-		
-		
-			return false;
-		
-		
+
+		return false;
+
 	}
-	
-	
+
 	// 取得某個相簿的相簿名稱
 	@GetMapping("/{albumId}")
 	public AlbumResponse getAlbumName(@PathVariable String albumId) {
