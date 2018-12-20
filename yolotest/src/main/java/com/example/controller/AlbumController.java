@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entity.Album;
 import com.example.entity.AlbumUser;
+import com.example.entity.AlbumUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -80,7 +81,6 @@ public class AlbumController {
 		return albumService.getAlbumsCreatedByMe(currentUser, page, size);
 //		return albumService.getAlbumsCreatedByMe(currentUser);
 	}
-
 
 	// 找相同username出現的albumId（自己新增＆被標記的全部相簿）
 	@GetMapping("/allAlbums")
@@ -212,5 +212,19 @@ public class AlbumController {
 			albumRepository.delete(album);
 			return ResponseEntity.ok().build();
 		}).orElseThrow(() -> new ResourceNotFoundException("AlbumId " + albumId + " not found", null, albumId));
+	}
+
+	// 刪除albumUser
+	@DeleteMapping("/deleteAlbumUser/{albumId}")
+	public ResponseEntity<?> deleteAlbumUser(@PathVariable String albumId, @CurrentUser UserPrincipal currentUser) {
+		Optional<Album> album = albumRepository.findById(albumId);
+		String username = currentUser.getUsername();
+		Optional<User> user = userRepository.findById(username);
+		AlbumUserId albumUserId = new AlbumUserId(album.get(), user.get());
+		return albumUserRepository.findById(albumUserId).map(albumUser -> {
+			albumUserRepository.delete(albumUser);
+			return ResponseEntity.ok().build();
+		}).orElseThrow(() -> new ResourceNotFoundException("AlbumId " + albumId + " not found", null, albumId));
+
 	}
 }
