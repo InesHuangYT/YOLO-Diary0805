@@ -223,49 +223,6 @@ public class AlbumController {
 	}
 
 	// 刪除albumUser
-//	@DeleteMapping("/deleteAlbumUser/{albumId}")
-//	public ResponseEntity<?> deleteAlbumUser(@PathVariable String albumId, @CurrentUser UserPrincipal currentUser,
-//			Pageable pageable) {
-//		Optional<Album> album = albumRepository.findById(albumId);
-//		String username = currentUser.getUsername();
-//		Optional<User> user = userRepository.findById(username);
-//		AlbumUserId albumUserId = new AlbumUserId(album.get(), user.get());
-//		return albumUserRepository.findById(albumUserId).map(albumUser -> {
-//			albumUserRepository.delete(albumUser);
-//			Optional<Diary> diary = diaryRepository.findByAlbumIdAndCreatedBy(albumId, username);
-//			String diaryId = diary.get().getId();
-//			Diary diarys = diary.get();
-//
-//			Page<Photo> photo = photoRepository.findByDiaryId(diaryId, pageable);
-//			for (int i = 0; i < photo.getContent().size(); i++) {
-//				Photo photos = photo.getContent().get(i);
-//				photoRepository.delete(photos);
-//			}
-//
-//			Page<Diary> diaryss = diaryRepository.findByAlbumId(albumId, pageable);
-//
-//			System.out.println("delete in !");
-//
-//			for (int j = 0; j < diaryss.getContent().size(); j++) {
-//				System.out.println("username " + username);
-//				String createdBy = diaryss.getContent().get(j).getCreatedBy();
-//				System.out.println("diaryss.getContent().get(j).getCreatedBy() " + createdBy);
-//
-//				if (diaryss.getContent().get(j).getCreatedBy().equals(username)) {
-////					diaryRepository.delete(diaryss.getContent().get(j));
-//					String id = "26e19df0-d29b-4dab-9f0a-eaef93efb3e0";
-//					diaryRepository.deleteById(id);
-//
-//					System.out.println("delete Success !");
-//
-//				}
-//
-//			}
-//
-//			return ResponseEntity.ok().build();
-//		}).orElseThrow(() -> new ResourceNotFoundException("AlbumId " + albumId + " not found", null, albumId));
-//
-//	}
 	@DeleteMapping("/deleteAlbumUser/{albumId}")
 	public void deleteAlbumUser(@PathVariable String albumId, @CurrentUser UserPrincipal currentUser,
 			Pageable pageable) {
