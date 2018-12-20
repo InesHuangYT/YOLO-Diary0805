@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.entity.Album;
 import com.example.entity.AlbumUser;
 import com.example.entity.AlbumUserId;
+import com.example.entity.Diary;
+import com.example.entity.Photo;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -36,6 +38,8 @@ import com.example.payload.AlbumResponse;
 import com.example.payload.UserSummary;
 import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
+import com.example.repository.DiaryRepository;
+import com.example.repository.PhotoRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
@@ -55,7 +59,11 @@ public class AlbumController {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
+	DiaryRepository diaryRepository;
+	@Autowired
 	AlbumUserRepository albumUserRepository;
+	@Autowired
+	PhotoRepository photoRepository;
 
 	// 取得所有相簿
 	@GetMapping
@@ -216,13 +224,26 @@ public class AlbumController {
 
 	// 刪除albumUser
 	@DeleteMapping("/deleteAlbumUser/{albumId}")
-	public ResponseEntity<?> deleteAlbumUser(@PathVariable String albumId, @CurrentUser UserPrincipal currentUser) {
+	public ResponseEntity<?> deleteAlbumUser(@PathVariable String albumId, @CurrentUser UserPrincipal currentUser,
+			Pageable pageable) {
 		Optional<Album> album = albumRepository.findById(albumId);
 		String username = currentUser.getUsername();
 		Optional<User> user = userRepository.findById(username);
 		AlbumUserId albumUserId = new AlbumUserId(album.get(), user.get());
 		return albumUserRepository.findById(albumUserId).map(albumUser -> {
 			albumUserRepository.delete(albumUser);
+			Optional<Diary> diary = diaryRepository.findByAlbumIdAndCreatedBy(albumId, username);
+			String diaryId = diary.get().getId();
+			Diary diarys = diary.get();
+		
+			Page<Photo> photo = photoRepository.findByDiaryId(diaryId, pageable);
+			for (int i = 0; i < photo.getContent().size(); i++) {
+				Photo photos = photo.getContent().get(i);
+				photoRepository.delete(photos);
+			}
+			diaryRepository.delete(diarys);
+			System.out.println("hereddddd !");
+			
 			return ResponseEntity.ok().build();
 		}).orElseThrow(() -> new ResourceNotFoundException("AlbumId " + albumId + " not found", null, albumId));
 
