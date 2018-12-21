@@ -44,6 +44,7 @@ import com.example.engine.util.Textfile;
 import com.example.entity.Album;
 import com.example.entity.Diary;
 import com.example.entity.RecUser;
+import com.example.entity.User;
 import com.example.entity.Notice;
 import com.example.entity.Photo;
 import com.example.exception.BadRequestException;
@@ -57,6 +58,7 @@ import com.example.repository.AlbumRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.NoticeRepository;
 import com.example.repository.PhotoRepository;
+import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.service.AlbumService;
 import com.example.service.PhotoStorageService;
@@ -66,7 +68,7 @@ import com.example.util.ModelMapper;
 @RequestMapping("/api/photo")
 public class UploadDiaryPhotoController {
 
-	static String PhotoFILEPATH = "/Users/ines/Desktop/engine/photo/";
+	static String PhotoFILEPATH = "C:/engine/photo/";
 	// --> C:/engine/photo/ -->windows's path
 	// --> /Users/ines/Desktop/engine/photo/ -->ines's mac path
 	// --> C:/Users/Administrator/Desktop/Engine0818/photo/ -->rou's path
@@ -91,6 +93,9 @@ public class UploadDiaryPhotoController {
 	AlbumRepository albumRepository;
 	@Autowired
 	NoticeRepository noticerepository;
+	@Autowired
+	UserRepository userrepository;
+	
 
 	/**
 	 * 新增日記 -->辨識人臉 -->辨識出是好友-->通知(hasFound:1) -->辨識不出是好友，但是是好友-->訓練(hasFound:0)
@@ -194,8 +199,10 @@ public class UploadDiaryPhotoController {
 
 				for (int i = 0; i < faceList.size(); i++) {
 					int hasFound = Integer.valueOf(faceList.get(i).getHasFound());
+					Optional<User> checkUserexist = userrepository.findByUsername(faceList.get(i).getPersonId());
+					
 					// 辨識出的使用者不是本人就開始標記
-					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId())) {
+					if (hasFound == 1 && !currentUer.getName().equals(faceList.get(i).getPersonId()) && checkUserexist.isPresent()) {
 						// 同一個被標記的使用者只標記一次
 						hashmap.putIfAbsent(faceList.get(i).getPersonId(),
 								new RecUser(faceList.get(i).getPersonId(), faceList.get(i).getImageSourcePath(),

@@ -32,6 +32,8 @@ import com.example.entity.AlbumUser;
 import com.example.entity.Diary;
 import com.example.entity.AlbumUserId;
 import com.example.entity.Photo;
+import com.example.entity.PhotoTagUser;
+import com.example.entity.PhotoTagUserId;
 import com.example.entity.User;
 import com.example.exception.BadRequestException;
 import com.example.exception.ResourceNotFoundException;
@@ -41,6 +43,7 @@ import com.example.repository.AlbumRepository;
 import com.example.repository.AlbumUserRepository;
 import com.example.repository.DiaryRepository;
 import com.example.repository.PhotoRepository;
+import com.example.repository.PhotoTagUserRepository;
 import com.example.repository.UserRepository;
 import com.example.security.CurrentUser;
 import com.example.security.UserPrincipal;
@@ -65,6 +68,8 @@ public class AlbumController {
 	AlbumUserRepository albumUserRepository;
 	@Autowired
 	PhotoRepository photoRepository;
+	@Autowired
+	PhotoTagUserRepository photoTagUserRepository;
 
 	// 取得所有相簿
 	@GetMapping
@@ -245,14 +250,33 @@ public class AlbumController {
 	public void deleteAlbumUser(@PathVariable String albumId, @CurrentUser UserPrincipal currentUser,
 			Pageable pageable) {
 		String username = currentUser.getUsername();
-		Optional<Diary> diary = diaryRepository.findByAlbumIdAndCreatedBy(albumId, username);
-		String diaryId = diary.get().getId();
+		if (diaryRepository.findByAlbumIdAndCreatedBy(albumId, username).isPresent()) {
+			Optional<Diary> diary = diaryRepository.findByAlbumIdAndCreatedBy(albumId, username);
 
-		Page<Photo> photo = photoRepository.findByDiaryId(diaryId, pageable);
-		for (int i = 0; i < photo.getContent().size(); i++) {
-			Photo photos = photo.getContent().get(i);
-			photoRepository.delete(photos);
+			System.out.println("here ");
+			System.out.println("diary.get().getId() != null ");
+
+			String diaryId = diary.get().getId();
+			Page<PhotoTagUser> photoTagUser = photoTagUserRepository.findByDiaryId(diaryId, pageable);
+
+			for (int i = 0; i < photoTagUser.getContent().size(); i++) {
+				System.out.println("photoTagUserRepository ");
+
+				PhotoTagUser photoTagUsers = photoTagUser.getContent().get(i);
+				photoTagUserRepository.delete(photoTagUsers);
+			}
+
+			Page<Photo> photo = photoRepository.findByDiaryId(diaryId, pageable);
+			for (int i = 0; i < photo.getContent().size(); i++) {
+				System.out.println("photoRepository ");
+
+				Photo photos = photo.getContent().get(i);
+				photoRepository.delete(photos);
+			}
+
 		}
+
+		System.out.println("3");
 
 		Page<Diary> diaryss = diaryRepository.findByAlbumId(albumId, pageable);
 
@@ -273,8 +297,8 @@ public class AlbumController {
 			}
 
 		}
-		Optional<Album> album = albumRepository.findById(albumId);
 		Optional<User> user = userRepository.findById(username);
+		Optional<Album> album = albumRepository.findById(albumId);
 		AlbumUserId albumUserId = new AlbumUserId(album.get(), user.get());
 		Optional<AlbumUser> albumUser = albumUserRepository.findById(albumUserId);
 		albumUserRepository.delete(albumUser.get());
