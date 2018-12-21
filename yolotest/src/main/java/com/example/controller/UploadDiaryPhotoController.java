@@ -212,7 +212,7 @@ public class UploadDiaryPhotoController {
 						
 						
 						
-					} else if (hasFound == 0) {
+					} else if (hasFound == 0 || !checkUserexist.isPresent()) {
 						System.out.println(
 								"|||||Face Not Found Here||||" + faceList.get(i).getFrameFace().getFrameFacePath());
 						NotFoundFaceResponse notfoundFaceRes = engineAndHandTagUserController
